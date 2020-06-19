@@ -3,7 +3,7 @@
 inserted_instructions = []
 position_of_labels = dict()
 #Valores dos registradores
-register_values = [0] * 66
+register_values = [0] * 67
 
 registers_name_to_id = {
     "$zero": 0,
@@ -71,7 +71,8 @@ registers_name_to_id = {
     "$f31": 62,
     "$HI": 63,
     "$LO": 64,
-    "$ra": 65
+    "$ra": 65,
+    "$pc": 66
 }
 
 
@@ -79,7 +80,7 @@ def get_command_parts_R_type(command, register_quantity=3):
     command_parts = command.split(' ')
     if (len(command_parts) != (register_quantity + 1)):
         print("Erro: Formato da instrução inválido (tipo R)")
-        return (None, None)
+        return tuple([None] * register_quantity)
     
     register_names = command_parts[1:]
     register_ids = []
@@ -87,37 +88,35 @@ def get_command_parts_R_type(command, register_quantity=3):
     for register_name in register_names:
         if (register_name not in registers_name_to_id):
             print("Erro: " +register_name + " não é um registrador válido!")
-            return (None) * register_quantity
+            return tuple([None] * register_quantity)
         register_ids.append(int(registers_name_to_id[register_name]))
 
     return tuple(register_ids)
 
-def get_command_parts_I_type(command):
+def get_command_parts_I_type(command, register_quantity=2):
     command_parts = command.split(' ')
-    if (len(command_parts) != 4):
+    if (len(command_parts) != 1 + register_quantity + 1):
         print("Erro: Formato da instrução inválido (tipo I)")
-        return (None, None)
-        
-    register_name_1 = command_parts[1]
-    register_name_2 = command_parts[2]
+        return tuple([None] * (register_quantity+1))
+    register_names = command_parts[1:1+register_quantity]
+    register_ids = []
 
-    if (register_name_1 not in registers_name_to_id.keys()):
-        print("Erro: " +register_name_1 + " não é um registrador válido!")
-        return (None, None, None)
-    
-    if (register_name_2 not in registers_name_to_id):
-        print("Erro: " +register_name_2 + " não é um registrador válido!")
-        return (None, None, None)
+    for register_name in register_names:
+        if (register_name not in registers_name_to_id.keys()):
+            print("Erro: " +register_name + " não é um registrador válido!")
+            return tuple([None] * (register_quantity+1))
+        register_ids.append(int(registers_name_to_id[register_name]))
 
-    register_id_1 = registers_name_to_id[register_name_1]
-    register_id_2 = registers_name_to_id[register_name_2]
-    immediate = int(command_parts[3])
+    immediate = int(command_parts[register_quantity+1])
 
-    return (register_id_1, register_id_2, immediate)
+    #Adiciona à futura tupla 
+    register_ids.append(immediate)
+
+    #também retorna o imediato
+    return tuple(register_ids)
 
 
 def get_branch_true(bool_val,label):
-
     if(bool_val):
         if(label in position_of_labels):
             return (True, position_of_labels[label])
@@ -185,6 +184,10 @@ def get_command_parts_branch(command):
         print("ERRO: Comando fora dos valores existentes")
         return (None, None)
 
+    if(command[0] in link_registers):
+        registers_name_to_id["$ra"] = register_values[registers_name_to_id['$PC']]+1
+        print("A posição atual"+str(registers_name_to_id["$ra"])+"foi salva no registrador $ra")
+
     return should_jump, branch_jump_pos        
 
 def interpret_command(command):
@@ -234,7 +237,7 @@ def interpret_command(command):
         reg1_id, reg2_id, reg3_id = get_command_parts_R_type(command)
         if (reg1_id == None or reg2_id == None or reg3_id == None): return False
         register_values[reg1_id] = register_values[reg2_id] + register_values[reg3_id]
-        print("Novo valor de " + command[1] + " = " + register_values[reg1_id])
+        print("Novo valor de " + command_parts[1] + " = " + str(register_values[reg1_id]))
        
     #INSTRUCAO 'addi'
     elif (command_parts[0] == 'addi'):
@@ -242,7 +245,14 @@ def interpret_command(command):
         reg1_id, reg2_id, immediate = get_command_parts_I_type(command)
         if (reg1_id == None or reg2_id == None or immediate == None): return False
         register_values[reg1_id] = register_values[reg2_id] + immediate
-        print("Novo valor de " + command[1] + " = " + register_values[reg1_id])
+        print("Novo valor de " + command_parts[1] + " = " + str(register_values[reg1_id]))
+
+    #INSTRUCAO 'li'
+    elif (command_parts[0] == 'li'):
+        print('li foda (tipo I)')
+        reg1_id, immediate = get_command_parts_I_type(command, 1)
+        register_values[reg1_id] = immediate #addi $reg1, $zero, immediate
+        print("Novo valor de " + command_parts[1] + " = " + str(register_values[reg1_id]))
 
     #INSTRUCAO 'sub'
     elif (command_parts[0] == 'sub'):
@@ -250,7 +260,7 @@ def interpret_command(command):
         reg1_id, reg2_id, reg3_id = get_command_parts_R_type(command)
         if (reg1_id == None): return False
         register_values[reg1_id] = register_values[reg2_id] - register_values[reg3_id]
-        print("Novo valor de " + command[1] + " = " + register_values[reg1_id])
+        print("Novo valor de " + command_parts[1] + " = " + str(register_values[reg1_id]))
     
     #INSTRUCAO 'mult'
     elif (command_parts[0] == 'mult'):
@@ -263,12 +273,30 @@ def interpret_command(command):
     #INSTRUCAO 'div'
     elif (command_parts[0] == 'div'):
         if (len(command_parts) == 3):
-            # get_command_parts_R_type()
-            pass
+            print('div foda')
+            reg1_id, reg2_id = get_command_parts_R_type(command, 2)
+            v1, v2 = register_values[reg1_id], register_values[reg2_id]
+            quocient = v1 // v2
+            rest = v1 % v2
+            
+            register_values[registers_name_to_id['$LO']] = quocient
+            register_values[registers_name_to_id['$HI']] = rest
+            print("Novo valor de $HI = " + str(register_values[registers_name_to_id['$HI']]))
+            print("Novo valor de $LO = " + str(register_values[registers_name_to_id['$LO']]))
 
         elif (len(command_parts) == 4):
-            #div $a, $b, $c, 30
             print('pseudo div foda')
+            reg1_id, reg2_id, reg3_id = get_command_parts_R_type(command, 3)
+            v1, v2 = register_values[reg2_id], register_values[reg3_id]
+            quocient = v1 // v2
+            rest = v1 % v2
+            
+            register_values[reg3_id] = quocient
+            register_values[registers_name_to_id['$LO']] = quocient
+            register_values[registers_name_to_id['$HI']] = rest
+            print("Novo valor de $HI = " + str(register_values[registers_name_to_id['$HI']]))
+            print("Novo valor de $LO = " + str(register_values[registers_name_to_id['$LO']]))
+            print("Novo valor de " + command[1] + " = " + str(register_values[reg1_id]))
 
         else:
             print('div errada ai amigao')
@@ -280,6 +308,16 @@ def interpret_command(command):
 
     #instruções de branch
     elif (command[0] in ["bgez", "bgtz", "blez", "bltz", "beqz", "beq", "bne", "blt", "ble", "bgt", "bge"]):
+        should_jump, branch_jump_pos = False, -1
+        should_jump, branch_jump_pos = get_command_parts_branch(command)
+        if(should_jump == None and branch_jump_pos == None):
+            pass
+        elif(not should_jump):
+            print("Condições para o branch não foram satisfeitas")
+        elif(should_jump == True and branch_jump_pos == -1):
+            print("Label não incializada")
+        else:
+            print("Foi feito um branch para a posição "+str(branch_jump_pos))
         pass
     
     #INSTRUCAO 'and'
@@ -345,9 +383,14 @@ def interpret_command(command):
             print('Invalid use of \'jal\'')
             return False
         
-        ra_id = get_command_parts_R_type(command, 1)
-        register_values[ra_id] = len(inserted_instructions)+1
-        interpret_command('j ')
+        ra_id = registers_name_to_id['$ra']
+        pc_id = registers_name_to_id['$pc']
+        register_values[ra_id] = register_values[pc_id] + 1
+        interpret_command('j '+command_parts[1])
+    
+    #INSTRUCAO 'jalr'
+    elif (command_parts[0] == 'jalr'):
+        pass
 
     #INSTRUCAO 'jr'
     elif (command_parts[0] == 'jr'):
@@ -355,10 +398,20 @@ def interpret_command(command):
             print('Invalid use of \'jr\'')
             return False
 
-        #COLOCA O MV AQUI
+        pc_id = registers_name_to_id['$pc']
+        ra_id = registers_name_to_id['$ra']
+        register_values[pc_id] = register_values[ra_id]
 
-    
-    #Comando invalido
+    #INSTRUCAO 'syscall'
+    elif (command_parts[0] == 'syscall'):
+        if (len(command_parts) != 1):
+            print('Invalid use of \'Syscall\'. Invalidating instruction.')
+            return False
+
+        pass #TODO: fazer a syscall
+
+        
+    #Comando invalido ou nao implementado
     else:
         print("Command not implemented or command does not exist")
         return False
@@ -378,3 +431,7 @@ def main():
 
 if (__name__ == '__main__'):
     main()
+
+#TODO: FAZER O PC FUNCIONAR
+#TODO: fazer o .data section
+#TODO: 
