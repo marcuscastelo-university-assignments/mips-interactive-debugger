@@ -88,7 +88,7 @@ def get_command_parts_R_type(command, register_quantity=3):
         if (register_name not in registers_name_to_id):
             print("Erro: " +register_name + " não é um registrador válido!")
             return (None) * register_quantity
-        register_ids.append(registers_name_to_id[register_name])
+        register_ids.append(int(registers_name_to_id[register_name]))
 
     return tuple(register_ids)
 
@@ -184,12 +184,8 @@ def get_command_parts_branch(command):
     else:
         print("ERRO: Comando fora dos valores existentes")
         return (None, None)
-    
-    if should_jump:
-        
-        pass # fazer coisas
 
-    return branch_true, register_val        
+    return should_jump, branch_jump_pos        
 
 def interpret_command(command):
     command = command.replace(',','')
@@ -251,7 +247,7 @@ def interpret_command(command):
     #INSTRUCAO 'sub'
     elif (command_parts[0] == 'sub'):
         print('sub foda (tipo R)')
-        reg1_id, reg2_id, reg_3_id = get_command_parts_R_type(command)
+        reg1_id, reg2_id, reg3_id = get_command_parts_R_type(command)
         if (reg1_id == None): return False
         register_values[reg1_id] = register_values[reg2_id] - register_values[reg3_id]
         print("Novo valor de " + command[1] + " = " + register_values[reg1_id])
@@ -268,6 +264,7 @@ def interpret_command(command):
     elif (command_parts[0] == 'div'):
         if (len(command_parts) == 3):
             # get_command_parts_R_type()
+            pass
 
         elif (len(command_parts) == 4):
             #div $a, $b, $c, 30
@@ -348,7 +345,9 @@ def interpret_command(command):
             print('Invalid use of \'jal\'')
             return False
         
-        #COLOCA O MV RA AQUI
+        ra_id = get_command_parts_R_type(command, 1)
+        register_values[ra_id] = len(inserted_instructions)+1
+        interpret_command('j ')
 
     #INSTRUCAO 'jr'
     elif (command_parts[0] == 'jr'):
