@@ -86,7 +86,9 @@ def lw_int():
     sp = register_values[registers_name_to_id['$sp']]
     for i in range(1,5): 
         number |= stack[sp-i]
+        number << 8
     return number
+
 def lw_string(string_size):
     string = ''
     sp = register_values[registers_name_to_id['$sp']]
@@ -97,12 +99,11 @@ def lw_string(string_size):
 def sw(word):
     sp = register_values[registers_name_to_id['$sp']]
     if (word is int):
-        byte_n = lambda x : (word & ((2**(8*x) - 1) - (2**(8*(x-1)) - 1)) )
         for i in range(1,5): 
-            stack[sp-(5-i)] = byte_n(i)
+            stack[sp-(5-i)] = word & 255
+            word >> 8
     elif word is str:
-        for char in word: stack.append(char)
-#
+        for i in range(1,len(word)+1): stack[sp - (len(word) - i)] = word[i]
 
 def lb():
     pass
@@ -130,18 +131,29 @@ def make_syscall():
         f12_value = float(register_values[f12_id])
         print(f12_value)
 
-    if (v0_value == 4):
+    elif (v0_value == 4):
         a0_id = registers_name_to_id['$a0']
         a0_value = str(register_values[a0_id])
         print(a0_value)
 
-    if (v0_value == 5):
+    elif (v0_value == 5):
         v0_id = registers_name_to_id['$v0']
         v0_value = int(input())
         
-    if (v0_value == 6):
+    elif (v0_value == 6):
         v0_id = registers_name_to_id['$v0']
-        v0_value = int(input())
+        v0_value = float(input())
+
+    elif (v0_value == 7):
+        v0_id = registers_name_to_id['$v0']
+        v0_value = float(input())
+
+    elif (v0_value == 8):
+        pass
+
+    elif (v0_value == 10):
+        exit(0)
+        
         
 
     
@@ -603,7 +615,9 @@ def loop():
         loop()
         #print_reg_values()
 
-    if (interpret_command(command) == True):
+        
+
+    elif (interpret_command(command) == True):
         inserted_instructions.append(command)
         pc_id = registers_name_to_id['$pc']
         register_values[pc_id] += 1
