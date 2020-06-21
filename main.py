@@ -615,13 +615,21 @@ def loop():
         loop()
         #print_reg_values()
 
-        
+
 
     elif (interpret_command(command) == True):
         inserted_instructions.append(command)
         pc_id = registers_name_to_id['$pc']
         register_values[pc_id] += 1
         #print_registers()
+
+def data_section():
+    print("You are in the .data section.")
+    try:
+        command = input("[MIPS Debugger] >>> ")
+    except:
+        print('') # Go to the next line so printing looks better.
+        
 
 def text_section():
     print("You are in the .text section.")
@@ -641,6 +649,7 @@ def main():
 Use the instruction \'run\' to run the program.n
 Use instruction \'exit\' to finish the program.
 ''')
+    data_section()
     text_section()
 
 if (__name__ == '__main__'):
