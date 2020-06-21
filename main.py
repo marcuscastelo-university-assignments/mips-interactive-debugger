@@ -4,6 +4,7 @@ import signal, os, sys
 #TODO: help
 
 inserted_instructions = []
+inserted_breakpoints = []
 position_of_labels = dict()
 #Valores dos registradores
 register_values = [0] * 67
@@ -111,7 +112,6 @@ def lb():
 def wb():
     pass
     
-
 def make_syscall():
     v0_id = registers_name_to_id['$v0']
     v0_value = register_values[v0_id]
@@ -149,14 +149,13 @@ def make_syscall():
         v0_value = float(input())
 
     elif (v0_value == 8):
-        pass
+        pass #TODO: implementar syscall 8
 
     elif (v0_value == 10):
-        exit(0)
+        pass
         
-        
-
-    
+def is_label(str_to_verify):
+    return str_to_verify.endswith(':')           
 
 def print_reg(reg):
     print("|\t"+str(reg)+"\t:\t"+str(register_values[registers_name_to_id[reg]])+"\t|")
@@ -167,7 +166,6 @@ def print_reg_values():
     for i in registers_name_to_id:
         print_reg(i)
     print('-'*33)
-
 
 def print_label(label):
     print("|\t"+str(label)+"\t:\t"+str(position_of_labels[label])+"\t|")
@@ -182,12 +180,32 @@ def print_labels():
         print_label(i)
     print('-'*33)
 
+def show_info(command_parts):
+    if (command_parts[1] == "registers"): 
+            print_reg_values()
+
+    elif (command_parts[1] in registers_name_to_id.keys()):
+        print('-'*33)
+        print_reg(command_parts[1])
+        print('-'*33)
+
+    elif (command_parts[1] == "labels"):
+        print_labels()
+
+    elif (command_parts[1] in position_of_labels.keys()):
+        print_label(command_parts[1])
+
+def show_instructions_all():
+    len_instructions_vec = len(inserted_instructions)
+
+    for i in range (len_instructions_vec):
+        if (is_label(inserted_instructions[i])):
+            print(f'{inserted_instructions[i]}')
+        else:
+            print(f'\t{inserted_instructions[i]}')
 
 
-def print_registers():
-    for key, value in zip(registers_name_to_id.keys(), registers_name_to_id.values()):
-        print(f'{key:5} ----- {register_values[value]:10}')
-    return
+
 
 def get_command_parts_R_type(command, register_quantity=3):
     command_parts = command.split(' ')
@@ -238,7 +256,6 @@ def get_branch_true(bool_val,label):
             return (True, -1)
     else:
         return(False, -1)
-
 
 def get_command_parts_branch(command):
     command_parts = command.split()
@@ -309,6 +326,7 @@ def get_command_parts_branch(command):
 
     return should_jump, branch_jump_pos        
 
+
 def interpret_command(command):
     if (command.replace(' ','') == ''): return False
     if (command.encode('ascii') == b'\x0c' or command in ['cls', 'clear'] ): 
@@ -323,7 +341,7 @@ def interpret_command(command):
 
     #Sai do programa
     if (command_parts[0] == 'exit'):
-        exit(0)
+        return "Exit_signal"
 
     #Roda o programa
     elif (command_parts[0] == 'run'):
@@ -581,20 +599,7 @@ def interpret_command(command):
         make_syscall()
 
     elif (command_parts[0] == "info"):
-        if (command_parts[1] == "registers"): 
-            print_reg_values()
-
-        elif (command_parts[1] in registers_name_to_id.keys()):
-            print('-'*33)
-            print_reg(command_parts[1])
-            print('-'*33)
-
-        elif (command_parts[1] == "labels"):
-            print_labels()
-
-        elif (command_parts[1] in position_of_labels.keys()):
-            print_label(command_parts[1])
-
+        show_info(command_parts)
         return False
 
 
@@ -604,53 +609,104 @@ def interpret_command(command):
         return False
     
     return True
-
-
-def loop():
-    command = ''
-    try:
-        command = input("[MIPS Debugger] >>> ")
-    except:
-        print('') # Go to the next line so printing looks better.
-        loop()
-        #print_reg_values()
-
-
-
-    elif (interpret_command(command) == True):
-        inserted_instructions.append(command)
-        pc_id = registers_name_to_id['$pc']
-        register_values[pc_id] += 1
-        #print_registers()
+    
 
 def data_section():
-    print("You are in the .data section.")
-    try:
-        command = input("[MIPS Debugger] >>> ")
-    except:
-        print('') # Go to the next line so printing looks better.
-        
+    pass
 
 def text_section():
     print("You are in the .text section.")
-    while True: loop()
+    while True:
+        command = ''
+        try:
+            command = input("(MIPS Debugger) >>> ")
+        except:
+            print('') # Go to the next line so printing looks better.
+            continue
+            
+        
+        result = interpret_command(command)
 
-def sigint_handler(signum, frame):
-    print ("\033[A                             \033[A")
-    
-    sys.stdin = open('/dev/tty', 'r')
+        if (result == True):
+            inserted_instructions.append(command)
+            pc_id = registers_name_to_id['$pc']
+            register_values[pc_id] += 1
+
+        elif (result == "Exit_signal"):
+            break
+
+
+def console():
+    data_section()
     text_section()
-    pass #Ignora o CTRL+C, o que acontece em boa parte dos terminais interativos
+
+def run():
+    pass
+
+def disassemble(command_parts):
+    if (len(command_parts) == 1):
+        show_instructions_all()
+        return
+
+    len_command_parts = len(command_parts)
+
+    for i in range (1, len_command_parts):
+        if (command_parts[i] not in position_of_labels.keys()):
+            continue
+
+        show_instructions_in(command_parts[i])
+
+
+def make_breakpoint(command_parts):
+    pass
+
+def export_code(command_parts):
+    pass
+
+def debugger():
+    while True:
+        command = str(input('(MIPS Debugger) '))
+        command_parts = command.split()
+        if (len(command_parts) == 0):
+            continue
+
+        if (command_parts[0] == 'console'):
+            console()
+
+        elif (command_parts[0] == 'run'):
+            run()
+
+        elif (command_parts[0] == 'dissassemble'): #TODO: mudar o nome pra algo que faca mais sentido
+            disassemble(command_parts)
+
+        elif (command_parts[0] == 'b' or command_parts[0] == 'breakpoint'):
+            make_breakpoint(command_parts)
+
+        elif (command_parts[0] == 'info'):
+            show_info(command_parts)
+
+        elif (command_parts[0] == 'export'):
+            export_code(command_parts)
+
+        elif (command_parts[0] == 'help'):
+            pass
+
+        elif (command_parts[0] == 'quit'):
+            break
+
+        else:
+            print(f'Command \'{command_parts[0]}\' does not exist')
+
+
+#Ignora o CTRL+C, o que acontece em boa parte dos terminais interativos
+def sigint_handler(signum, frame):
+    return
 
 def main():
     signal.signal(signal.SIGINT, sigint_handler)
-    print(
-'''Starting MIPS Debugger.
-Use the instruction \'run\' to run the program.n
-Use instruction \'exit\' to finish the program.
-''')
-    data_section()
-    text_section()
+    
+    print('Starting MIPS Debugger.')
+    debugger()
 
 if (__name__ == '__main__'):
     main()
