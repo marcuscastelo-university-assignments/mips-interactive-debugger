@@ -195,15 +195,25 @@ def show_info(command_parts):
     elif (command_parts[1] in position_of_labels.keys()):
         print_label(command_parts[1])
 
+def print_instruction(instruction):
+    if (is_label(instruction)):
+        print(f'\n{instruction}')
+    else:
+        print(f'\t{instruction}')
+
 def show_instructions_all():
     len_instructions_vec = len(inserted_instructions)
 
     for i in range (len_instructions_vec):
-        if (is_label(inserted_instructions[i])):
-            print(f'{inserted_instructions[i]}')
-        else:
-            print(f'\t{inserted_instructions[i]}')
+        print_instruction(inserted_instructions[i])
 
+def show_instructions_in(command_parts):
+    inst_index = position_of_labels{command_parts[1]}
+    len_instructions_vec = len(inserted_instructions)
+    print_instruction(inserted_instructions[inst_index])
+    inst_index += 1
+
+    while inst_index < len_instructions_vec or inserted_instructions[inst_index]
 
 
 
@@ -648,7 +658,9 @@ def disassemble(command_parts):
         show_instructions_all()
         return
 
-    len_command_parts = len(command_parts)
+    #TODO: remover
+    print('easter egg, quero me matar')
+    len_command_parts = len(command_parts) 
 
     for i in range (1, len_command_parts):
         if (command_parts[i] not in position_of_labels.keys()):
@@ -676,7 +688,7 @@ def debugger():
         elif (command_parts[0] == 'run'):
             run()
 
-        elif (command_parts[0] == 'dissassemble'): #TODO: mudar o nome pra algo que faca mais sentido
+        elif (command_parts[0] == 'disassemble'): #TODO: mudar o nome pra algo que faca mais sentido
             disassemble(command_parts)
 
         elif (command_parts[0] == 'b' or command_parts[0] == 'breakpoint'):
@@ -717,4 +729,4 @@ if (__name__ == '__main__'):
 
 
 
-# Set the signal handler
+# Set the signal handlerw
