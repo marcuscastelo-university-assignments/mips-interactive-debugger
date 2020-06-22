@@ -1,3 +1,4 @@
+#!/bin/python3
 import signal, os, sys
 
 #TODO: fazer o registrador $zero read-only (ver se tem outros read-only tb)
@@ -729,4 +730,4 @@ if (__name__ == '__main__'):
 
 
 
-# Set the signal handlerw
+# Set the signal handler
