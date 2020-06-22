@@ -3,6 +3,7 @@ import signal, os, sys
 #TODO: fazer o registrador $zero read-only (ver se tem outros read-only tb)
 #TODO: help
 
+inserted_data = []
 inserted_instructions = []
 inserted_breakpoints = []
 position_of_labels = dict()
@@ -195,25 +196,27 @@ def show_info(command_parts):
     elif (command_parts[1] in position_of_labels.keys()):
         print_label(command_parts[1])
 
-def print_instruction(instruction):
+def print_instruction(instruction, fo):
     if (is_label(instruction)):
-        print(f'\n{instruction}')
+        print(f'\n{instruction}', file=fo)
     else:
-        print(f'\t{instruction}')
+        print(f'\t{instruction}', file=fo)
 
-def show_instructions_all():
+def show_instructions_all(fo=sys.stdin):
     len_instructions_vec = len(inserted_instructions)
 
     for i in range (len_instructions_vec):
-        print_instruction(inserted_instructions[i])
+        print_instruction(inserted_instructions[i], fo)
 
-def show_instructions_in(command_parts):
-    inst_index = position_of_labels{command_parts[1]}
+def show_instructions_in(command_parts, fo=sys.stdin):
+    inst_index = position_of_labels[command_parts]-1
     len_instructions_vec = len(inserted_instructions)
-    print_instruction(inserted_instructions[inst_index])
+    print_instruction(inserted_instructions[inst_index], fo)
     inst_index += 1
 
-    while inst_index < len_instructions_vec or inserted_instructions[inst_index]
+    while inst_index < len_instructions_vec and is_label(inserted_instructions[inst_index]) == False:
+        print_instruction(inserted_instructions[inst_index], fo)
+        inst_index += 1
 
 
 
@@ -362,12 +365,17 @@ def interpret_command(command):
         if (len(command_parts) != 1):
             print('Cannot have spaces in label identifier')
             return False
-            
+        
+        if (command_parts[0][:-1] in registers_name_to_id.keys()):
+            print('Cannot have a label named after a register')
+            return False
+        
         #Verifica se o a label ja existe no codigo
         if (command_parts[0][:-1] in position_of_labels):
             print(f'Label {command_parts[-1][:-1]} already exists')
             return False
-            
+        
+        
         position_of_labels[command[:-1]] = register_values[registers_name_to_id['$pc']] + 1
         print(position_of_labels[command[:-1]])
         return True
@@ -419,10 +427,12 @@ def interpret_command(command):
         print("Novo valor de " + command_parts[1] + " = " + str(register_values[reg1_id]))
     
     #INSTRUCAO 'mult'
+    #TODO: mult
     elif (command_parts[0] == 'mult'):
         print('instrucao mult foda')
 
     #INSTRUCAO 'mul'
+    #TODO: mul
     elif (command_parts[0] == 'mul'):
         print('pseudo instrucao mult foda')
         
@@ -433,7 +443,11 @@ def interpret_command(command):
             reg1_id, reg2_id = get_command_parts_R_type(command, 2)
             if (None in [reg1_id, reg2_id]): return False
             v1, v2 = register_values[reg1_id], register_values[reg2_id]
-            quocient = v1 // v2
+            try:
+                quocient = v1 // v2
+            except:
+                print("Erro na divisão")
+                pass
             rest = v1 % v2
             
             register_values[registers_name_to_id['$LO']] = quocient
@@ -446,7 +460,11 @@ def interpret_command(command):
             reg1_id, reg2_id, reg3_id = get_command_parts_R_type(command, 3)
             if (None in [reg1_id, reg2_id, reg3_id]): return False
             v1, v2 = register_values[reg2_id], register_values[reg3_id]
-            quocient = v1 // v2
+            try:
+                quocient = v1 // v2
+            except:
+                print("Erro na divisão")
+                pass    
             rest = v1 % v2
             
             register_values[reg1_id] = quocient
@@ -467,7 +485,11 @@ def interpret_command(command):
             reg1_id, reg2_id = get_command_parts_R_type(command, 2)
             if (None in [reg1_id, reg2_id]): return False
             v1, v2 = register_values[reg1_id], register_values[reg2_id]
-            quocient = v1 // v2
+            try:
+                quocient = v1 // v2
+            except:
+                print("Divisão Inválida\n")
+                pass                
             rest = v1 % v2
             
             register_values[reg1_id] = rest
@@ -658,56 +680,105 @@ def disassemble(command_parts):
         show_instructions_all()
         return
 
-    #TODO: remover
-    print('easter egg, quero me matar')
     len_command_parts = len(command_parts) 
 
     for i in range (1, len_command_parts):
         if (command_parts[i] not in position_of_labels.keys()):
+            print(f'There is no label named \'{command_parts[1]}\'')
             continue
 
         show_instructions_in(command_parts[i])
 
-
 def make_breakpoint(command_parts):
     pass
 
-def export_code(command_parts):
-    pass
+def export_code():
+    print('exporting code as \'code.asm\'')
+    fo = open("code.asm", "w")
+    show_instructions_all(fo)
+    fo.close()
+
+def show_help(command_parts):
+    if (len(command_parts) == 1):
+        print('Help options:')
+        print('- console')
+        print('- run')
+        print('- disassemble')
+        print('- breakpoint')
+        print('- info')
+        print('- help')
+        print('- export')
+        print('- quit')
+    
+    else:
+        if (command_parts[1] == 'console'):
+            print('') #TODO: console help
+        
+        elif (command_parts[1] == 'run'):
+            print('') #TODO: run help
+
+        elif (command_parts[1] == 'disassemble'):
+            print('') #TODO: disassemble help
+
+        elif (command_parts[1] == 'breakpoint' or command_parts[1] == 'b'):
+            print('') #TODO: breakpoint help
+
+        elif (command_parts[1] == 'info'):
+            print('') #TODO: info help
+
+        elif (command_parts[1] == 'export'):
+            print('') #TODO: export help
+
+        elif (command_parts[1] == 'help'):
+            print('') #TODO: help help
+
+        elif (command_parts[1] == 'quit'):
+            print('Quit program') #TODO: quit help
+
+        else:
+            print(f'Command \'{command_parts[0]}\' does not exist. Use \'help\' to see commands')
+    
 
 def debugger():
     while True:
         command = str(input('(MIPS Debugger) '))
         command_parts = command.split()
+
         if (len(command_parts) == 0):
             continue
-
+        
+        #ONGOING
         if (command_parts[0] == 'console'):
             console()
 
         elif (command_parts[0] == 'run'):
             run()
 
+        #DONE
         elif (command_parts[0] == 'disassemble'): #TODO: mudar o nome pra algo que faca mais sentido
+            print(command_parts)
             disassemble(command_parts)
 
         elif (command_parts[0] == 'b' or command_parts[0] == 'breakpoint'):
             make_breakpoint(command_parts)
 
+        #DONE
         elif (command_parts[0] == 'info'):
             show_info(command_parts)
 
+        #DONE
         elif (command_parts[0] == 'export'):
-            export_code(command_parts)
+            export_code()
 
         elif (command_parts[0] == 'help'):
-            pass
-
+            show_help(command_parts)
+        
+        #DONE?
         elif (command_parts[0] == 'quit'):
             break
 
         else:
-            print(f'Command \'{command_parts[0]}\' does not exist')
+            print(f'Command \'{command_parts[0]}\' does not exist. Use \'help\' to see commands')
 
 
 #Ignora o CTRL+C, o que acontece em boa parte dos terminais interativos
@@ -725,7 +796,7 @@ if (__name__ == '__main__'):
 
 #TODO: FAZER O PC FUNCIONAR
 #TODO: fazer o .data section
-#TODO: 
+#TODO: try catch para divisao por 0 em #div e #rem
 
 
 
