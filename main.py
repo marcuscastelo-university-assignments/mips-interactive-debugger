@@ -1,5 +1,6 @@
 #!/bin/python3
 import signal, os, sys
+import FourByteRegister
 
 #TODO: fazer o registrador $zero read-only (ver se tem outros read-only tb)
 #TODO: help
@@ -7,9 +8,10 @@ import signal, os, sys
 inserted_data = []
 inserted_instructions = []
 inserted_breakpoints = []
+instructions_accepted = ["add", "addi,", "j", "sub", "mul", "mult", "div", "rem", "bgez", "bgtz", "blez", "bltz", "beqz", "beq", "bne", "blt", "ble", "bgt", "bge", "bgezal", "bltzal", "mflo", "mfhi", "jal", "jalr", "jr", "and", "andi", "or", "ori", "xor", "xori", "li"]
 position_of_labels = dict()
 #Valores dos registradores
-register_values = [0] * 67
+register_values = [ FourByteRegister.FourByteRegister() for i in range(66) ]
 
 registers_name_to_id = {
     "$zero": 0,
@@ -79,7 +81,8 @@ registers_name_to_id = {
     "$LO": 64,
     "$ra": 65,
     "$pc": 66
-}
+}    
+
 
 stack = [b'\x00' for i in range(4096)]
 register_values[registers_name_to_id['$sp']] = 4095
@@ -352,14 +355,13 @@ def interpret_command(command):
     command_parts = command.split(' ')
     
 
-
     #Sai do programa
     if (command_parts[0] == 'exit'):
         return "Exit_signal"
 
     #Roda o programa
     elif (command_parts[0] == 'run'):
-        return False #TODO: fazer as coisas
+        return False #TODO: fazer as coisas em run console
 
     #Adiciona novas labels ao codigo
     elif command.endswith(':'):
@@ -713,28 +715,61 @@ def show_help(command_parts):
     
     else:
         if (command_parts[1] == 'console'):
-            print('') #TODO: console help
-        
+            print('Enter in console mode that allow to enter and execute code. Use "exit" to exit console mode.')
+
+            if (len(command_parts) == 2):
+                print('- data')
+                print('- text')
+
+            else:
+                if (command_parts[2] == 'text'):
+                    print('Enter instructions to be executed')
+                    print('List of instructions supported by the program:')
+                    for i in instructions_accepted:
+                        print(f'- {i}\n')
+                    print('Labels are accepted as well')
+
         elif (command_parts[1] == 'run'):
-            print('') #TODO: run help
+            print('Run the code entered')
+            print('This command can also be used while in console mode')
 
         elif (command_parts[1] == 'disassemble'):
-            print('') #TODO: disassemble help
+            print('Show all code entered. Label name as argument prints the code from that label to the next label')
 
         elif (command_parts[1] == 'breakpoint' or command_parts[1] == 'b'):
-            print('') #TODO: breakpoint help
+            print('Insert breakpoint in given line') #TODO: breakpoint help
 
         elif (command_parts[1] == 'info'):
-            print('') #TODO: info help
+            if (len(command_parts) == 2):
+                print('- registers')    
+                print('- labels')
+            
+            else:
+                if (command_parts[2] == 'registers'):
+                    print('Print a list of registers and their contents')
+                    print('Register name as argument makes the program describe only that register')
+                
+                elif (command_parts[2] == 'labels'):
+                    print('Print list of labels and their position in code')
+                    print('Register name as argument makes the program describe only that label')
+
+                else:
+                    print(f'Undefined command \'{command_parts[2]}\'')
+                    return
+
+                print('This command can also be used while in console mode')
+
+        elif (command_parts[1] == 'import'):
+            print('Import code in .asm file')
 
         elif (command_parts[1] == 'export'):
-            print('') #TODO: export help
+            print('Export code entered in console mode as \'code.asm\'')
 
         elif (command_parts[1] == 'help'):
-            print('') #TODO: help help
+            print('Print list of commands')
 
         elif (command_parts[1] == 'quit'):
-            print('Quit program') #TODO: quit help
+            print('Exit debugger') #TODO: quit help
 
         else:
             print(f'Command \'{command_parts[0]}\' does not exist. Use \'help\' to see commands')
