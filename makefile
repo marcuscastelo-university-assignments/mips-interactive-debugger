@@ -3,15 +3,21 @@ SRC = ./src
 COMP = g++
 FLAGS = -Wall
 
-RULES = ConsoleDebugger Debugger FileDebugger
+CLASSES = ConsoleDebugger Debugger FileDebugger
 
-all: $(RULES)
+all: $(CLASSES) string_utils
 	$(COMP) $(SRC)/Main.cpp *.o -o mipsdb $(INC) $(FLAGS)
 	rm -f *.o
 
-run: 
+rconsole: 
+	./mipsdb -c
+
+rfile:
 	./mipsdb
 
-$(RULES):
+$(CLASSES):
 	$(COMP) -c $(SRC)/$@.cpp $(INC) $(FLAGS)
+
+string_utils:
+	$(COMP) -c $(SRC)/string_utils.cpp $(INC) $(FLAGS)
 

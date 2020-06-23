@@ -6,6 +6,9 @@ class Debugger {
         Debugger();
 		virtual ~Debugger();
         virtual void start(void);
+
+    private:
+        
 };
 
 #endif
