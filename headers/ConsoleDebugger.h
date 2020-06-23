@@ -2,13 +2,13 @@
 #define CONSOLEDEBUGGER_H
 
 #include "Debugger.h"
+#include "ConsoleDebugger.h"
 
-class Console : public Debugger {
+class ConsoleDebugger : public Debugger {
     public:
+		ConsoleDebugger(void);
+		~ConsoleDebugger(void);
         void start(void);
-
-    private:
-
 };
 
 #endif
