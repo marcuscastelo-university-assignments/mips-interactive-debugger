@@ -7,8 +7,8 @@ class Debugger {
 		virtual ~Debugger();
         virtual void start(void);
 
-    private:
-        
+    protected:
+        // Programa programa;
 };
 
 #endif

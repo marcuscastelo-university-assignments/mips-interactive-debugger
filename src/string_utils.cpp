@@ -19,7 +19,6 @@ vector<string> split(string str, const string delimiter) {
     }
 
     vec.push_back(str.substr(0, str.size()));
-    cout << vec.size() << endl;
     
     return vec;
 }

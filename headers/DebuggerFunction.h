@@ -2,9 +2,10 @@
 #define DEBUGGERFUNCTION_H
 
 class DebuggerFunction {
-    
-    virtual ~DebuggerFunction();
-    virtual void exec();
+    public:
+        DebuggerFunction(void);
+        virtual ~DebuggerFunction();
+        virtual void exec(void);
 };
 
 #endif

@@ -3,13 +3,13 @@ SRC = ./src
 COMP = g++
 FLAGS = -Wall
 
-CLASSES = ConsoleDebugger Debugger FileDebugger
+CLASSES = ConsoleDebugger Debugger FileDebugger DebuggerFunction Help Info
 
 all: $(CLASSES) string_utils
 	$(COMP) $(SRC)/Main.cpp *.o -o mipsdb $(INC) $(FLAGS)
 	rm -f *.o
 
-rconsole: 
+run: 
 	./mipsdb -c
 
 rfile:
