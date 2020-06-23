@@ -3,8 +3,15 @@
 #include "FileDebugger.h"
 
 #include <string>
+#include <signal.h>
+
+void sigint_handler (int par) {
+    fflush(stdin);
+    return;
+}
 
 int main (int argc, char *argv[]) {
+    signal(SIGINT, sigint_handler);
     Debugger *debugger;
     
     if (argc == 1)

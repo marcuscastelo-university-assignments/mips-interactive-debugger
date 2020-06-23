@@ -7,8 +7,9 @@
 class ConsoleDebugger : public Debugger {
     public:
 		ConsoleDebugger(void);
-		~ConsoleDebugger(void);
+		~ConsoleDebugger();
         void start(void);
+
 };
 
 #endif
