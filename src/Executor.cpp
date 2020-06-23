@@ -1,82 +1,193 @@
 #include "Executor.h"
 
-char *Executor::lw(int stackAddress) {
-    return this->stack.loadBytes(stackAddress, 4);
+int Executor::registerIntValues(int regId){
+    return registerValues[regId].asInt()
 }
 
-void Executor::sw(int stackAdress, char* word) {
-    this->stack.writeBytes(stackAdress, word, 4);
+int Executor::nameToId(char *name){
+    return registerNameToId[std::string(name)];
 }
 
-char Executor::lb(int stackAddress) {
+Word *Executor::_lw(int stackAddress) {
+    return new Word(stack.loadBytes(stackAddress, 4));
+}
+
+void Executor::_sw(int stackAdress, Word *word) {
+    this->stack.writeBytes(stackAdress, word->asByteArray(), 4);
+}
+
+char Executor::_lb(int stackAddress) {
     return this->stack.loadByte(stackAddress);
 }
 
-void Executor::sb(int stackAdress, char word) {
-    this->stack.writeByte(stackAdress, word);
+void Executor::_sb(int stackAdress, char byte) {
+    this->stack.writeByte(stackAdress, byte);
 }
 
-void Executor::beqz(int regId, int jumpAddress){
-    if(regId == 0) jump(jumpAddress);
+void Executor::_beq(int reg1Id, int reg2Id, int jumpAddress){
+    if(reg1Id == reg2Id) _jump(jumpAddress);    
 }
 
-void Executor::bnez(int regId, int jumpAddress){
-    if(regId != 0) jump(jumpAddress);    
+void Executor::_bgez(int regId, int jumpAddress){
+    if(regId >= 0) _jump(jumpAddress);    
 }
 
-void Executor::bgez(int regId, int jumpAddress){
-    if(regId >= 0) jump(jumpAddress);    
+void Executor::_bgezal(int regId, int jumpAddress){
+    if(regId >= 0) _jump(jumpAddress);    
 }
 
-void Executor::bgtz(int regId, int jumpAddress){
-    if(regId > 0) jump(jumpAddress);    
+void Executor::_bgtz(int regId, int jumpAddress){
+    if(regId > 0) _jump(jumpAddress);    
 }
 
-void Executor::blez(int regId, int jumpAddress){
-    if(regId <= 0) jump(jumpAddress);    
+void Executor::_blez(int regId, int jumpAddress){
+    if(regId <= 0) _jump(jumpAddress);    
 }
 
-void Executor::bltz(int regId, int jumpAddress){
-    if(regId < 0) jump(jumpAddress);    
+void Executor::_bltz(int regId, int jumpAddress){
+    if(regId < 0) _jump(jumpAddress);    
 }
 
-void Executor::bgezal(int regId, int jumpAddress){
-    if(regId >= 0) jump(jumpAddress);    
+void Executor::_bltzal(int regId, int jumpAddress){
+    if(regId < 0) _jump(jumpAddress);    
 }
 
-void Executor::bltzal(int regId, int jumpAddress){
-    if(regId < 0) jump(jumpAddress);    
+void Executor::_bne(int reg1Id, int reg2Id, int jumpAddress){
+    if(reg1Id != reg2Id) _jump(jumpAddress);    
 }
 
-void Executor::bne(int reg1Id, int reg2Id, int jumpAddress){
-    if(reg1Id != reg2Id) jump(jumpAddress);    
+
+
+//TODO:
+
+void Executor::_beqz(int regId, int jumpAddress){
+    if(regId == 0) _jump(jumpAddress);    
 }
 
-void Executor::beq(int reg1Id, int reg2Id, int jumpAddress){
-    if(reg1Id == reg2Id) jump(jumpAddress);    
+void Executor::_bnez(int regId, int jumpAddress){
+    if(regId != 0) _jump(jumpAddress);    
 }
 
-void Executor::blt(int reg1Id, int reg2Id, int jumpAddress){
-    if(reg1Id < reg2Id) jump(jumpAddress);    
+
+
+
+void Executor::_blt(int reg1Id, int reg2Id, int jumpAddress){
+    if(reg1Id < reg2Id) _jump(jumpAddress);    
 }
 
-void Executor::ble(int reg1Id, int reg2Id, int jumpAddress){
-    if(reg1Id <= reg2Id) jump(jumpAddress);    
+void Executor::_ble(int reg1Id, int reg2Id, int jumpAddress){
+    if(reg1Id <= reg2Id) _jump(jumpAddress);    
 }
 
-void Executor::bgt(int reg1Id, int reg2Id, int jumpAddress){
-    if(reg1Id > reg2Id) jump(jumpAddress);    
+void Executor::_bgt(int reg1Id, int reg2Id, int jumpAddress){
+    if(reg1Id > reg2Id) _jump(jumpAddress);    
 }
 
-void Executor::bge(int reg1Id, int reg2Id, int jumpAddress){
-    if(reg1Id >= reg2Id) jump(jumpAddress);    
+void Executor::_bge(int reg1Id, int reg2Id, int jumpAddress){
+    if(reg1Id >= reg2Id) _jump(jumpAddress);    
 }
 
-void Executor::jump(int jumpAddress){
+void Executor::_b(int jumpAddress){
+    _beq(nameToId("$zero"),nameToId("$zero"),jumpAddress);
+}
+
+void Executor::_jump(int jumpAddress){
     if(jumpAddress < 0 || jumpAddress >= this->stack.getStackSize()) printf("ERROR: Jump adress out of range.\n");
     else registerValues[this->registerNameToId[std::string("$pc")]] = jumpAddress;
 }
 
+void Executor::_add(int reg1Id,int reg2Id,int reg3Id){
+    registerValues[reg1Id] = registerValues[reg2Id] + registerValues[reg3Id];   
+}
+
+void Executor::_addi(int reg1Id, int reg2Id, int intValue){
+    registerValues[reg1Id] = registerValues[reg2Id] + intValue;   
+}
+
+void Executor::_sub(int reg1Id,int reg2Id,int reg3Id){
+    registerValues[reg1Id] = registerValues[reg2Id] - registerValues[reg3Id];   
+}
+
+void Executor::_mult(int reg1Id,int reg2Id){
+    registerValues[nameToId("$LO")] = registerValues[reg1Id] * registerValues[reg2Id];
+}
+
+void Executor::_mflo(int regId){
+    registerValues[regId] = registerValues[nameToId("$LO")]];    
+}
+
+void Executor::_mfhi(int regId){
+    registerValues[regId] = registerValues[nameToId("$HI")]];    
+}
+
+
+void Executor::_mul(int reg1Id,int reg2Id,int reg3Id){
+    _mult(reg2Id,reg1Id);
+    _mflo(reg1Id);
+}
+
+void Executor::_div(int reg1Id,int reg2Id) { 
+    registerValues[nameToId("$LO")] = registerValues[reg1Id] / registerValues[reg2Id];   
+    registerValues[nameToId("$HI")] = registerValues[reg1Id] % registerValues[reg2Id];   
+}
+
+void Executor::_div(int reg1Id,int reg2Id,int reg3Id) { 
+    _div(reg2Id,reg3Id);
+    _mflo(reg1Id);
+}
+
+void Executor::_rem(int reg1Id,int reg2Id,int reg3Id) { 
+    _div(reg2Id,reg3Id);
+    _mfhi(reg1Id);
+}
+
+void Executor::_and(int reg1Id, int reg2Id, int reg3Id) {
+    registerValues[reg1Id] = registerValues[reg2Id] & registerValues[reg3Id];
+}
+
+void Executor::_or(int reg1Id, int reg2Id, int reg3Id) {
+    registerValues[reg1Id] = registerValues[reg2Id] | registerValues[reg3Id];
+}
+
+void Executor::_xor(int reg1Id, int reg2Id, int reg3Id) {
+    registerValues[reg1Id] = registerValues[reg2Id] ^ registerValues[reg3Id];
+}
+
+void Executor::_andi(int reg1Id, int reg2Id, int immediate) {
+    registerValues[reg1Id] = registerValues[reg2Id] & immediate;
+}
+
+void Executor::_ori(int reg1Id, int reg2Id, int immediate) {
+    registerValues[reg1Id] = registerValues[reg2Id] | immediate;
+}
+
+void Executor::_xori(int reg1Id, int reg2Id, int immediate) {
+    registerValues[reg1Id] = registerValues[reg2Id] ^ immediate;
+}
+
+void Executor::_slt(int reg1Id, int reg2Id, int reg3Id){
+    if(registerValues[reg2Id] < registerValues[reg3Id]) registerValues[reg1Id] = 1;
+    else registerValues[reg1Id] = 0;
+}
+
+
+void Executor::_sltu(int reg1Id, int reg2Id, int reg3Id){
+    if((unsigned int)(registerValues[reg2Id].asInt()) < (unsigned int)registerValues[reg3Id]) registerValues[reg1Id] = 1;
+    else registerValues[reg1Id] = 0;
+}
+
+
+void Executor::_slti(int reg1Id, int reg2Id, int immediate){
+    if(registerValues[reg2Id]<immediate) registerValues[reg1Id] = 1;
+    else registerValues[reg1Id] = 0;
+}
+
+void Executor::_sltiu(int reg1Id, int reg2Id, unsigned immediate){
+    if((unsigned)(registerValues[reg2Id].asInt())<immediate) registerValues[reg1Id] = 1;
+    else registerValues[reg1Id] = 0;
+}
+
+//void Executor::_()
 
 
 /*
