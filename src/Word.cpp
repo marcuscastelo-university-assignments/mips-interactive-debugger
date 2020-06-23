@@ -33,22 +33,22 @@ Word Word::operator^(Word &other) {
 }
 
 Word Word::operator<(Word &other) {
-    return Word(this->asInt() < other.asInt());
+    return this->asInt() < other.asInt();
 }
 
 Word Word::operator<=(Word &other) {
-    return Word(this->asInt() <= other.asInt());
+    return this->asInt() <= other.asInt();
 }
 Word Word::operator>(Word &other) {
-    return Word(this->asInt() > other.asInt());
+    return this->asInt() > other.asInt();
 
 }
 Word Word::operator>=(Word &other) {
-    return Word(this->asInt() >= other.asInt());
+    return this->asInt() >= other.asInt();
 
 }
 Word Word::operator==(Word &other) {
-    return Word(this->asInt() == other.asInt());
+    return this->asInt() == other.asInt();
 }
 
 

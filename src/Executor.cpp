@@ -1,7 +1,7 @@
 #include "Executor.h"
 
 int Executor::registerIntValues(int regId){
-    return registerValues[regId].asInt()
+    return registerValues[regId].asInt();
 }
 
 int Executor::nameToId(char *name){
@@ -25,99 +25,103 @@ void Executor::_sb(int stackAdress, char byte) {
 }
 
 void Executor::_beq(int reg1Id, int reg2Id, int jumpAddress){
-    if(reg1Id == reg2Id) _jump(jumpAddress);    
+    if(registerIntValues(reg1Id) == registerIntValues(reg2Id)) _jump(jumpAddress);    
 }
 
 void Executor::_bgez(int regId, int jumpAddress){
-    if(regId >= 0) _jump(jumpAddress);    
+    if(registerIntValues(regId) >= 0) _jump(jumpAddress);    
 }
 
 void Executor::_bgezal(int regId, int jumpAddress){
-    if(regId >= 0) _jump(jumpAddress);    
+    if(registerIntValues(regId) >= 0) _jal(jumpAddress);    
+    
 }
 
 void Executor::_bgtz(int regId, int jumpAddress){
-    if(regId > 0) _jump(jumpAddress);    
+    if(registerIntValues(regId) > 0) _jump(jumpAddress);    
 }
 
 void Executor::_blez(int regId, int jumpAddress){
-    if(regId <= 0) _jump(jumpAddress);    
+    if(registerIntValues(regId) <= 0) _jump(jumpAddress);    
 }
 
 void Executor::_bltz(int regId, int jumpAddress){
-    if(regId < 0) _jump(jumpAddress);    
+    if(registerIntValues(regId) < 0) _jump(jumpAddress);    
 }
 
 void Executor::_bltzal(int regId, int jumpAddress){
-    if(regId < 0) _jump(jumpAddress);    
+    if(registerIntValues(regId) < 0) _jal(jumpAddress);    
 }
 
 void Executor::_bne(int reg1Id, int reg2Id, int jumpAddress){
-    if(reg1Id != reg2Id) _jump(jumpAddress);    
+    if(registerIntValues(reg1Id) != registerIntValues(reg2Id)) _jump(jumpAddress);    
 }
 
 
 
 //TODO:
 
+void Executor::_b(int jumpAddress){
+    _beq(nameToId("$zero"),nameToId("$zero"),jumpAddress);
+}
+
+void Executor::_bal(int jumpAddress){
+    _bgezal(nameToId("$zero"),jumpAddress);
+}
+
+void Executor::_bgt(int reg1Id, int reg2Id, int jumpAddress){
+    _slt(nameToId("$at"),reg2Id,reg1Id);
+    bne
+}
+
+
 void Executor::_beqz(int regId, int jumpAddress){
-    if(regId == 0) _jump(jumpAddress);    
 }
 
 void Executor::_bnez(int regId, int jumpAddress){
-    if(regId != 0) _jump(jumpAddress);    
 }
 
 
 
 
 void Executor::_blt(int reg1Id, int reg2Id, int jumpAddress){
-    if(reg1Id < reg2Id) _jump(jumpAddress);    
 }
 
 void Executor::_ble(int reg1Id, int reg2Id, int jumpAddress){
-    if(reg1Id <= reg2Id) _jump(jumpAddress);    
 }
 
-void Executor::_bgt(int reg1Id, int reg2Id, int jumpAddress){
-    if(reg1Id > reg2Id) _jump(jumpAddress);    
-}
 
 void Executor::_bge(int reg1Id, int reg2Id, int jumpAddress){
-    if(reg1Id >= reg2Id) _jump(jumpAddress);    
 }
 
-void Executor::_b(int jumpAddress){
-    _beq(nameToId("$zero"),nameToId("$zero"),jumpAddress);
-}
 
 void Executor::_jump(int jumpAddress){
     if(jumpAddress < 0 || jumpAddress >= this->stack.getStackSize()) printf("ERROR: Jump adress out of range.\n");
-    else registerValues[this->registerNameToId[std::string("$pc")]] = jumpAddress;
+    else registerValues[this->registerNameToId[std::string("$pc")]].setValue(jumpAddress);
 }
 
 void Executor::_add(int reg1Id,int reg2Id,int reg3Id){
-    registerValues[reg1Id] = registerValues[reg2Id] + registerValues[reg3Id];   
+    registerValues[reg1Id].setValue(registerIntValues(reg2Id) + registerIntValues(reg3Id));   
 }
 
 void Executor::_addi(int reg1Id, int reg2Id, int intValue){
-    registerValues[reg1Id] = registerValues[reg2Id] + intValue;   
+    registerValues[reg1Id].setValue(registerIntValues(reg2Id) + intValue);   
 }
 
 void Executor::_sub(int reg1Id,int reg2Id,int reg3Id){
-    registerValues[reg1Id] = registerValues[reg2Id] - registerValues[reg3Id];   
+    registerValues[reg1Id].setValue(registerIntValues(reg2Id) - registerIntValues(reg3Id));   
 }
 
 void Executor::_mult(int reg1Id,int reg2Id){
-    registerValues[nameToId("$LO")] = registerValues[reg1Id] * registerValues[reg2Id];
+    registerValues[nameToId("$LO")].setValue(registerIntValues(reg1Id) * registerIntValues(reg2Id));
 }
 
 void Executor::_mflo(int regId){
-    registerValues[regId] = registerValues[nameToId("$LO")]];    
+    registerValues[regId].setValue(registerIntValues(nameToId("$LO")));    
 }
 
 void Executor::_mfhi(int regId){
-    registerValues[regId] = registerValues[nameToId("$HI")]];    
+    registerValues[regId].setValue(registerIntValues(nameToId("$HI")));    
 }
 
 
@@ -127,8 +131,8 @@ void Executor::_mul(int reg1Id,int reg2Id,int reg3Id){
 }
 
 void Executor::_div(int reg1Id,int reg2Id) { 
-    registerValues[nameToId("$LO")] = registerValues[reg1Id] / registerValues[reg2Id];   
-    registerValues[nameToId("$HI")] = registerValues[reg1Id] % registerValues[reg2Id];   
+    registerValues[nameToId("$LO")].setValue(registerIntValues(reg1Id) / registerIntValues(reg2Id));   
+    registerValues[nameToId("$HI")].setValue(registerIntValues(reg1Id) % registerIntValues(reg2Id));   
 }
 
 void Executor::_div(int reg1Id,int reg2Id,int reg3Id) { 
@@ -142,50 +146,57 @@ void Executor::_rem(int reg1Id,int reg2Id,int reg3Id) {
 }
 
 void Executor::_and(int reg1Id, int reg2Id, int reg3Id) {
-    registerValues[reg1Id] = registerValues[reg2Id] & registerValues[reg3Id];
+    registerValues[reg1Id].setValue(registerIntValues(reg2Id) & registerIntValues(reg3Id));
 }
 
 void Executor::_or(int reg1Id, int reg2Id, int reg3Id) {
-    registerValues[reg1Id] = registerValues[reg2Id] | registerValues[reg3Id];
+    registerValues[reg1Id].setValue(registerIntValues(reg2Id) | registerIntValues(reg3Id));
 }
 
 void Executor::_xor(int reg1Id, int reg2Id, int reg3Id) {
-    registerValues[reg1Id] = registerValues[reg2Id] ^ registerValues[reg3Id];
+    registerValues[reg1Id].setValue(pow(registerIntValues(reg2Id),registerIntValues(reg3Id)));
 }
 
 void Executor::_andi(int reg1Id, int reg2Id, int immediate) {
-    registerValues[reg1Id] = registerValues[reg2Id] & immediate;
+    registerValues[reg1Id].setValue(registerIntValues(reg2Id) & immediate);
 }
 
 void Executor::_ori(int reg1Id, int reg2Id, int immediate) {
-    registerValues[reg1Id] = registerValues[reg2Id] | immediate;
+    registerValues[reg1Id].setValue(registerIntValues(reg2Id) | immediate);
 }
 
 void Executor::_xori(int reg1Id, int reg2Id, int immediate) {
-    registerValues[reg1Id] = registerValues[reg2Id] ^ immediate;
+    registerValues[reg1Id].setValue(registerIntValues(reg2Id) ^ immediate);
 }
 
 void Executor::_slt(int reg1Id, int reg2Id, int reg3Id){
-    if(registerValues[reg2Id] < registerValues[reg3Id]) registerValues[reg1Id] = 1;
-    else registerValues[reg1Id] = 0;
+    if(registerIntValues(reg2Id) < registerIntValues(reg3Id)) registerValues[reg1Id].setValue(1);
+    else registerValues[reg1Id].setValue(0);
 }
 
 
 void Executor::_sltu(int reg1Id, int reg2Id, int reg3Id){
-    if((unsigned int)(registerValues[reg2Id].asInt()) < (unsigned int)registerValues[reg3Id]) registerValues[reg1Id] = 1;
-    else registerValues[reg1Id] = 0;
+    if((unsigned int)registerIntValues(reg2Id) < (unsigned int)registerIntValues(reg3Id)) 
+        registerValues[reg1Id].setValue(1);
+    else registerValues[reg1Id].setValue(0);
 }
 
 
 void Executor::_slti(int reg1Id, int reg2Id, int immediate){
-    if(registerValues[reg2Id]<immediate) registerValues[reg1Id] = 1;
-    else registerValues[reg1Id] = 0;
+    if(registerIntValues(reg2Id)<immediate) registerValues[reg1Id].setValue(1);
+    else registerValues[reg1Id].setValue(0);
 }
 
 void Executor::_sltiu(int reg1Id, int reg2Id, unsigned immediate){
-    if((unsigned)(registerValues[reg2Id].asInt())<immediate) registerValues[reg1Id] = 1;
-    else registerValues[reg1Id] = 0;
+    if((unsigned int)registerIntValues(reg2Id)<immediate) registerValues[reg1Id].setValue(1);
+    else registerValues[reg1Id].setValue(0);
 }
+
+void Executor::_jal(int jumpAddress){
+    registerValues[nameToId("$ra")].setValue(registerIntValues(nameToId("$pc")));
+    _jump(jumpAddress);
+}
+
 
 //void Executor::_()
 
