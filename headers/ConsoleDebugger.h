@@ -6,9 +6,9 @@
 
 class ConsoleDebugger : public Debugger {
     public:
-		ConsoleDebugger(void);
-		~ConsoleDebugger();
-        void start(void);
+		  ConsoleDebugger(void);
+		  ~ConsoleDebugger();
+      void start(void);
 
 };
 

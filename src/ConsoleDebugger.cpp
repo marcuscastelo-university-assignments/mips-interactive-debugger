@@ -1,30 +1,28 @@
 #include <stdio.h>
 #include <string>
+#include <iostream>
+
+using namespace std;
 
 #include "ConsoleDebugger.h"
 #include "Debugger.h"
-#include "DebuggerFunction.h"
-#include "Help.h"
-#include "Info.h"
 
 #include "string_utils.h"
 
 using namespace std;
 
 ConsoleDebugger::ConsoleDebugger(void) {
-
+    program = new Program();
 }
 
 ConsoleDebugger::~ConsoleDebugger() {
-
+    delete program;
 }
 
 void ConsoleDebugger::start (void) {
     char *tmp;
     string command;
-    vector<string> command_parts;
-
-    DebuggerFunction *debuggerFunction;
+    vector<string> commandParts;
 
     while (true) {
         printf("(MipsDB) >>> ");
@@ -36,26 +34,39 @@ void ConsoleDebugger::start (void) {
         }
 
         command = string(tmp);
-        command_parts = split(command);
-        
-        if (command_parts.size() == 0)
+        command = trim(command);
+        commandParts = split(command);
+
+        if (commandParts.size() == 0)
             continue;
 
-        if (command_parts[0] == "quit")
+        if (commandParts[0] == "quit")
             break;
         
-        else if (command_parts[0] == "info")
-            debuggerFunction = new Info();
+        else if (commandParts[0] == "info")
+            info(commandParts);
 
-        else if (command_parts[0] == "help")
-            debuggerFunction = new Help();
+        else if (commandParts[0] == "help")
+            help(commandParts);
 
-        else {
-            printf("Command not implemented yet\n");
-            continue;
+        // else if (commandParts[0] == "export")
+        //     debuggerFunction = new Export();
+
+        else if (commandParts[0] == "disassemble")
+            disassemble(commandParts);
+
+        else if (commandParts[0] == "b"){
+            program->removeBreakpoint(1000);
         }
 
-        debuggerFunction->exec(command_parts);
-        delete debuggerFunction;
-    } 
+        else {
+            program->addInstruction(command);
+        }
+
+        // else {
+        //     printf("Command not implemented yet\n");
+        //     continue;
+        // }
+        
+    }
 }
