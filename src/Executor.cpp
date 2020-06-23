@@ -10,23 +10,91 @@ void Executor::sw(int stackAdress, char* word) {
 
 char Executor::lb(int stackAddress) {
     return this->stack.loadByte(stackAddress);
-
 }
 
-void Executor::sb(int stackAdress, char* word) {
-    this->stack.writeByte(stackAdress, &word);
+void Executor::sb(int stackAdress, char word) {
+    this->stack.writeByte(stackAdress, word);
 }
 
-void branchs(std::string command){
-    
+void Executor::beqz(int regId, int jumpAddress){
+    if(regId == 0) jump(jumpAddress);
 }
+
+void Executor::bnez(int regId, int jumpAddress){
+    if(regId != 0) jump(jumpAddress);    
+}
+
+void Executor::bgez(int regId, int jumpAddress){
+    if(regId >= 0) jump(jumpAddress);    
+}
+
+void Executor::bgtz(int regId, int jumpAddress){
+    if(regId > 0) jump(jumpAddress);    
+}
+
+void Executor::blez(int regId, int jumpAddress){
+    if(regId <= 0) jump(jumpAddress);    
+}
+
+void Executor::bltz(int regId, int jumpAddress){
+    if(regId < 0) jump(jumpAddress);    
+}
+
+void Executor::bgezal(int regId, int jumpAddress){
+    if(regId >= 0) jump(jumpAddress);    
+}
+
+void Executor::bltzal(int regId, int jumpAddress){
+    if(regId < 0) jump(jumpAddress);    
+}
+
+void Executor::bne(int reg1Id, int reg2Id, int jumpAddress){
+    if(reg1Id != reg2Id) jump(jumpAddress);    
+}
+
+void Executor::beq(int reg1Id, int reg2Id, int jumpAddress){
+    if(reg1Id == reg2Id) jump(jumpAddress);    
+}
+
+void Executor::blt(int reg1Id, int reg2Id, int jumpAddress){
+    if(reg1Id < reg2Id) jump(jumpAddress);    
+}
+
+void Executor::ble(int reg1Id, int reg2Id, int jumpAddress){
+    if(reg1Id <= reg2Id) jump(jumpAddress);    
+}
+
+void Executor::bgt(int reg1Id, int reg2Id, int jumpAddress){
+    if(reg1Id > reg2Id) jump(jumpAddress);    
+}
+
+void Executor::bge(int reg1Id, int reg2Id, int jumpAddress){
+    if(reg1Id >= reg2Id) jump(jumpAddress);    
+}
+
+void Executor::jump(int jumpAddress){
+    if(jumpAddress < 0 || jumpAddress >= this->stack.getStackSize()) printf("ERROR: Jump adress out of range.\n");
+    else registerValues[this->registerNameToId[std::string("$pc")]] = jumpAddress;
+}
+
 
 
 /*
+def get_branch_true(bool_val,label):
+    if(bool_val):
+        if(label in position_of_labels.keys()):
+            return (True, position_of_labels[label])
+        else:
+            return (True, -1)
+    else:
+        return(False, -1)
+
+
 def get_command_parts_branch(command):
     command_parts = command.split()
     registers1 = ["beqz","bnez","bgez","bgtz","blez","bltz","bgezal","bltzal"]
-    registers2 = ["bne","beq","blt","ble","bgt","bge"]
+    registers2 = ["bne","beq","blt","ble","bgt","bge"]  
+    
     link_registers = ["bgezal","bltzal"]
 
 

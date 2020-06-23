@@ -7,6 +7,9 @@ Stack::Stack(int stackSize) {
     this->stackBytes = std::vector<char>(stackSize);
 }
 
+int Stack::getStackSize() {
+    return stackBytes.size();
+}
 
 char Stack::loadByte(int address){
     return stackBytes[address];

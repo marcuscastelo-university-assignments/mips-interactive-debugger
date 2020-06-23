@@ -11,6 +11,8 @@ class Stack
         Stack();
         Stack(int stackSize);
 
+        int getStackSize();
+
         ~Stack();
         char *loadBytes(int address, int size);
         void writeBytes(int address, char *bytes, int size);
