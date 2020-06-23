@@ -56,7 +56,7 @@ void ConsoleDebugger::start (void) {
             disassemble(commandParts);
 
         else if (commandParts[0] == "b"){
-            program->removeBreakpoint(1000);
+            breakpoint(commandParts);
         }
 
         else {

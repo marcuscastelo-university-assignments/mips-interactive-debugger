@@ -125,3 +125,7 @@ void Debugger::disassemble(vector<string> commandParts) {
         printf("---------------\n");
     }
 }
+
+void Debugger::breakpoint(vector<string> commandParts) {
+    
+}

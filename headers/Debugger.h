@@ -16,6 +16,7 @@ class Debugger {
         void info(vector<string> commandParts);
         void help(vector<string> commandParts);
         void disassemble(vector<string> commandParts);
+        void breakpoint(vector<string> commandParts);
 
     protected:
         Program *program;
