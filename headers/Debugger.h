@@ -2,10 +2,9 @@
 #define DEBUGGER_H
 
 class Debugger {
-    private:
-        
     public:
         Debugger();
+		virtual ~Debugger();
         virtual void start(void);
 };
 

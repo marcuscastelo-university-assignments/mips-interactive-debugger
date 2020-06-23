@@ -13,6 +13,6 @@ int main (int argc, char *argv[]) {
     else if (std::string(argv[1]) == "-c")
         debugger = new ConsoleDebugger();
 
-    debugger->run();
+    debugger->start();
     delete debugger;
 }
