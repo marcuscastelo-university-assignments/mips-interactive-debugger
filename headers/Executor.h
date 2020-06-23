@@ -6,66 +6,76 @@
 
 #include "Stack.h"
 #include "Word.h"
+#include "Register.h"
+#include "Registers.h"
 
 class Executor{
     private:
         std::map<std::string,int> registerNameToId;
         std::vector<Word> registerValues;
+        Registers registers;
         Stack stack;
     public:
         Executor();
         ~Executor();
 
-        int nameToId(char *name);
-        int registerIntValues(int id);
-
-        Word *_lw(int stackAddress);
+        Word _lw(int stackAddress);
         void _sw(int stackAdress, Word *word);
-        char _lb(int stackAdress);
-        void _sb(int stackAddress, char byte);
-        void _beqz(int regId, int jumpAddress);
-        void _bnez(int regId, int jumpAddress);
-        void _bgez(int regId, int jumpAddress);
-        void _bgtz(int regId, int jumpAddress);
-        void _blez(int regId, int jumpAddress);
-        void _bltz(int regId, int jumpAddress);
-        void _bgezal(int regId, int jumpAddress);
-        void _bltzal(int regId, int jumpAddress);
-        void _bne(int reg1Id, int reg2Id, int jumpAddress);
-        void _beq(int reg1Id, int reg2Id, int jumpAddress);
-        void _blt(int reg1Id, int reg2Id, int jumpAddress);
-        void _ble(int reg1Id, int reg2Id, int jumpAddress);
-        void _bgt(int reg1Id, int reg2Id, int jumpAddress);
-        void _bge(int reg1Id, int reg2Id, int jumpAddress);
+        char _lb(int stackAddress);
+        void _sb(int stackAdress, char byte);
+        void _beq(Register *reg1, Register *reg2, int jumpAddress);
+        void _bgez(Register *reg, int jumpAddress);
+        void _bgezal(Register *reg, int jumpAddress);
+        void _bgtz(Register *reg, int jumpAddress);
+        void _blez(Register *reg, int jumpAddress);
+        void _bltz(Register *reg, int jumpAddress);
+        void _bltzal(Register *reg, int jumpAddress);
+        void _bne(Register *reg1, Register *reg2, int jumpAddress);
         void _b(int jumpAddress);
-
+        void _bal(int jumpAddress);
+        void _bgt(Register *reg1, Register *reg2, int jumpAddress);
+        void _blt(Register *reg1, Register *reg2, int jumpAddress);
+        void _bge(Register *reg1, Register *reg2, int jumpAddress);
+        void _ble(Register *reg1, Register *reg2, int jumpAddress);
+        void _bgtu(Register *reg1, Register *reg2, int jumpAddress);
+        void _beqz(Register *reg, int jumpAddress);
+        void _beq(Register *reg1, int immediate, int jumpAddress);
+        void _beq(Register *reg1, int immediate, int jumpAddress);
+        void _beq(Register *reg1, int immediate, int jumpAddress);
         void _jump(int jumpAddress);
-        void _add(int reg1Id, int reg2Id, int reg3Id);
-        void _addi(int reg1Id, int reg2Id, int value);
-        void _sub(int reg1Id, int reg2Id, int reg3Id);
-        void _mult(int reg1Id,int reg2Id);
-        void _mul(int reg1Id,int reg2Id,int reg3Id);
-        
-        void _mflo(int regId);
-        void _mfhi(int regId);
-        
-        void _div(int reg1Id,int reg2Id);
-        void _div(int reg1Id,int reg2Id,int reg3Id);
-        void _rem(int reg1Id,int reg2Id,int reg3Id);
-
-
-        void _and(int reg1Id, int reg2Id, int reg3Id);
-        void _or(int reg1Id, int reg2Id, int reg3Id);
-        void _xor(int reg1Id, int reg2Id, int reg3Id);
-        void _andi(int reg1Id, int reg2Id, int value);
-        void _ori(int reg1Id, int reg2Id, int value);
-        void _xori(int reg1Id, int reg2Id, int value);
-        void _slt(int reg1Id, int reg2Id, int reg3Id);
-
-        void _sltu(int reg1Id, int reg2Id, int reg3Id);
-        void _slti(int reg1Id, int reg2Id, int immediate);
-        void _sltiu(int reg1Id, int reg2Id, unsigned immediate);
+        void _add(Register *reg1,Register *reg2,Register *reg3);
+        void _addi(Register *reg1, Register *reg2, int immediate);
+        void _sub(Register *reg1,Register *reg2,Register *reg3);
+        void _mult(Register *reg1,Register *reg2);
+        void _mflo(Register *reg);
+        void _mfhi(Register *reg);
+        void _mul(Register *reg1,Register *reg2,Register *reg3);
+        void _div(Register *reg1,Register *reg2);
+        void _div(Register *reg1,Register *reg2,Register *reg3);
+        void _rem(Register *reg1,Register *reg2,Register *reg3);
+        void _and(Register *reg1, Register *reg2, Register *reg3);
+        void _or(Register *reg1, Register *reg2, Register *reg3);
+        void _xor(Register *reg1, Register *reg2, Register *reg3);
+        void _andi(Register *reg1, Register *reg2, int immediate);
+        void _ori(Register *reg1, Register *reg2, int immediate);
+        void _xori(Register *reg1, Register *reg2, int immediate);
+        void _slt(Register *reg1, Register *reg2, Register *reg3);
+        void _sltu(Register *reg1, Register *reg2, Register *reg3);
+        void _slti(Register *reg1, Register *reg2, int immediate);
+        void _sltiu(Register *reg1, Register *reg2, unsigned immediate);
         void _jal(int jumpAddress);
+
+        void _addiu(Register *reg1, Register *reg2, unsigned int immediate);
+        void _addu(Register *reg1,Register *reg2,Register *reg3);
+        void _subu(Register *reg1,Register *reg2,Register *reg3);
+        void _divu(Register *reg1,Register *reg2);
+                
+        void _sllv(Register *reg1,Register *reg2,Register *reg3);
+        void _jr(Register *reg);
+        void _lui(Register *reg,int immediate);
+        void _sll(Register *reg1,Register *reg2,int immediate);
+        void _noop();
+        void _nop();
         
         void syscall();
 

@@ -1,6 +1,7 @@
 #ifndef DEBUGGER_H
 #define DEBUGGER_H
 
+#include "Registers.h"
 #include "Program.h"
 
 #include <vector>
@@ -8,6 +9,9 @@
 using namespace std;
 
 class Debugger {
+    private:
+        Registers registers;
+
     public:
         Debugger();
 		virtual ~Debugger();
