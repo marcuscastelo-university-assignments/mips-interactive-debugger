@@ -3,7 +3,7 @@ SRC = ./src
 COMP = g++
 FLAGS = -Wall
 
-CLASSES = ConsoleDebugger Debugger FileDebugger DebuggerFunction Help Info
+CLASSES = ConsoleDebugger Debugger FileDebugger Program
 
 all: $(CLASSES) string_utils
 	$(COMP) $(SRC)/Main.cpp *.o -o mipsdb $(INC) $(FLAGS)
@@ -20,4 +20,7 @@ $(CLASSES):
 
 string_utils:
 	$(COMP) -c $(SRC)/string_utils.cpp $(INC) $(FLAGS)
+
+gdb:
+	gdb mipsdb
 

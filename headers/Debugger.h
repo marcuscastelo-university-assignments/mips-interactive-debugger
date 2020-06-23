@@ -2,6 +2,11 @@
 #define DEBUGGER_H
 
 #include "Registers.h"
+#include "Program.h"
+
+#include <vector>
+#include <string>
+using namespace std;
 
 class Debugger {
     private:
@@ -12,8 +17,12 @@ class Debugger {
 		virtual ~Debugger();
         virtual void start(void);
 
+        void info(vector<string> commandParts);
+        void help(vector<string> commandParts);
+        void disassemble(vector<string> commandParts);
+
     protected:
-        // Programa programa;
+        Program *program;
 };
 
 #endif
