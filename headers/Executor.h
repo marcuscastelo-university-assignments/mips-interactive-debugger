@@ -17,6 +17,7 @@ class Executor{
         ~Executor();
 
         int nameToId(char *name);
+        int registerIntValues(int id);
 
         Word *_lw(int stackAddress);
         void _sw(int stackAdress, Word *word);
@@ -60,7 +61,15 @@ class Executor{
         void _ori(int reg1Id, int reg2Id, int value);
         void _xori(int reg1Id, int reg2Id, int value);
         void _slt(int reg1Id, int reg2Id, int reg3Id);
+
+        void _sltu(int reg1Id, int reg2Id, int reg3Id);
+        void _slti(int reg1Id, int reg2Id, int immediate);
+        void _sltiu(int reg1Id, int reg2Id, unsigned immediate);
+        void _jal(int jumpAddress);
+        
         void syscall();
+
+
 };
 
 #endif
