@@ -55,7 +55,7 @@ void ConsoleDebugger::start (void) {
             continue;
         }
 
-        debuggerFunction->exec();
+        debuggerFunction->exec(command_parts);
         delete debuggerFunction;
     } 
 }

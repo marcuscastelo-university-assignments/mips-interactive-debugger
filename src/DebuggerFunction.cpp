@@ -8,6 +8,6 @@ DebuggerFunction::~DebuggerFunction () {
 
 }
 
-void DebuggerFunction::exec (void) {
+void DebuggerFunction::exec (vector<string> command_parts) {
 
 }
