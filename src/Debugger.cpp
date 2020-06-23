@@ -12,6 +12,10 @@ void Debugger::start (void) {
 
 }
 
+void Debugger::exec (void) {
+
+}
+
 void Debugger::help (vector<string> commandParts) {
     if (commandParts.size() == 1) {
         printf("Help options:\n");
@@ -57,12 +61,15 @@ void Debugger::help (vector<string> commandParts) {
             printf("Show all code entered. Label name as argument prints the code from that label to the next label\n");
         }
 
-        else if (commandParts[1] == "breakpoint" or commandParts[1] == "b") {
-            printf("Insert breakpoint in given line\n"); 
+        else if (commandParts[1] == "breakpoint") {
+            printf("'b' - Insert breakpoint in given line\n"); 
+            printf("'break' - Insert breakpoint in given line\n");
+            printf("'break-remove' - Delete breakpoint in given line\n"); 
         }
 
         else if (commandParts[1] == "info") {
             if (commandParts.size() == 2) {
+                printf("Info help options:\n");
                 printf("- registers\n");    
                 printf("- labels\n");
             }
@@ -105,7 +112,27 @@ void Debugger::help (vector<string> commandParts) {
 }
 
 void Debugger::info(vector<string> commandParts) {
-    printf("mostrando info foda\n");
+    if (commandParts.size() == 1) {
+        printf("No argument to show help. See 'help info'\n");
+        return ;
+    }
+
+    if (commandParts[1] == "registers") { 
+            
+    }
+
+    // else if (commandParts[1] in registers_name_to_id.keys()) {
+    //     print('-'*33)
+    //     print_reg(commandParts[1])
+    //     print('-'*33)
+
+    else if (commandParts[1] == "labels") {
+        program->printLabel();
+    }
+
+    else if (program->hasLabel(commandParts[1])) {
+        program->printLabel(commandParts[1]);
+    }
 }
 
 void Debugger::disassemble(vector<string> commandParts) {
@@ -127,5 +154,9 @@ void Debugger::disassemble(vector<string> commandParts) {
 }
 
 void Debugger::breakpoint(vector<string> commandParts) {
-    
+    if (commandParts[0] == "break-remove")
+        program->removeBreakpoint(stoi(commandParts[1]));
+
+    else
+        program->addBreakpoint(stoi(commandParts[1]));
 }

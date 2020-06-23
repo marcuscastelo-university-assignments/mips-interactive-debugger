@@ -9,6 +9,7 @@ class FileDebugger : public Debugger {
         FileDebugger(void);
         ~FileDebugger(void);
         void start(void);
+        void exec(void);
 };
 
 #endif

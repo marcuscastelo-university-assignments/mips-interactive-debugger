@@ -1,4 +1,5 @@
 #include "Program.h"
+#include "string_utils.h"
 #include <stdexcept>
 
 Program::Program() {
@@ -13,6 +14,8 @@ Program::~Program() {
     delete breakpointsPosition;
 }
 
+
+/////INSTRUCTION/////
 void Program::addInstruction(string inst) {
     if (inst.empty())
         return;
@@ -32,12 +35,12 @@ string Program::getInstruction(int pos) {
     return (*instructions)[pos];
 }
 
-void Program::printInstructions(string label) {
+void Program::printInstructions(string label, FILE *file_ptr) {
     int size = (int) instructions->size();
     
     if (label.empty()) {
         for (int i = 0; i < size; i++)
-            printSingleInstruction(getInstruction(i));
+            printSingleInstruction(getInstruction(i), file_ptr);
         return;
     }
 
@@ -47,13 +50,13 @@ void Program::printInstructions(string label) {
         return;
     }
 
-    printSingleInstruction(getInstruction(it->second));
+    printSingleInstruction(getInstruction(it->second), file_ptr);
     for (int i = it->second+1; i < size; i++) {
         string inst = getInstruction(i);
         if (isLabel(inst))
             break;
         
-        printSingleInstruction(inst);
+        printSingleInstruction(inst, file_ptr);
     }  
 
     return;
@@ -93,6 +96,26 @@ bool Program::hasLabel(string label) {
     return !(getLabelPos(label) == labelsPosition->end());
 }
 
+void Program::printLabel(string label) {
+    if (label.empty() == false) {
+        if (hasLabel(label)) {
+            printLine(25);    
+            printSingleLabel(label, getLabelPos(label)->second);
+            printLine(25);
+        }
+
+        return;
+    }
+
+    for (auto it = labelsPosition->begin(); it != labelsPosition->end(); it++) {
+        printLine(25);
+        printSingleLabel(it->first, it->second);
+    }
+    printLine(25);        
+    
+    return;
+}
+
 /////BREAKPOINTS/////
 void Program::addBreakpoint(int pos) {
     if (pos < 0 or pos >= (int) instructions->size())
@@ -114,8 +137,6 @@ bool Program::isBreakpoint(int pos) {
 }
 
 
-
-
 //////////////////////////////////////////////
 
 bool isLabel(string str) {
@@ -128,6 +149,12 @@ bool isLabel(string str) {
     return false;
 }
 
-void printSingleInstruction(string line) {
-    printf("%c%s\n", isLabel(line) ? '\n' : '\t', line.c_str());
+void printSingleInstruction(string line, FILE *file_ptr) {
+    fprintf(file_ptr, "%c%s\n", isLabel(line) ? '\n' : '\t', line.c_str());
+}
+
+void printSingleLabel(string label, int pos) {
+    printf("|%-15s|%-7d|\n", label.c_str(), pos);
+
+    return;
 }

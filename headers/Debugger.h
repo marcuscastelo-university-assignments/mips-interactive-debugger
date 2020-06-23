@@ -10,12 +10,13 @@ using namespace std;
 
 class Debugger {
     private:
-        Registers registers;
+        // Registers registers;
 
     public:
         Debugger();
 		virtual ~Debugger();
         virtual void start(void);
+        virtual void exec(void);
 
         void info(vector<string> commandParts);
         void help(vector<string> commandParts);

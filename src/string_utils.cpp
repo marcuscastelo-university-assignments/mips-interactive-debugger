@@ -44,3 +44,22 @@ string ltrim (string str) {
 string trim (string str) {
     return ltrim(rtrim(str));       
 }
+
+
+string replaceAllChars (string str, char toReplace, char substitute) {
+    if (str.empty())
+        return str;
+
+    int pos;
+    while ((size_t) (pos = str.find(toReplace)) != (string::npos)) {
+        str[pos] = substitute;
+    }
+
+    return str;
+}
+
+void printLine (int size) {
+    for (int i = 0; i < size; i++)
+            printf("%c", '-');
+        printf("\n");
+}
