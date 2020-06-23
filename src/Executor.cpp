@@ -71,7 +71,7 @@ void Executor::_bal(int jumpAddress){
 
 void Executor::_bgt(int reg1Id, int reg2Id, int jumpAddress){
     _slt(nameToId("$at"),reg2Id,reg1Id);
-    bne
+    
 }
 
 
