@@ -33,30 +33,43 @@ void ConsoleDebugger::start (void) {
             continue;
         }
 
+        /*STRING PARSING*/
         command = string(tmp);
         command = trim(command);
+        command = replaceAllChars(command, ',', ' ');
         commandParts = split(command);
 
-        if (commandParts.size() == 0)
+        int size = commandParts.size();
+
+        if (size == 0)
             continue;
+        
+        for (int i = 0; i < size; i++)
+            commandParts[i] = trim(commandParts[i]);
+        /****************/
+
 
         if (commandParts[0] == "quit")
             break;
         
-        else if (commandParts[0] == "info")
+        else if (commandParts[0] == "info") //TODO: info registers
             info(commandParts);
 
         else if (commandParts[0] == "help")
             help(commandParts);
 
-        // else if (commandParts[0] == "export")
-        //     debuggerFunction = new Export();
+        else if (commandParts[0] == "export")
+            exportCode(commandParts);
 
         else if (commandParts[0] == "disassemble")
             disassemble(commandParts);
 
-        else if (commandParts[0] == "b"){
-            program->removeBreakpoint(1000);
+        else if (commandParts[0] == "b" or commandParts[0] == "break" or commandParts[0] == "break-remove"){
+            breakpoint(commandParts);
+        }
+
+        else if (commandParts[0] == "r" or commandParts[0] == "run") {
+            exec();
         }
 
         else {
@@ -69,4 +82,31 @@ void ConsoleDebugger::start (void) {
         // }
         
     }
+
+    return;
+}
+
+void ConsoleDebugger::exec(void) {
+
+}
+
+void ConsoleDebugger::exportCode(vector<string> commandParts) {
+    string name = "code";
+
+    //prevent to create files outside of the dir in which the program was executed
+    if (commandParts.size() >= 2) {
+        name = commandParts[1];
+        auto pos = name.rfind("/");
+        if (pos != string::npos) {
+            name.erase(0, pos+1);
+        }
+    }
+
+    name += ".asm";
+
+    FILE *file = fopen(name.c_str(), "w");
+    program->printInstructions("", file);
+    fclose(file);
+    
+    return;
 }

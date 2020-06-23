@@ -22,16 +22,18 @@ class Program {
         void addLabelPos(string label, int pos);
         map<string, int>::iterator getLabelPos(string label);
         bool hasLabel(string label);
+        void printLabel(string label="");
 
         void addBreakpoint(int pos);
         void removeBreakpoint(int pos);
         bool isBreakpoint(int pos);
 
-        void printInstructions(string label="");
+        void printInstructions(string label="", FILE *file_ptr=stdout);
 
 };
 
 bool isLabel(string str);
-void printSingleInstruction(string line);
+void printSingleInstruction(string line, FILE *file_ptr=stdout);
+void printSingleLabel(string label, int pos);
 
 #endif

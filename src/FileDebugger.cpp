@@ -14,3 +14,7 @@ FileDebugger::~FileDebugger () {
 void FileDebugger::start (void) {
     std::cout << "Entrei File Debugger foda" << std::endl;
 }
+
+void FileDebugger::exec (void) {
+    
+}
