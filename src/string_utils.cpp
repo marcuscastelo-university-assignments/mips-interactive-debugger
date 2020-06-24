@@ -1,6 +1,7 @@
 #include "string_utils.h"
 #include <iostream>
 #include <stdexcept>
+#include <regex>
 
 using namespace std;
 
@@ -52,7 +53,7 @@ string replaceAllChars (string str, char toReplace, char substitute) {
         return str;
 
     int pos;
-    while ((size_t) (pos = str.find(toReplace)) != (string::npos)) {
+    while ((int) (pos = str.find(toReplace)) != (string::npos)) {
         str[pos] = substitute;
     }
 
@@ -93,4 +94,7 @@ string preventAbsolutePath(string str) {
     }
 
     return str;
+}
+bool isInteger(const std::string & s){
+    return std::regex_match(s, std::regex("[(-|+)|][0-9]+"));
 }

@@ -13,5 +13,6 @@ void printLine(int size);
 string getLine(FILE *file_ptr=stdin);
 string preventAbsolutePath(string str);
 
+bool isInteger(const std::string & s);
 
 #endif

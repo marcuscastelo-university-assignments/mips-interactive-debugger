@@ -20,6 +20,10 @@ class Registers
 
         Registers();
         ~Registers();
+
+        void printRegisters(FILE *file_stream = stdout);
+        void printRegister(std::string name, FILE *file_stream = stdout);
+        void printRegister(Register *reg, FILE *file_stream = stdout);
         
         Register *ZERO;
         Register *AT;

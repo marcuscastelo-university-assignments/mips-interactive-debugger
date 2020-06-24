@@ -3,7 +3,7 @@ SRC = ./src
 COMP = g++
 FLAGS = -Wall
 
-CLASSES = ConsoleDebugger Debugger Executor FileDebugger Program Register Registers Stack Word
+CLASSES = ConsoleDebugger Debugger Executor FileDebugger Program Register Registers Stack Word Instruction Interpreter
 
 all: $(CLASSES) string_utils
 	$(COMP) $(SRC)/Main.cpp *.o -o mipsdb $(INC) $(FLAGS)
@@ -11,7 +11,7 @@ all: $(CLASSES) string_utils
 
 run: rfile
 
-rfile:
+rfile: all
 	./mipsdb
 
 rconsole:

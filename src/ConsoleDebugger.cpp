@@ -20,7 +20,7 @@ ConsoleDebugger::~ConsoleDebugger() {
 void ConsoleDebugger::start (void) {
     string command;
     vector<string> commandParts;
-
+        
     while (true) {
         printf("(MipsDB) >>> ");
         command = getLine();
@@ -61,9 +61,9 @@ void ConsoleDebugger::start (void) {
         }
 
         else {
-            //TODO: adicionar somente se o executor não retornar erros (instrução não existente, etc...)
-            // InstructionExecutionResult eres = executor->executeInstruction(command);
-            // if (eres != ERR_404)
+            // TODO: adicionar somente se o executor não retornar erros (instrução não existente, etc...)
+            Instruction *executedInstruction = executor->executeInstruction(command);
+            if (executedInstruction->isValid())
                 program->addInstruction(command);
         }
 

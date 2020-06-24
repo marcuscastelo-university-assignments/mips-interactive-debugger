@@ -1,6 +1,7 @@
 #ifndef REGISTER_H
 #define REGISTER_H
 
+#include <stdio.h>
 #include <string>
 #include "Word.h"
 
@@ -18,6 +19,7 @@ class Register
         void setValue(Word word);
         Word getValue();
         int getValueAsInt();
+        void print(FILE *file_stream = stdout);
 };
 
 #endif
