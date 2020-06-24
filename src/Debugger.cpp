@@ -120,7 +120,7 @@ void Debugger::info(vector<string> commandParts) {
     }
 
     if (commandParts[1] == "registers") { 
-            
+        this->executor->getRegisters()->printRegisters();
     }
 
     // else if (commandParts[1] in registers_name_to_id.keys()) {

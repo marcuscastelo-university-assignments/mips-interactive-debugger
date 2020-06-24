@@ -21,6 +21,7 @@ Word Register::getValue(){
 int Register::getValueAsInt(){
     return this->word.asInt();
 }
+
 void Register::copyValue(Register *reg){
     this->word = reg->getValue();
 }
@@ -29,5 +30,13 @@ void Register::setValue(Word word){
     this->word = word;
 }
 
-Register::~Register(){
+void Register::print(FILE *file_stream = stdout) {
+    //TODO: colocar como bytearray e deixar bonito
+    fprintf(file_stream, "|%s|%d / ", name, word.asInt());
+    for(int i=0;i<4;i++) fprintf(file_stream,"%x ",word.asByteArray()[i]);
+    fprintf(file_stream,"|\n");
+}
+
+Register::~Register() {
+
 }

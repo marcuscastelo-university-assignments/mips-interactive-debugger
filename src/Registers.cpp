@@ -74,6 +74,25 @@ Register *Registers::getRegisterByName(std::string registerName) {
     return this->registerNamesMap[registerName];
 }
 
+void Registers::printRegisters(FILE *file_stream) {
+    //TODO: deixara bonito
+    fprintf(file_stream, "+-------------+");
+    for (auto it = registerNamesMap.begin(); it != registerNamesMap.end(); it++)
+        printRegister(it->second, file_stream);
+    fprintf(file_stream, "+-------------+");
+
+
+}
+
+void Registers::printRegister(std::string name, FILE *file_stream) {
+    printRegister(getRegisterByName(name), file_stream);
+}
+
+void Registers::printRegister(Register *reg, FILE *file_stream) {
+    reg->print(file_stream);
+}
+
+
 
 Registers::~Registers() {
 

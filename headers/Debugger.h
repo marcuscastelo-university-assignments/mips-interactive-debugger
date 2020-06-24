@@ -19,7 +19,6 @@ class Debugger {
         virtual void start(void);
         virtual void exec(void);
 
-
         void info(vector<string> commandParts);
         void help(vector<string> commandParts = vector<string>(1));
         void disassemble(vector<string> commandParts);
