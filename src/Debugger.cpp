@@ -156,6 +156,11 @@ void Debugger::disassemble(vector<string> commandParts) {
 }
 
 void Debugger::breakpoint(vector<string> commandParts) {
+    if (commandParts.size() == 1) {
+        printf("No argument with '%s'\n", commandParts[0].c_str());
+        return;
+    }
+
     if (commandParts[0] == "break-remove")
         program->removeBreakpoint(stoi(commandParts[1]));
 

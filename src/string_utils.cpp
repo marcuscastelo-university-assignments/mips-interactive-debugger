@@ -1,5 +1,6 @@
 #include "string_utils.h"
 #include <iostream>
+#include <stdexcept>
 #include <regex>
 
 using namespace std;
@@ -52,7 +53,7 @@ string replaceAllChars (string str, char toReplace, char substitute) {
         return str;
 
     int pos;
-    while ((size_t) (pos = str.find(toReplace)) != (string::npos)) {
+    while ((int) (pos = str.find(toReplace)) != (string::npos)) {
         str[pos] = substitute;
     }
 
@@ -65,6 +66,35 @@ void printLine (int size) {
         printf("\n");
 }
 
+string getLine(FILE *file_ptr) {
+    char *tmp;
+    fscanf(file_ptr, "%m[^\r\n]%*c", &tmp);
+
+    if (tmp == NULL) {
+        fscanf(file_ptr, "%*c");
+
+        return string("");
+    }
+
+    if (tmp[0] == '\n')
+        return string("");
+
+    string str = string(tmp);
+    str = trim(str);
+    return str;
+}
+
+string preventAbsolutePath(string str) {
+    if (str.empty())
+        return str;
+
+    auto pos = str.rfind("/");
+    if (pos != string::npos) {
+        str.erase(0, pos+1);
+    }
+
+    return str;
+}
 bool isInteger(const std::string & s){
     return std::regex_match(s, std::regex("[(-|+)|]?[0-9]+"));
 }

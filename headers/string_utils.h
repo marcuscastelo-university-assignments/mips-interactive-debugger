@@ -10,6 +10,9 @@ vector<string> split(string str, const string delimiter=" ");
 string trim(string str);
 string replaceAllChars(string str, char toReplace, char substitute);
 void printLine(int size);
+string getLine(FILE *file_ptr=stdin);
+string preventAbsolutePath(string str);
+
 bool isInteger(const std::string & s);
 
 #endif
