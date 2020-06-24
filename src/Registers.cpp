@@ -93,7 +93,7 @@ void Registers::printRegister(Register *reg, FILE *file_stream) {
     reg->print(file_stream);
 }
 
-bool Registers::isRegister(std::string name) {
+bool Registers::hasRegister(std::string name) {
     return !(registerNamesMap.find(name) == registerNamesMap.end());
 }
 

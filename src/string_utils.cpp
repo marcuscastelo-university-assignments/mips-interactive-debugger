@@ -52,9 +52,9 @@ string replaceAllChars (string str, char toReplace, char substitute) {
     if (str.empty())
         return str;
 
-    int pos;
-    while ((int) (pos = str.find(toReplace)) != (string::npos)) {
-        str[pos] = substitute;
+    size_t pos = 0;
+    while ((pos = str.find(toReplace)) != (string::npos)) {
+        str[(int)pos] = substitute;
     }
 
     return str;

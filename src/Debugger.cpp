@@ -116,7 +116,7 @@ void Debugger::help (vector<string> commandParts) {
 void Debugger::info(vector<string> commandParts) {
     if (commandParts.size() == 1) {
         printf("No argument to show help. See 'help info'\n");
-        return ;
+        return;
     }
 
     if (commandParts[1] == "registers") { 
@@ -183,6 +183,7 @@ bool Debugger::parseInstruction(string command) {
 
     if (executedInstruction->isValid())
         return program->addInstruction(command);
+    else return false;
 }
 
 

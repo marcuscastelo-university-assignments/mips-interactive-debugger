@@ -1,9 +1,7 @@
 #include "Interpreter.h"
 
-#include <functional>
 #include <vector>
 #include "string_utils.h"
-
 
 Interpreter::Interpreter(Executor *parentExecutor) {
     this->parentExecutor = parentExecutor;
@@ -24,9 +22,9 @@ Instruction *Interpreter::interpretInstruction(std::string instruction) {
         } else {
             Register *reg = parentExecutor->getRegisters()->getRegisterByName(instruction_parts[i]);
             if (reg == NULL) {
-                fprintf(stderr, "ERROR: invalid register provided: '%s'", instruction_parts[i]);
+                fprintf(stderr, "ERROR: invalid register provided: '%s'\n", instruction_parts[i].c_str());
                 return new Instruction(nullptr);
-            } 
+            }
             registers.push_back(reg);
         }
     }

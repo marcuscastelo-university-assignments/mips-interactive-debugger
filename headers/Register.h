@@ -5,6 +5,7 @@
 #include <string>
 #include "Word.h"
 
+//TODO: implementar registradores que não podem ser alterados
 class Register
 {
     private:

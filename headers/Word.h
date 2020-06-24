@@ -4,19 +4,19 @@
 #include <math.h>
 #include <stdlib.h>
 
-class Word
+#include "ByteArray.h"
+
+class Word : public ByteArray
 {
-    private:
-        char bytes[4] = {0, 0, 0, 0};
     public:
         Word();
-        Word(char *byteArr);
+        Word(unsigned char *byteArr);
         Word(int integer);
         void setValue(int integer);
-        void setValue(char *byteArr);
+        void setValue(unsigned char *byteArr);
         int asInt();
-        char *asByteArray();
-        ~Word();
+        ByteArray asByteArray();
+        Word clone();
 };
 
 #endif 

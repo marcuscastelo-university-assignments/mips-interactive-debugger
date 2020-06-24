@@ -16,7 +16,7 @@ class Executor{
     private:
         Interpreter *interpreter;
         Registers *registers;
-        Stack stack;
+        Stack *stack;
     public:
         Executor();
         ~Executor();
@@ -26,6 +26,8 @@ class Executor{
 
         Instruction *executeInstruction(std::string instruction);
         bool hasRegister(std::string name);
+
+        //void getInstructionInformation();
 
         void _lw(Register *reg1, Register *reg2, int offset);
         void _sw(Register *reg1, Register *reg2, int offset);
