@@ -91,7 +91,7 @@ void ConsoleDebugger::exec(void) {
 }
 
 void ConsoleDebugger::exportCode(vector<string> commandParts) {
-    string name = "code";
+    string name = "code.asm";
 
     //prevent to create files outside of the dir in which the program was executed
     if (commandParts.size() >= 2) {
@@ -101,9 +101,7 @@ void ConsoleDebugger::exportCode(vector<string> commandParts) {
             name.erase(0, pos+1);
         }
     }
-
-    name += ".asm";
-
+    
     FILE *file = fopen(name.c_str(), "w");
     program->printInstructions("", file);
     fclose(file);

@@ -4,10 +4,6 @@
 #include "Debugger.h"
 #include "ConsoleDebugger.h"
 
-#include <string>
-#include <vector>
-using namespace std;
-
 class ConsoleDebugger : public Debugger {
     public:
 		  ConsoleDebugger(void);

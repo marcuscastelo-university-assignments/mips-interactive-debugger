@@ -10,6 +10,9 @@ class FileDebugger : public Debugger {
         ~FileDebugger(void);
         void start(void);
         void exec(void);
+
+    private:
+        void importCode(vector<string> commandParts);
 };
 
 #endif
