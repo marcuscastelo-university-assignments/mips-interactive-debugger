@@ -22,8 +22,12 @@ Instruction *Interpreter::interpretInstruction(std::string instruction) {
         if (isInteger(instruction_parts[i])) {
             integers.push_back(stoi(instruction_parts[i]));
         } else {
-            parentExecutor->getRegisters()->getRegisterByName(instruction_parts[i])
-            registers.push_back();
+            Register *reg = parentExecutor->getRegisters()->getRegisterByName(instruction_parts[i]);
+            if (reg == NULL) {
+                fprintf(stderr, "ERROR: invalid register provided: '%s'", instruction_parts[i]);
+                return new Instruction(nullptr);
+            } 
+            registers.push_back(reg);
         }
     }
     

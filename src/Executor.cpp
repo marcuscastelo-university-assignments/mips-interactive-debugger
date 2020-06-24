@@ -15,7 +15,6 @@ Executor::~Executor() {
 Instruction *Executor::executeInstruction(std::string instructionStr) {
     Instruction *instruction = interpreter->interpretInstruction(instructionStr);
     instruction->execute();
-    instruction->executor->getRegisters()->printRegisters();
     return instruction;
 }
 
