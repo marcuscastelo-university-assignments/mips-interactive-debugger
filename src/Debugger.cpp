@@ -1,4 +1,7 @@
 #include "Debugger.h"
+#include <iostream>
+
+using namespace std;
 
 Debugger::Debugger() {
     program = new Program;
@@ -15,10 +18,29 @@ void Debugger::start (void) {
 }
 
 void Debugger::exec (void) {
+    Register *reg = executor->getRegister("$pc");
+    reg->setValue(3);
 
+    while (true) {
+        int pos = reg->getValueAsInt();
+        string inst;
+
+        printf("pos: %d\n", pos);
+
+        try {
+            inst = program->getInstruction(pos);
+            printSingleInstruction(inst);
+        } catch (std::out_of_range &e) {
+            cout << e.what() << endl;
+            break;
+        }
+        
+        pos++;
+        reg->setValue(pos);
+    }
 }
 
-void Debugger::help (vector<string> commandParts) {
+void Debugger::help(vector<string> commandParts) {
     if (commandParts.size() <= 1) {
         printf("Help options:\n");
         printf("- console\n");
@@ -176,16 +198,16 @@ bool Debugger::parseInstruction(string command) {
         string str = command;
         str.pop_back();
         if (hasRegister(command))
-        return program->addInstruction(command);
+            return false;
     }
 
-    Instruction *executedInstruction = executor->executeInstructionStr(command);
-
-    if (executedInstruction->isValid())
-        return program->addInstruction(command);
-    else return false;
+    return true;
 }
 
+bool Debugger::executeInstructionAndVerify(string command) {
+    Instruction *executedInstruction = executor->executeInstructionStr(command);
+    return executedInstruction->isValid();
+}
 
 bool Debugger::hasRegister(string name) {
     return executor->hasRegister(name);

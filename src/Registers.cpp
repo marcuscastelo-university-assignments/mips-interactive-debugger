@@ -1,4 +1,5 @@
 #include "Registers.h"
+#include <stdexcept>
 
 Registers::Registers() {
     this->registerNamesMap[s("$zero")] = ZERO = new Register("$zero");
@@ -95,6 +96,22 @@ void Registers::printRegister(Register *reg, FILE *file_stream) {
 
 bool Registers::hasRegister(std::string name) {
     return !(registerNamesMap.find(name) == registerNamesMap.end());
+}
+
+void Registers::setValue(std::string name, int value) {
+    Register *reg = getRegisterByName(name);
+    if (!reg)
+        throw std::invalid_argument("Not a valid register name");
+
+    reg->setValue(value);
+}
+
+int Registers::getValue(std::string name) {
+    Register *reg = getRegisterByName(name);
+    if (!reg)
+        throw std::invalid_argument("Not a valid register name");
+
+    return reg->getValueAsInt();
 }
 
 Registers::~Registers() {

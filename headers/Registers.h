@@ -25,8 +25,12 @@ class Registers
         void printRegister(std::string name, FILE *file_stream = stdout);
         void printRegister(Register *reg, FILE *file_stream = stdout);
 
+        int getValue(std::string name);
+        void setValue(std::string name, int value);
+
         bool hasRegister(std::string name);
         
+
         Register *ZERO;
         Register *AT;
         Register *V0;

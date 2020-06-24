@@ -20,7 +20,6 @@ bool Program::addInstruction(string inst) {
     if (inst.empty())
         return false;
 
-
     if (isLabel(inst) and hasLabel(inst)) {
             printf("Can't have two labels with the same identifier\n");
             return false;
@@ -34,7 +33,7 @@ bool Program::addInstruction(string inst) {
             return false;
         }
         instructions->push_back(inst);
-        addLabelPos(inst, instructions->size()-1);
+        addLabelPos(inst, getInstructionsVectorSize()-1);
     }
     else
         instructions->push_back(inst);
@@ -43,14 +42,18 @@ bool Program::addInstruction(string inst) {
 }
 
 string Program::getInstruction(int pos) {
-    if (pos < 0 or pos >= (int) instructions->size())
+    if (pos < 0 or pos >= (int) getInstructionsVectorSize())
         throw std::out_of_range("Position not allowed");
 
     return (*instructions)[pos];
 }
 
+size_t Program::getInstructionsVectorSize(void) {
+    return instructions->size();
+}   
+
 void Program::printInstructions(string label, FILE *file_ptr) {
-    int size = (int) instructions->size();
+    int size = (int) getInstructionsVectorSize();
     
     if (label.empty()) {
         for (int i = 0; i < size; i++)
@@ -82,7 +85,7 @@ void Program::addLabelPos(string label, int pos) {
     if (label.empty())
         return;
 
-    if (pos < 0 or pos >= (int) instructions->size())
+    if (pos < 0 or pos >= (int) getInstructionsVectorSize())
         throw std::out_of_range("Position not allowed");
     
     if (isLabel(label) == false)
@@ -105,6 +108,8 @@ map<string,int>::iterator Program::getLabelPos(string label) {
 bool Program::hasLabel(string label) {
     if (label.empty())
         return false;
+
+    label.pop_back();
 
     return !(getLabelPos(label) == labelsAddresses->end());
 }
@@ -132,7 +137,7 @@ void Program::printLabel(string label) {
 
 /////BREAKPOINTS/////
 void Program::addBreakpoint(int pos) {
-    if (pos < 0 or pos >= (int) instructions->size())
+    if (pos < 0 or pos >= (int) getInstructionsVectorSize())
         throw std::out_of_range("Position not allowed");
 
     (*breakpointsAddresses)[pos] = true;

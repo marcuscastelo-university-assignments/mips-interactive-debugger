@@ -2,8 +2,7 @@
 #include <string>
 #include <iostream>
 
-using namespace std;
-
+#include "Registers.h"
 #include "ConsoleDebugger.h"
 #include "Debugger.h"
 
@@ -62,7 +61,10 @@ void ConsoleDebugger::start (void) {
 
         else {
             // TODO: adicionar somente se o executor não retornar erros (instrução não existente, etc...)
-            if (parseInstruction(command) == false) {
+            if (parseInstruction(command) == true and executeInstructionAndVerify(command) == true) {
+                program->addInstruction(command);
+            }
+            else {
                 printf("Invalid instruction or syntax\n");
             }
         }
@@ -70,10 +72,6 @@ void ConsoleDebugger::start (void) {
     }
 
     return;
-}
-
-void ConsoleDebugger::exec(void) {
-
 }
 
 void ConsoleDebugger::exportCode(vector<string> commandParts) {
