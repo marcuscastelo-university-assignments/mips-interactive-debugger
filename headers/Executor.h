@@ -8,21 +8,22 @@
 #include "Word.h"
 #include "Register.h"
 #include "Registers.h"
+#include "Instruction.h"
+#include "Interpreter.h"
 
-enum InstructionExecutionResult {
-    OK_FOWARD, OK_NOP, ERR_404
-};
+
 class Executor{
     private:
         std::map<std::string,int> registerNameToId;
         std::vector<Word> registerValues;
-        Registers registers;
+        Interpreter *interpreter;
+        Registers *registers;
         Stack stack;
     public:
         Executor();
         ~Executor();
 
-        InstructionExecutionResult executeInstruction(std::string instruction);
+        Instruction executeInstruction(std::string instruction);
 
         void _lw(Register *reg1, Register *reg2, int offset);
         void _sw(Register *reg1, Register *reg2, int offset);
@@ -54,8 +55,8 @@ class Executor{
         void _mfhi(Register *reg);
         void _mul(Register *reg1,Register *reg2,Register *reg3);
         void _div(Register *reg1,Register *reg2);
-        void _div(Register *reg1,Register *reg2,Register *reg3);
-        void _rem(Register *reg1,Register *reg2,Register *reg3);
+        void _div(Register *reg1,Register *reg2, Register *reg3);
+        void _rem(Register *reg1,Register *reg2, Register *reg3);
         void _and(Register *reg1, Register *reg2, Register *reg3);
         void _or(Register *reg1, Register *reg2, Register *reg3);
         void _xor(Register *reg1, Register *reg2, Register *reg3);

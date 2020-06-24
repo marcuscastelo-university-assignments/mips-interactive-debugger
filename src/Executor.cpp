@@ -2,15 +2,17 @@
 #include <iostream>
 
 Executor::Executor() {
-
+    interpreter = new Interpreter(this);
+    registers = new Registers();
 }
 
 Executor::~Executor() {
-
+    delete interpreter;
+    delete registers;
 }
 
-InstructionExecutionResult Executor::executeInstruction(std::string instruction) {
-    return OK_FOWARD;
+Instruction Executor::executeInstruction(std::string instruction) {
+    
 }
 
 //TODO: Questão da stack
