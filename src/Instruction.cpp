@@ -85,12 +85,12 @@ void Instruction::execute() {
     if (type == INVALID) return;
     if (type == T_3R) (executor->*executor_funcT_3R)(registers[0], registers[1], registers[2]);
     if (type == T_2R) (executor->*executor_funcT_2R)(registers[0], registers[1]);
-    if (type == T_3R) (executor->*executor_funcT_1R)(registers[0]);
-    if (type == T_3R) (executor->*executor_funcT_2R_1I)(registers[0], registers[1], integers[0]);
-    if (type == T_3R) (executor->*executor_funcT_2R_1U)(registers[0], registers[1], (unsigned) integers[0]);
-    if (type == T_3R) (executor->*executor_funcT_1R_2I)(registers[0], integers[0], integers[1]);
-    if (type == T_3R) (executor->*executor_funcT_1R_1I)(registers[0], integers[0]);
-    if (type == T_3R) (executor->*executor_funcT_1I)(integers[0]);
+    if (type == T_1R) (executor->*executor_funcT_1R)(registers[0]);
+    if (type == T_2R_1I) (executor->*executor_funcT_2R_1I)(registers[0], registers[1], integers[0]);
+    if (type == T_2R_1U) (executor->*executor_funcT_2R_1U)(registers[0], registers[1], (unsigned) integers[0]);
+    if (type == T_1R_2I) (executor->*executor_funcT_1R_2I)(registers[0], integers[0], integers[1]);
+    if (type == T_1R_1I) (executor->*executor_funcT_1R_1I)(registers[0], integers[0]);
+    if (type == T_1I) (executor->*executor_funcT_1I)(integers[0]);
     if (type == T_V) (executor->*executor_funcT_V)();
     if (type == INVALID) throw new std::exception();
 }
