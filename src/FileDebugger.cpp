@@ -66,10 +66,6 @@ void FileDebugger::start (void) {
     }
 }
 
-void FileDebugger::exec (void) {
-    
-}
-
 void FileDebugger::importCode (vector<string> commandParts) {
     if (commandParts.size() == 1) {
         printf("This function needs a filename\n");
@@ -83,6 +79,11 @@ void FileDebugger::importCode (vector<string> commandParts) {
         printf("No file to open\n");
         return;
     }
+
+    delete program;
+    delete executor;
+    program = new Program();
+    executor = new Executor();
    
     while (!feof(file_ptr)) {
         string line = getLine(file_ptr);

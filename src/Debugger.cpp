@@ -1,4 +1,7 @@
 #include "Debugger.h"
+#include <iostream>
+
+using namespace std;
 
 Debugger::Debugger() {
     program = new Program;
@@ -15,7 +18,23 @@ void Debugger::start (void) {
 }
 
 void Debugger::exec (void) {
+    Register *reg = executor->getRegister("$pc");
+    reg->setValue(0);
 
+    while (true) {
+        int pos = reg->getValueAsInt();
+        string inst;
+
+        try {
+            inst = program->getInstruction(pos);
+            printSingleInstruction(inst);
+        } catch (std::out_of_range &e) {
+            cout << e.what() << endl;
+            break;
+        }
+
+        reg->setValue(pos+1);
+    }
 }
 
 void Debugger::help (vector<string> commandParts) {
@@ -176,15 +195,16 @@ bool Debugger::parseInstruction(string command) {
         string str = command;
         str.pop_back();
         if (hasRegister(command))
-        return program->addInstruction(command);
+            return false;
     }
 
-    Instruction *executedInstruction = executor->executeInstruction(command);
-
-    if (executedInstruction->isValid())
-        return program->addInstruction(command);
+    return true;
 }
 
+bool Debugger::executeInstructionAndVerify(string command) {
+    Instruction *executedInstruction = executor->executeInstruction(command);
+    return executedInstruction->isValid();
+}
 
 bool Debugger::hasRegister(string name) {
     return executor->hasRegister(name);

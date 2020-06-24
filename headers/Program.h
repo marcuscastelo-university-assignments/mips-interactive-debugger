@@ -18,6 +18,7 @@ class Program {
         
         bool addInstruction(string inst);
         string getInstruction(int pos);
+        size_t getInstructionsVectorSize(void);
         
         void addLabelPos(string label, int pos);
         map<string, int>::iterator getLabelPos(string label);

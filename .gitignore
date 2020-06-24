@@ -3,3 +3,9 @@ mipsdb
 
 #IDE configs
 .vscode
+
+*.py
+*.o
+*.asm
+./main.cpp
+./teste.cpp

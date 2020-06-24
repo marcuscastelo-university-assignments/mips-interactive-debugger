@@ -9,7 +9,6 @@ class ConsoleDebugger : public Debugger {
 		  ConsoleDebugger(void);
 		  ~ConsoleDebugger();
       void start(void);
-      void exec(void);
 
     private:
       void exportCode(vector<string> commandParts);

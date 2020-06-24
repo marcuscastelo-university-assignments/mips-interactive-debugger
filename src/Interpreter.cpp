@@ -22,7 +22,7 @@ Instruction *Interpreter::interpretInstruction(std::string instruction) {
         if (isInteger(instruction_parts[i])) {
             integers.push_back(stoi(instruction_parts[i]));
         } else {
-            parentExecutor->getRegisters()->getRegisterByName(instruction_parts[i])
+            parentExecutor->getRegisters()->getRegisterByName(instruction_parts[i]);
             registers.push_back();
         }
     }

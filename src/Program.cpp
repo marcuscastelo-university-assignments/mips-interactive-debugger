@@ -34,7 +34,7 @@ bool Program::addInstruction(string inst) {
             return false;
         }
         instructions->push_back(inst);
-        addLabelPos(inst, instructions->size()-1);
+        addLabelPos(inst, getInstructionsVectorSize()-1);
     }
     else
         instructions->push_back(inst);
@@ -43,14 +43,18 @@ bool Program::addInstruction(string inst) {
 }
 
 string Program::getInstruction(int pos) {
-    if (pos < 0 or pos >= (int) instructions->size())
+    if (pos < 0 or pos >= (int) getInstructionsVectorSize())
         throw std::out_of_range("Position not allowed");
 
     return (*instructions)[pos];
 }
 
+size_t Program::getInstructionsVectorSize(void) {
+    return getInstructionsVectorSize();
+}   
+
 void Program::printInstructions(string label, FILE *file_ptr) {
-    int size = (int) instructions->size();
+    int size = (int) getInstructionsVectorSize();
     
     if (label.empty()) {
         for (int i = 0; i < size; i++)
@@ -82,7 +86,7 @@ void Program::addLabelPos(string label, int pos) {
     if (label.empty())
         return;
 
-    if (pos < 0 or pos >= (int) instructions->size())
+    if (pos < 0 or pos >= (int) getInstructionsVectorSize())
         throw std::out_of_range("Position not allowed");
     
     if (isLabel(label) == false)
@@ -132,7 +136,7 @@ void Program::printLabel(string label) {
 
 /////BREAKPOINTS/////
 void Program::addBreakpoint(int pos) {
-    if (pos < 0 or pos >= (int) instructions->size())
+    if (pos < 0 or pos >= (int) getInstructionsVectorSize())
         throw std::out_of_range("Position not allowed");
 
     (*breakpointsAddresses)[pos] = true;
