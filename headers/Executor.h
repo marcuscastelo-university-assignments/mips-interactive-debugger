@@ -22,8 +22,10 @@ class Executor{
         ~Executor();
 
         Registers *getRegisters();
+        Register *getRegister(std::string name);
 
         Instruction *executeInstruction(std::string instruction);
+        bool hasRegister(std::string name);
 
         void _lw(Register *reg1, Register *reg2, int offset);
         void _sw(Register *reg1, Register *reg2, int offset);

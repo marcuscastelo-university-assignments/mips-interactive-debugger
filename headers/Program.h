@@ -16,7 +16,7 @@ class Program {
         Program();
         ~Program();
         
-        void addInstruction(string inst);
+        bool addInstruction(string inst);
         string getInstruction(int pos);
         
         void addLabelPos(string label, int pos);

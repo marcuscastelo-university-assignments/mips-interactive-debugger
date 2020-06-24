@@ -167,3 +167,25 @@ void Debugger::breakpoint(vector<string> commandParts) {
     else
         program->addBreakpoint(stoi(commandParts[1]));
 }
+
+bool Debugger::parseInstruction(string command) {
+    if (command.empty())
+        return false;
+
+    if (isLabel(command)) {
+        string str = command;
+        str.pop_back();
+        if (hasRegister(command))
+        return program->addInstruction(command);
+    }
+
+    Instruction *executedInstruction = executor->executeInstruction(command);
+
+    if (executedInstruction->isValid())
+        return program->addInstruction(command);
+}
+
+
+bool Debugger::hasRegister(string name) {
+    return executor->hasRegister(name);
+}

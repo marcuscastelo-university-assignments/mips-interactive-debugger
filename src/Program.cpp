@@ -16,14 +16,14 @@ Program::~Program() {
 
 
 /////INSTRUCTION/////
-void Program::addInstruction(string inst) {
+bool Program::addInstruction(string inst) {
     if (inst.empty())
-        return;
+        return false;
 
 
     if (isLabel(inst) and hasLabel(inst)) {
             printf("Can't have two labels with the same identifier\n");
-            return;
+            return false;
     }
 
     //TODO: parse register name
@@ -31,7 +31,7 @@ void Program::addInstruction(string inst) {
         vector<string> commandParts = split(inst);
         if (commandParts.size() >= 2) {
             printf("Can't have spaces in label's identifier. Ignoring this line: %s\n", inst.c_str());
-            return;
+            return false;
         }
         instructions->push_back(inst);
         addLabelPos(inst, instructions->size()-1);
@@ -39,7 +39,7 @@ void Program::addInstruction(string inst) {
     else
         instructions->push_back(inst);
     
-    return;
+    return true;
 }
 
 string Program::getInstruction(int pos) {
@@ -149,7 +149,6 @@ void Program::removeBreakpoint(int pos) {
 bool Program::isBreakpoint(int pos) {
     return (*breakpointsAddresses)[pos];
 }
-
 
 //////////////////////////////////////////////
 
