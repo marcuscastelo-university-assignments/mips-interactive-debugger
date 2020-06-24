@@ -1,7 +1,7 @@
 #ifndef DEBUGGER_H
 #define DEBUGGER_H
 
-#include "Registers.h"
+#include "Executor.h"
 #include "Program.h"
 
 #include <vector>
@@ -9,8 +9,9 @@
 using namespace std;
 
 class Debugger {
-    private:
-        // Registers registers;
+    protected:
+        Program *program;
+        Executor *executor;
 
     public:
         Debugger();
@@ -18,13 +19,12 @@ class Debugger {
         virtual void start(void);
         virtual void exec(void);
 
+
         void info(vector<string> commandParts);
         void help(vector<string> commandParts);
         void disassemble(vector<string> commandParts);
         void breakpoint(vector<string> commandParts);
 
-    protected:
-        Program *program;
 };
 
 #endif

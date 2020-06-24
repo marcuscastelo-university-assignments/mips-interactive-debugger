@@ -4,14 +4,14 @@
 
 Program::Program() {
     instructions = new vector<string>();
-    labelsPosition = new map<string, int>();
-    breakpointsPosition = new map<int, bool>();
+    labelsAddresses = new map<string, int>();
+    breakpointsAddresses = new map<int, bool>();
 }
 
 Program::~Program() {
     delete instructions;
-    delete labelsPosition;
-    delete breakpointsPosition;
+    delete labelsAddresses;
+    delete breakpointsAddresses;
 }
 
 
@@ -45,7 +45,7 @@ void Program::printInstructions(string label, FILE *file_ptr) {
     }
 
     auto it = getLabelPos(label);
-    if (it == labelsPosition->end()) {
+    if (it == labelsAddresses->end()) {
         printf("Label %s undefined\n", label.c_str());
         return;
     }
@@ -77,23 +77,23 @@ void Program::addLabelPos(string label, int pos) {
     label.pop_back();
     printf("label added = %s\n", label.c_str());
 
-    (*labelsPosition)[label] = pos;
+    (*labelsAddresses)[label] = pos;
 
     return;
 }
 
 map<string,int>::iterator Program::getLabelPos(string label) {
     if (label.empty())
-        return labelsPosition->end();
+        return labelsAddresses->end();
 
-    return labelsPosition->find(label);
+    return labelsAddresses->find(label);
 }
 
 bool Program::hasLabel(string label) {
     if (label.empty())
         return false;
 
-    return !(getLabelPos(label) == labelsPosition->end());
+    return !(getLabelPos(label) == labelsAddresses->end());
 }
 
 void Program::printLabel(string label) {
@@ -107,7 +107,7 @@ void Program::printLabel(string label) {
         return;
     }
 
-    for (auto it = labelsPosition->begin(); it != labelsPosition->end(); it++) {
+    for (auto it = labelsAddresses->begin(); it != labelsAddresses->end(); it++) {
         printLine(25);
         printSingleLabel(it->first, it->second);
     }
@@ -121,19 +121,19 @@ void Program::addBreakpoint(int pos) {
     if (pos < 0 or pos >= (int) instructions->size())
         throw std::out_of_range("Position not allowed");
 
-    (*breakpointsPosition)[pos] = true;
+    (*breakpointsAddresses)[pos] = true;
 
     return;
 }
 
 void Program::removeBreakpoint(int pos) {
-    breakpointsPosition->erase(pos);
+    breakpointsAddresses->erase(pos);
 
     return;
 }
 
 bool Program::isBreakpoint(int pos) {
-    return (*breakpointsPosition)[pos];
+    return (*breakpointsAddresses)[pos];
 }
 
 

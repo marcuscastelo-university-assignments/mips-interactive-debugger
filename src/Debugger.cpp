@@ -1,11 +1,13 @@
 #include "Debugger.h"
 
-Debugger::Debugger () {
-
+Debugger::Debugger() {
+    program = new Program;
+    executor = new Executor;
 }
 
 Debugger::~Debugger () {
-    
+    delete program;
+    delete executor;
 }
 
 void Debugger::start (void) {

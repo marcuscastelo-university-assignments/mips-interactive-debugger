@@ -1,6 +1,18 @@
 #include "Executor.h"
 #include <iostream>
 
+Executor::Executor() {
+
+}
+
+Executor::~Executor() {
+
+}
+
+InstructionExecutionResult executeInstruction(std::string instruction) {
+    return OK_FOWARD;
+}
+
 //TODO: Questão da stack
 void Executor::_lw(Register *reg1, Register *reg2, int offset) {
     int stackAddress = reg2->getValueAsInt() + offset;
@@ -91,16 +103,6 @@ void Executor::_bgtu(Register *reg1, Register *reg2, int jumpAddress){
 
 void Executor::_beqz(Register *reg, int jumpAddress){
     _beq(reg, registers.ZERO, jumpAddress);    
-}
-
-void Executor::_beq(Register *reg1, int immediate, int jumpAddress){
-    _ori(registers.AT, registers.ZERO, immediate);    
-    _beq(reg1, registers.AT, jumpAddress);    
-}
-
-void Executor::_beq(Register *reg1, int immediate, int jumpAddress){
-    _ori(registers.AT, registers.ZERO, immediate);    
-    _beq(reg1, registers.AT, jumpAddress);    
 }
 
 void Executor::_beq(Register *reg1, int immediate, int jumpAddress){

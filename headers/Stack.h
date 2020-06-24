@@ -10,14 +10,14 @@ class Stack
     public:
         Stack();
         Stack(int stackSize);
+        ~Stack();
 
         int getStackSize();
 
-        ~Stack();
         char *loadBytes(int address, int size);
         void writeBytes(int address, char *bytes, int size);
         char loadByte(int address);
-        char writeByte(int address, char byte);
+        void writeByte(int address, char byte);
 };
 
 #endif

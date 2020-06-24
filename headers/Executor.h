@@ -9,6 +9,9 @@
 #include "Register.h"
 #include "Registers.h"
 
+enum InstructionExecutionResult {
+    OK_FOWARD, OK_NOP, ERR_404
+};
 class Executor{
     private:
         std::map<std::string,int> registerNameToId;
@@ -18,6 +21,8 @@ class Executor{
     public:
         Executor();
         ~Executor();
+
+        InstructionExecutionResult executeInstruction(std::string instruction);
 
         void _lw(Register *reg1, Register *reg2, int offset);
         void _sw(Register *reg1, Register *reg2, int offset);
@@ -39,8 +44,6 @@ class Executor{
         void _ble(Register *reg1, Register *reg2, int jumpAddress);
         void _bgtu(Register *reg1, Register *reg2, int jumpAddress);
         void _beqz(Register *reg, int jumpAddress);
-        void _beq(Register *reg1, int immediate, int jumpAddress);
-        void _beq(Register *reg1, int immediate, int jumpAddress);
         void _beq(Register *reg1, int immediate, int jumpAddress);
         void _jump(int jumpAddress);
         void _add(Register *reg1,Register *reg2,Register *reg3);
