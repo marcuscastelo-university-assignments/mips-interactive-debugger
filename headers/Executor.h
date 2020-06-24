@@ -25,7 +25,7 @@ class Executor{
         Registers *getRegisters();
         Register *getRegister(std::string name);
 
-        Instruction *executeInstruction(std::string instruction);
+        Instruction *executeInstructionStr(std::string instruction);
         bool hasRegister(std::string name);
 
         //void getInstructionInformation();

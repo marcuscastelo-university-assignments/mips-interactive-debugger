@@ -78,3 +78,32 @@ void Instruction::execute() {
     if (type == T_V) (executor->*executor_funcT_V)();
     if (type == INVALID) throw new std::exception();
 }
+
+int Instruction::getRegistersCount(){
+    return registers.size();
+}
+
+int Instruction::getRegistersSupposedCount(){
+    if(type == T_3R) return 3;
+    else if(type == T_2R || type == T_2R_1I || type == T_2R_1U) return 2;
+    else if(type == T_V) return 0;
+    else if(type == INVALID) throw("ERROR: Invalid instruction does not have register parameters!\n");
+    else return 1;
+}
+
+int Instruction::getIntegersCount(){
+    return integers.size();
+}
+
+
+int Instruction::getIntegersSupposedCount(){
+    if (type == T_3R || type == T_2R || type == T_1R || type == T_V) return 0;
+    else if (type == T_1I || type == T_1R_1I || type == T_2R_1I || type == T_2R_1U) return 1;
+    else if (type == T_1R_2I) return 2;
+    else if (type == INVALID) throw("ERROR: Invalid instruction does not have integer parameters!\n");
+    else throw("Invalid instruction state");
+}
+
+std::string Instruction::toString() {
+    return repr;
+}

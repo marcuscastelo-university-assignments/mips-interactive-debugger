@@ -19,6 +19,8 @@ Instruction *Interpreter::interpretInstruction(std::string instruction) {
     std::vector<int> integers;
     int invalidRegisters = 0;
 
+    if (instruction_parts.size() < 1) return new Instruction(nullptr);
+
     for (unsigned i = 1; i < instruction_parts.size(); i++) {
         if (isInteger(instruction_parts[i])) {
             integers.push_back(stoi(instruction_parts[i]));
@@ -106,5 +108,5 @@ Instruction *Interpreter::interpretInstruction(std::string instruction) {
     else if (instruction_parts[0] == "la") sef(la);
     else if (instruction_parts[0] == "nor") sef(nor);
     else if (instruction_parts[0] == "not") sef(not);
-    return (new Instruction(nullptr));
+    return generated_instruction;
 }

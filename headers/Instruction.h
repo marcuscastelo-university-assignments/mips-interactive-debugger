@@ -52,6 +52,13 @@ class Instruction
 
         void execute();
         Instruction *feed(std::vector<Register*> newRegisters, std::vector<int> newIntegers);
+
+        std::string toString();
+        int getRegistersCount();
+        int getRegistersSupposedCount();
+        int getIntegersCount();
+        int getIntegersSupposedCount();
+
 };
 
 #endif  //!__INSTRUCTION__H__

@@ -16,11 +16,18 @@ Executor::~Executor() {
     delete stack;
 }
 
-Instruction *Executor::executeInstruction(std::string instructionStr) {
-    Instruction *instruction = interpreter->interpretInstruction(instructionStr);
-    instruction->execute();
-    getRegisters()->printRegisters();
-    return instruction;
+void printInstructionMistake(Instruction *interpretedInstruction) {
+    printf("The instruction %s should have recieved:\n%d Registers and %d Integers, instead %d Registers and %d Integers have been passed.\n", interpretedInstruction->toString().c_str(), interpretedInstruction->getRegistersSupposedCount() , interpretedInstruction->getIntegersSupposedCount(), interpretedInstruction->getRegistersCount(), interpretedInstruction->getIntegersCount());
+}
+
+Instruction *Executor::executeInstructionStr(std::string instructionStr) {
+    Instruction *interpretedInstruction = interpreter->interpretInstruction(instructionStr);
+    
+    if (interpretedInstruction->isValid()) interpretedInstruction->execute();
+    else if (true) printInstructionMistake(interpretedInstruction);  //this->isForUsuarioBurro())
+    
+
+    return interpretedInstruction;
 }
 
 Registers *Executor::getRegisters() {

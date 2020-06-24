@@ -179,7 +179,7 @@ bool Debugger::parseInstruction(string command) {
         return program->addInstruction(command);
     }
 
-    Instruction *executedInstruction = executor->executeInstruction(command);
+    Instruction *executedInstruction = executor->executeInstructionStr(command);
 
     if (executedInstruction->isValid())
         return program->addInstruction(command);

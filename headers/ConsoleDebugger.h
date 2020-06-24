@@ -13,7 +13,6 @@ class ConsoleDebugger : public Debugger {
 
     private:
       void exportCode(vector<string> commandParts);
-
 };
 
 #endif
