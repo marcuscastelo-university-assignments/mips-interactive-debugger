@@ -330,7 +330,7 @@ void Executor::_not(Register *reg1, Register *reg2){
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 
-void Executor::syscall() {
+void Executor::_syscall() {
     int operationCode = registers->V0->getValueAsInt();
     if (operationCode == 1) {
         std::cout << registers->A0->getValueAsInt();

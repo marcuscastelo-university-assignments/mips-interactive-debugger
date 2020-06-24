@@ -89,7 +89,7 @@ class Executor{
         void _sra(Register *reg1, Register *reg2, int immediate);
         void _srl(Register *reg1, Register *reg2, int immediate);
         
-        void syscall();
+        void _syscall();
         void _move(Register *reg1, Register *reg2);
         void _srlv(Register *reg1, Register *reg2, Register *reg3);
         void _clear(Register *reg);
