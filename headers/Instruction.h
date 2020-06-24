@@ -16,6 +16,7 @@ class Instruction
     private:
         std::string repr;
         InstructionType type;
+        Executor *executor;
 
         std::vector<Register *> registers; 
         std::vector<int> integers;
@@ -31,7 +32,6 @@ class Instruction
         void (Executor::*executor_funcT_V)(void);
 
     public:
-        Executor *executor;
         bool isValid();
         Instruction(std::string repr, Executor *executor, void (Executor::*executor_func)(Register*, Register*, Register*));
         Instruction(std::string repr, Executor *executor, void (Executor::*executor_func)(Register*, Register*));

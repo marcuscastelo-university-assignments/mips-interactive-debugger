@@ -6,7 +6,7 @@
 class Stack
 {
     private:
-        std::vector<char> stackBytes;
+        std::vector<unsigned char> stackBytes;
     public:
         Stack();
         Stack(int stackSize);
@@ -14,10 +14,10 @@ class Stack
 
         int getStackSize();
 
-        char *loadBytes(int address, int size);
-        void writeBytes(int address, char *bytes, int size);
-        char loadByte(int address);
-        void writeByte(int address, char byte);
+        ByteArray loadBytes(int address, int size);
+        void writeBytes(int address, ByteArray byteArray);
+        unsigned char loadByte(int address);
+        void writeByte(int address, unsigned char byte);
 };
 
 #endif

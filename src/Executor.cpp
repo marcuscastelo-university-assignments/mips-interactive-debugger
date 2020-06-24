@@ -2,20 +2,24 @@
 #include "Instruction.h"
 #include <iostream>
 
+//TODO: implementar comportamentos esquisitos de registradores temporarios (j label, etc) (e outros obscutos)
 Executor::Executor() {
     interpreter = new Interpreter(this);
-    registers= new Registers();
+    registers = new Registers();
+    stack = new Stack();
+    registers->SP->setValue(stack->getStackSize());
 }
 
 Executor::~Executor() {
     delete interpreter;
     delete registers;
+    delete stack;
 }
 
 Instruction *Executor::executeInstruction(std::string instructionStr) {
     Instruction *instruction = interpreter->interpretInstruction(instructionStr);
     instruction->execute();
-    instruction->executor->getRegisters()->printRegisters();
+    getRegisters()->printRegisters();
     return instruction;
 }
 
@@ -24,35 +28,37 @@ Registers *Executor::getRegisters() {
 }
 
 Register *Executor::getRegister(std::string name) {
-    if (registers->isRegister(name) == false)
+    if (registers->hasRegister(name) == false)
         return nullptr;
 
     return registers->getRegisterByName(name);
 }
 
 bool Executor::hasRegister(std::string name) {
-    return registers->isRegister(name);
+    return registers->hasRegister(name);
 }
 
 //TODO: Questão da stack
 void Executor::_lw(Register *reg1, Register *reg2, int offset) {
     int stackAddress = reg2->getValueAsInt() + offset;
-    reg1->setValue(stack.loadBytes(stackAddress, 4));
+    reg1->setValue(stack->loadBytes(stackAddress, 4));
 }
 
 void Executor::_sw(Register *reg1, Register *reg2, int offset) {
     int stackAddress = reg2->getValueAsInt() + offset;
-    stack.writeBytes(stackAddress, reg1->getValue().asByteArray(), 4);
+    stack->writeBytes(stackAddress, reg1->getValue().asByteArray(), 4);
 }
 
 void Executor::_lb(Register *reg1, Register *reg2,int offset) {
     int stackAddress = reg2->getValueAsInt() + offset;
-    reg1->setValue(stack.loadByte(stackAddress));
+    Word newWord = reg1->getValue();
+    newWord.setByteAt(3, stack->loadByte(stackAddress));
+    reg1->setValue(newWord);   
 }
 
 void Executor::_sb(Register *reg1, Register *reg2,int offset) {
     int stackAddress = reg2->getValueAsInt() + offset;
-    stack.writeByte(stackAddress, reg1->getValue().asByteArray()[0]);
+    stack->writeByte(stackAddress, reg1->getValue().asByteArray()[3]);
 }
 
 void Executor::_beq(Register *reg1, Register *reg2, int jumpAddress){
@@ -133,7 +139,7 @@ void Executor::_beqi(Register *reg1, int immediate, int jumpAddress){
 
 //TODO: Questão do jump e tamanho da stack
 void Executor::_jump(int jumpAddress){
-    if(jumpAddress < 0 || jumpAddress >= stack.getStackSize()) printf("ERROR: Jump adress not implemented.\n");
+    if(jumpAddress < 0 || jumpAddress >= stack->getStackSize()) printf("ERROR: Jump adress not implemented.\n");
     else registers->PC->setValue(jumpAddress);
 }
 
@@ -302,7 +308,7 @@ void Executor::_li(Register *reg1, short immediate){
 }
 
 void Executor::_li(Register *reg1, int immediate){
-    _lui(reg1, reg1->getValueAsInt() >> 16);
+    _lui(reg1, immediate >> 16);
     _ori(reg1, reg1, immediate & 0x0000FFFF); 
 }
 
@@ -340,7 +346,7 @@ void Executor::syscall() {
         //TODO: permitir acesso a outras regiões que não a stack
         int stringAddress = registers->A0->getValueAsInt();
         char c;
-        while ((c = stack.loadByte(stringAddress++)) != '\0') std::cout << c;
+        while ((c = stack->loadByte(stringAddress++)) != '\0') std::cout << c;
         std::cout << std::endl;
     }
     else if (operationCode == 5){
@@ -359,7 +365,7 @@ void Executor::syscall() {
         char c;
         for (int i = 0; i < registers->A1->getValueAsInt(); i++) {
             std::cin >> c;
-            stack.writeByte(registers->A0->getValueAsInt() + offset++, c);
+            stack->writeByte(registers->A0->getValueAsInt() + offset++, c);
         }
     }
     else if (operationCode == 9){

@@ -27,8 +27,8 @@ class Registers
 
         int getValue(std::string name);
         void setValue(std::string name, int value);
-        bool isRegister(std::string name);
 
+        bool hasRegister(std::string name);
         
 
         Register *ZERO;
