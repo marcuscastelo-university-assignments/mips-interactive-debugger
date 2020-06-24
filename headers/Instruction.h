@@ -22,6 +22,8 @@ class Instruction
         std::vector<Register *> registers; 
         std::vector<int> integers;
 
+
+        //TODO: union
         void (Executor::*executor_funcT_3R)(Register*, Register*, Register*);
         void (Executor::*executor_funcT_2R)(Register*, Register*);
         void (Executor::*executor_funcT_1R)(Register*);
@@ -34,22 +36,22 @@ class Instruction
 
     public:
         bool isValid();
-        Instruction(std::string repr, Executor *executor, void (Executor::*executor_func)(Register*, Register*, Register*));
-        Instruction(std::string repr, Executor *executor, void (Executor::*executor_func)(Register*, Register*));
-        Instruction(std::string repr, Executor *executor, void (Executor::*executor_func)(Register*));
-        Instruction(std::string repr, Executor *executor, void (Executor::*executor_func)(Register*, Register*, int));
-        Instruction(std::string repr, Executor *executor, void (Executor::*executor_func)(Register*, Register*, unsigned));
-        Instruction(std::string repr, Executor *executor, void (Executor::*executor_func)(Register*, int, int));
-        Instruction(std::string repr, Executor *executor, void (Executor::*executor_func)(Register*, int));
-        Instruction(std::string repr, Executor *executor, void (Executor::*executor_func)(int));
-        Instruction(std::string repr, Executor *executor, void (Executor::*executor_func)(void));
+        Instruction(std::string repr, Executor *executor);
         Instruction(nullptr_t null);
 
+
+        void setExecutionFunction(void (Executor::*executor_func)(Register*, Register*, Register*));
+        void setExecutionFunction(void (Executor::*executor_func)(Register*, Register*));
+        void setExecutionFunction(void (Executor::*executor_func)(Register*));
+        void setExecutionFunction(void (Executor::*executor_func)(Register*, Register*, int));
+        void setExecutionFunction(void (Executor::*executor_func)(Register*, Register*, unsigned));
+        void setExecutionFunction(void (Executor::*executor_func)(Register*, int, int));
+        void setExecutionFunction(void (Executor::*executor_func)(Register*, int));
+        void setExecutionFunction(void (Executor::*executor_func)(int));
+        void setExecutionFunction(void (Executor::*executor_func)(void));
+
         void execute();
-        Instruction *add(int integer);
-        Instruction *add(Register *reg);
-        Instruction *add(std::vector<int> newIntegers);
-        Instruction *add(std::vector<Register*> newRegisters);
+        Instruction *feed(std::vector<Register*> newRegisters, std::vector<int> newIntegers);
 };
 
 #endif  //!__INSTRUCTION__H__
