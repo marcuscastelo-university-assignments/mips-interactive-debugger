@@ -9,7 +9,7 @@ Executor::~Executor() {
 
 }
 
-InstructionExecutionResult executeInstruction(std::string instruction) {
+InstructionExecutionResult Executor::executeInstruction(std::string instruction) {
     return OK_FOWARD;
 }
 

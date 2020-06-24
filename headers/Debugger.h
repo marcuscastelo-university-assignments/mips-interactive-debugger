@@ -21,7 +21,7 @@ class Debugger {
 
 
         void info(vector<string> commandParts);
-        void help(vector<string> commandParts);
+        void help(vector<string> commandParts = vector<string>(1));
         void disassemble(vector<string> commandParts);
         void breakpoint(vector<string> commandParts);
 
