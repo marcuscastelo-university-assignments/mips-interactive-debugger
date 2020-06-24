@@ -22,6 +22,17 @@ Registers *Executor::getRegisters() {
     return registers;
 }
 
+Register *Executor::getRegister(std::string name) {
+    if (registers->isRegister(name) == false)
+        return nullptr;
+
+    return registers->getRegisterByName(name);
+}
+
+bool Executor::hasRegister(std::string name) {
+    return registers->isRegister(name);
+}
+
 //TODO: Questão da stack
 void Executor::_lw(Register *reg1, Register *reg2, int offset) {
     int stackAddress = reg2->getValueAsInt() + offset;

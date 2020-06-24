@@ -62,15 +62,10 @@ void ConsoleDebugger::start (void) {
 
         else {
             // TODO: adicionar somente se o executor não retornar erros (instrução não existente, etc...)
-            Instruction *executedInstruction = executor->executeInstruction(command);
-            if (executedInstruction->isValid())
-                program->addInstruction(command);
+            if (parseInstruction(command) == false) {
+                printf("Invalid instruction or syntax\n");
+            }
         }
-
-        // else {
-        //     printf("Command not implemented yet\n");
-        //     continue;
-        // }
         
     }
 

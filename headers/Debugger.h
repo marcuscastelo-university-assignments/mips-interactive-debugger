@@ -23,6 +23,9 @@ class Debugger {
         void help(vector<string> commandParts = vector<string>(1));
         void disassemble(vector<string> commandParts);
         void breakpoint(vector<string> commandParts);
+        bool parseInstruction(string command);
+
+        bool hasRegister(string name);
 
 };
 
