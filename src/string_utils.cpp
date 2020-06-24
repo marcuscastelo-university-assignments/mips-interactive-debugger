@@ -66,5 +66,5 @@ void printLine (int size) {
 }
 
 bool isInteger(const std::string & s){
-    return std::regex_match(s, std::regex("[(-|+)|][0-9]+"));
+    return std::regex_match(s, std::regex("[(-|+)|]?[0-9]+"));
 }

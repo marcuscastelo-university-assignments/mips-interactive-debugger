@@ -17,7 +17,7 @@ void Word::setValue(char *byteArr) {
 }
 
 void Word::setValue(int integer) {
-    for (int i = 3; i >= 0; i--) bytes[i] = integer & (int)(pow(2,8*(i+1))-1);
+    for (int i = 3; i >= 0; i--) bytes[i] = (char) ((integer >> i*8) & 0xFF);
 }
 
 char *Word::asByteArray() {
@@ -26,7 +26,7 @@ char *Word::asByteArray() {
 
 int Word::asInt() {
     int integer = 0;
-    for (int i = 3; i >= 0; i++) integer |= bytes[i] << i*8;
+    for (int i = 3; i >= 0; i--) integer |= ((int)bytes[i]) << i*8;
     return integer;
 }
 

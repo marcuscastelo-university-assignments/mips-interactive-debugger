@@ -71,15 +71,16 @@ Registers::Registers() {
 }
 
 Register *Registers::getRegisterByName(std::string registerName) {
+    if (registerNamesMap.find(registerName) == registerNamesMap.end()) return NULL;
     return this->registerNamesMap[registerName];
 }
 
 void Registers::printRegisters(FILE *file_stream) {
     //TODO: deixara bonito
-    fprintf(file_stream, "+-------------+");
+    fprintf(file_stream, "+-------------+\n");
     for (auto it = registerNamesMap.begin(); it != registerNamesMap.end(); it++)
         printRegister(it->second, file_stream);
-    fprintf(file_stream, "+-------------+");
+    fprintf(file_stream, "+-------------+\n");
 
 
 }

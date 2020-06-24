@@ -1,11 +1,11 @@
 #include "Register.h"
 
-Register::Register(std::string, Word word){    
+Register::Register(std::string name, Word word){    
     this->word = word;
     this->name = name;
 }
 
-Register::Register(std::string) {    
+Register::Register(std::string name) {    
     this->word = 0;
     this->name = name;
 }
@@ -30,9 +30,9 @@ void Register::setValue(Word word){
     this->word = word;
 }
 
-void Register::print(FILE *file_stream = stdout) {
+void Register::print(FILE *file_stream) {
     //TODO: colocar como bytearray e deixar bonito
-    fprintf(file_stream, "|%s|%d / ", name, word.asInt());
+    fprintf(file_stream, "|%s|%d / ", name.c_str(), word.asInt());
     for(int i=0;i<4;i++) fprintf(file_stream,"%x ",word.asByteArray()[i]);
     fprintf(file_stream,"|\n");
 }
