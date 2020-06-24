@@ -4,12 +4,13 @@
 #include <map>
 #include <string>
 
-#include "Stack.h"
 #include "Register.h"
 #include "Registers.h"
 #include "Interpreter.h"
 #include "Instruction.h"
+#include "ByteArray.h"
 
+typedef ByteArray Stack;
 class Interpreter;
 
 class Executor{

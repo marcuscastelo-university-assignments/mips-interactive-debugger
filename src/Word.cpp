@@ -1,17 +1,22 @@
 #include "Word.h"
 
-Word::Word(): ByteArray(4) {}
+#define WORD_SIZE 4
 
-Word::Word(unsigned char *byteArr): Word() {
-    setValue(byteArr);   
+Word::Word(): ByteArray(WORD_SIZE) {}
+
+Word::Word(unsigned char *byteArr): ByteArray(byteArr, WORD_SIZE) { }
+
+Word::Word(ByteArray bytearray): Word() {
+    if (bytearray.getSize() != WORD_SIZE) throw("bytearray is not word-sized");
+    this->setBytes(bytearray);
 }
 
 Word::Word(int integer): Word() {
     setValue(integer);
 }
 
-void Word::setValue(unsigned char *byteArr) {
-    this->setBytes(byteArr, 4);
+void Word::setValue(ByteArray byteArray) {
+    this->setBytes(byteArray);
 }
 
 void Word::setValue(int integer) {

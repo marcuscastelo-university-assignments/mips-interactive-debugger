@@ -33,7 +33,7 @@ void Register::setValue(Word word){
 void Register::print(FILE *file_stream) {
     //TODO: colocar como bytearray e deixar bonito
     fprintf(file_stream, "|%s|%d / ", name.c_str(), word.asInt());
-    for(int i=0;i<4;i++) fprintf(file_stream, "%02X ", word.asByteArray()[i]);
+    for(int i=0;i<4;i++) fprintf(file_stream, "%02X ", word.asByteArray().getByteAt(i));
     fprintf(file_stream,"|\n");
 }
 

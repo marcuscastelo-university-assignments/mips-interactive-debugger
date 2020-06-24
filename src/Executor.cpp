@@ -6,8 +6,8 @@
 Executor::Executor() {
     interpreter = new Interpreter(this);
     registers = new Registers();
-    stack = new Stack();
-    registers->SP->setValue(stack->getStackSize());
+    stack = new Stack(4096 * sizeof(unsigned char));
+    registers->SP->setValue(stack->getSize());
 }
 
 Executor::~Executor() {
@@ -41,24 +41,24 @@ bool Executor::hasRegister(std::string name) {
 //TODO: Questão da stack
 void Executor::_lw(Register *reg1, Register *reg2, int offset) {
     int stackAddress = reg2->getValueAsInt() + offset;
-    reg1->setValue(stack->loadBytes(stackAddress, 4));
+    reg1->setValue(stack->getBytes(stackAddress, 4));
 }
 
 void Executor::_sw(Register *reg1, Register *reg2, int offset) {
     int stackAddress = reg2->getValueAsInt() + offset;
-    stack->writeBytes(stackAddress, reg1->getValue().asByteArray(), 4);
+    stack->setBytes(stackAddress, reg1->getValue().asByteArray());
 }
 
 void Executor::_lb(Register *reg1, Register *reg2,int offset) {
     int stackAddress = reg2->getValueAsInt() + offset;
     Word newWord = reg1->getValue();
-    newWord.setByteAt(3, stack->loadByte(stackAddress));
+    newWord.setByteAt(3, stack->getByteAt(stackAddress));
     reg1->setValue(newWord);   
 }
 
 void Executor::_sb(Register *reg1, Register *reg2,int offset) {
     int stackAddress = reg2->getValueAsInt() + offset;
-    stack->writeByte(stackAddress, reg1->getValue().asByteArray()[3]);
+    stack->setByteAt(stackAddress, reg1->getValue().asByteArray().getByteAt(3));
 }
 
 void Executor::_beq(Register *reg1, Register *reg2, int jumpAddress){
@@ -139,7 +139,8 @@ void Executor::_beqi(Register *reg1, int immediate, int jumpAddress){
 
 //TODO: Questão do jump e tamanho da stack
 void Executor::_jump(int jumpAddress){
-    if(jumpAddress < 0 || jumpAddress >= stack->getStackSize()) printf("ERROR: Jump adress not implemented.\n");
+    //TODO: PEGAR O TAMANHO DO PROGRAMA
+    if(jumpAddress < 0 || jumpAddress >= 50135) printf("ERROR: Jump adress not implemented.\n");
     else registers->PC->setValue(jumpAddress);
 }
 
@@ -150,8 +151,6 @@ void Executor::_add(Register *reg1,Register *reg2,Register *reg3){
 void Executor::_addi(Register *reg1, Register *reg2, int immediate){
     reg1->setValue(reg2->getValueAsInt() + immediate);   
 }
-
-
 
 void Executor::_sub(Register *reg1,Register *reg2,Register *reg3){
     reg1->setValue(reg2->getValueAsInt() - reg3->getValueAsInt());   
@@ -346,7 +345,7 @@ void Executor::syscall() {
         //TODO: permitir acesso a outras regiões que não a stack
         int stringAddress = registers->A0->getValueAsInt();
         char c;
-        while ((c = stack->loadByte(stringAddress++)) != '\0') std::cout << c;
+        while ((c = stack->getByteAt(stringAddress++)) != '\0') std::cout << c;
         std::cout << std::endl;
     }
     else if (operationCode == 5){
@@ -365,7 +364,7 @@ void Executor::syscall() {
         char c;
         for (int i = 0; i < registers->A1->getValueAsInt(); i++) {
             std::cin >> c;
-            stack->writeByte(registers->A0->getValueAsInt() + offset++, c);
+            stack->setBytes(registers->A0->getValueAsInt() + offset++, c);
         }
     }
     else if (operationCode == 9){
@@ -377,7 +376,7 @@ void Executor::syscall() {
     }
     else if (operationCode == 11){
         //TODO: verificar qual é o low-order byte (vide https://i.imgur.com/HhQsemz.png)
-        std::cout << registers->A0->getValue().asByteArray()[0];
+        std::cout << registers->A0->getValue().asByteArray().getByteAt(3);
     }
     else if (operationCode == 12){
         std::cout << "WARNING: Syscall not implemented" << std::endl;                
