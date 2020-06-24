@@ -1,6 +1,6 @@
 #include "Registers.h"
 
-Registers::Registers(): {
+Registers::Registers() {
     this->registerNamesMap[s("$zero")] = ZERO = new Register("$zero");
     this->registerNamesMap[s("$at")]   = AT = new Register("$at");
     this->registerNamesMap[s("$v0")]   = V0 = new Register("$v0");

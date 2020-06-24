@@ -9,6 +9,9 @@
 #include "Register.h"
 #include "Registers.h"
 
+enum InstructionExecutionResult {
+    OK_FOWARD, OK_NOP, ERR_404
+};
 class Executor{
     private:
         std::map<std::string,int> registerNameToId;
@@ -19,10 +22,12 @@ class Executor{
         Executor();
         ~Executor();
 
-        Word _lw(int stackAddress);
-        void _sw(int stackAdress, Word *word);
-        char _lb(int stackAddress);
-        void _sb(int stackAdress, char byte);
+        InstructionExecutionResult executeInstruction(std::string instruction);
+
+        void _lw(Register *reg1, Register *reg2, int offset);
+        void _sw(Register *reg1, Register *reg2, int offset);
+        void _lb(Register *reg1, Register *reg2,int offset);
+        void _sb(Register *reg1, Register *reg2,int offset);
         void _beq(Register *reg1, Register *reg2, int jumpAddress);
         void _bgez(Register *reg, int jumpAddress);
         void _bgezal(Register *reg, int jumpAddress);
@@ -39,8 +44,6 @@ class Executor{
         void _ble(Register *reg1, Register *reg2, int jumpAddress);
         void _bgtu(Register *reg1, Register *reg2, int jumpAddress);
         void _beqz(Register *reg, int jumpAddress);
-        void _beq(Register *reg1, int immediate, int jumpAddress);
-        void _beq(Register *reg1, int immediate, int jumpAddress);
         void _beq(Register *reg1, int immediate, int jumpAddress);
         void _jump(int jumpAddress);
         void _add(Register *reg1,Register *reg2,Register *reg3);
@@ -72,14 +75,23 @@ class Executor{
                 
         void _sllv(Register *reg1,Register *reg2,Register *reg3);
         void _jr(Register *reg);
+        void _jalr(Register *reg);
         void _lui(Register *reg,int immediate);
         void _sll(Register *reg1,Register *reg2,int immediate);
         void _noop();
         void _nop();
+        void _sra(Register *reg1, Register *reg2, int immediate);
+        void _srl(Register *reg1, Register *reg2, int immediate);
         
         void syscall();
-
-
+        void _move(Register *reg1, Register *reg2);
+        void _srlv(Register *reg1, Register *reg2, Register *reg3);
+        void _clear(Register *reg);
+        void _li(Register *reg1, short immediate);
+        void _li(Register *reg1, int immediate);
+        void _la(Register *reg1, int address);
+        void _nor(Register *reg1, Register *reg2,Register *reg3);
+        void _not(Register *reg1, Register *reg2);
 };
 
 #endif

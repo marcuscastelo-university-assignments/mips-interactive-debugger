@@ -9,8 +9,8 @@ using namespace std;
 class Program {
     private:
         vector <string> *instructions;
-        map <string, int> *labelsPosition;
-        map <int, bool> *breakpointsPosition;
+        map <string, int> *labelsAddresses;
+        map <int, bool> *breakpointsAddresses;
     
     public:
         Program();

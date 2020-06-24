@@ -1,3 +1,6 @@
+#ifndef __WORD__H__
+#define __WORD__H__
+
 #include <math.h>
 #include <stdlib.h>
 
@@ -38,3 +41,4 @@ class Word
         Word operator^(int &value);
 };
 
+#endif 

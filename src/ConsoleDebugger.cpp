@@ -12,11 +12,9 @@ using namespace std;
 using namespace std;
 
 ConsoleDebugger::ConsoleDebugger(void) {
-    program = new Program();
 }
 
 ConsoleDebugger::~ConsoleDebugger() {
-    delete program;
 }
 
 void ConsoleDebugger::start (void) {
@@ -73,7 +71,10 @@ void ConsoleDebugger::start (void) {
         }
 
         else {
-            program->addInstruction(command);
+            //TODO: adicionar somente se o executor não retornar erros (instrução não existente, etc...)
+            // InstructionExecutionResult eres = executor->executeInstruction(command);
+            // if (eres != ERR_404)
+                program->addInstruction(command);
         }
 
         // else {
