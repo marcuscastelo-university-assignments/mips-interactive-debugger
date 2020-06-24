@@ -1,9 +1,10 @@
 #include "Executor.h"
+#include "Instruction.h"
 #include <iostream>
 
 Executor::Executor() {
     interpreter = new Interpreter(this);
-    registers = new Registers();
+    registers= new Registers();
 }
 
 Executor::~Executor() {
@@ -11,8 +12,14 @@ Executor::~Executor() {
     delete registers;
 }
 
-Instruction Executor::executeInstruction(std::string instruction) {
-    
+Instruction *Executor::executeInstruction(std::string instructionStr) {
+    Instruction *instruction = interpreter->interpretInstruction(instructionStr);
+    instruction->execute();
+    return instruction;
+}
+
+Registers *Executor::getRegisters() {
+    return registers;
 }
 
 //TODO: Questão da stack
@@ -70,52 +77,52 @@ void Executor::_bne(Register *reg1, Register *reg2, int jumpAddress){
 }
 
 void Executor::_b(int jumpAddress){
-    _beq(registers.ZERO, registers.ZERO, jumpAddress);
+    _beq(registers->ZERO, registers->ZERO, jumpAddress);
 }
 
 void Executor::_bal(int jumpAddress){
-    _bgezal(registers.ZERO, jumpAddress);
+    _bgezal(registers->ZERO, jumpAddress);
 }
 
 void Executor::_bgt(Register *reg1, Register *reg2, int jumpAddress){
-    _slt(registers.AT, reg2,reg1);
-    _bne(registers.AT, registers.ZERO, jumpAddress);    
+    _slt(registers->AT, reg2,reg1);
+    _bne(registers->AT, registers->ZERO, jumpAddress);    
 }
 
 
 void Executor::_blt(Register *reg1, Register *reg2, int jumpAddress){
-    _slt(registers.AT, reg1, reg2);
-    _bne(registers.AT, registers.ZERO, jumpAddress);    
+    _slt(registers->AT, reg1, reg2);
+    _bne(registers->AT, registers->ZERO, jumpAddress);    
 }
 
 void Executor::_bge(Register *reg1, Register *reg2, int jumpAddress){
-    _slt(registers.AT, reg1, reg2);
-    _beq(registers.AT, registers.ZERO, jumpAddress);    
+    _slt(registers->AT, reg1, reg2);
+    _beq(registers->AT, registers->ZERO, jumpAddress);    
 }
 
 void Executor::_ble(Register *reg1, Register *reg2, int jumpAddress){
-    _slt(registers.AT, reg2, reg1);
-    _beq(registers.AT, registers.ZERO, jumpAddress);    
+    _slt(registers->AT, reg2, reg1);
+    _beq(registers->AT, registers->ZERO, jumpAddress);    
 }
 
 void Executor::_bgtu(Register *reg1, Register *reg2, int jumpAddress){
-    _sltu(registers.AT, reg2, reg1);
-    _bne(registers.AT, registers.ZERO, jumpAddress);    
+    _sltu(registers->AT, reg2, reg1);
+    _bne(registers->AT, registers->ZERO, jumpAddress);    
 }
 
 void Executor::_beqz(Register *reg, int jumpAddress){
-    _beq(reg, registers.ZERO, jumpAddress);    
+    _beq(reg, registers->ZERO, jumpAddress);    
 }
 
-void Executor::_beq(Register *reg1, int immediate, int jumpAddress){
-    _ori(registers.AT, registers.ZERO, immediate);    
-    _bne(reg1, registers.AT, jumpAddress);    
+void Executor::_beqi(Register *reg1, int immediate, int jumpAddress){
+    _ori(registers->AT, registers->ZERO, immediate);    
+    _bne(reg1, registers->AT, jumpAddress);    
 }
 
 //TODO: Questão do jump e tamanho da stack
 void Executor::_jump(int jumpAddress){
     if(jumpAddress < 0 || jumpAddress >= stack.getStackSize()) printf("ERROR: Jump adress not implemented.\n");
-    else registers.PC->setValue(jumpAddress);
+    else registers->PC->setValue(jumpAddress);
 }
 
 void Executor::_add(Register *reg1,Register *reg2,Register *reg3){
@@ -133,15 +140,15 @@ void Executor::_sub(Register *reg1,Register *reg2,Register *reg3){
 }
 
 void Executor::_mult(Register *reg1,Register *reg2){
-    registers.LO->setValue(reg1->getValueAsInt() * reg2->getValueAsInt());   
+    registers->LO->setValue(reg1->getValueAsInt() * reg2->getValueAsInt());   
 }
 
 void Executor::_mflo(Register *reg){
-    reg->copyValue(registers.LO);   
+    reg->copyValue(registers->LO);   
 }
 
 void Executor::_mfhi(Register *reg){
-    reg->copyValue(registers.HI);
+    reg->copyValue(registers->HI);
 }
 
 
@@ -150,18 +157,18 @@ void Executor::_mul(Register *reg1,Register *reg2,Register *reg3){
     _mflo(reg1);
 }
 
-void Executor::_div(Register *reg1,Register *reg2) { 
-    registers.LO->setValue(reg1->getValueAsInt() / reg2->getValueAsInt());   
-    registers.HI->setValue(reg1->getValueAsInt() % reg2->getValueAsInt());
+void Executor::_div2(Register *reg1,Register *reg2) { 
+    registers->LO->setValue(reg1->getValueAsInt() / reg2->getValueAsInt());   
+    registers->HI->setValue(reg1->getValueAsInt() % reg2->getValueAsInt());
 }
 
-void Executor::_div(Register *reg1,Register *reg2,Register *reg3) { 
-    _div(reg2,reg3);
+void Executor::_div3(Register *reg1,Register *reg2,Register *reg3) { 
+    _div2(reg2,reg3);
     _mflo(reg1);
 }
 
 void Executor::_rem(Register *reg1,Register *reg2,Register *reg3) { 
-    _div(reg2,reg3);
+    _div2(reg2,reg3);
     _mfhi(reg1);
 }
 
@@ -210,7 +217,7 @@ void Executor::_sltiu(Register *reg1, Register *reg2, unsigned immediate){
 }
 
 void Executor::_jal(int jumpAddress){
-    registers.RA->copyValue(registers.PC);
+    registers->RA->copyValue(registers->PC);
     _jump(jumpAddress);
 }
 
@@ -227,8 +234,8 @@ void Executor::_subu(Register *reg1,Register *reg2,Register *reg3){
 }
 
 void Executor::_divu(Register *reg1,Register *reg2) { 
-    registers.LO->setValue((int)((unsigned)reg1->getValueAsInt() / (unsigned)reg2->getValueAsInt()));   
-    registers.HI->setValue((int)((unsigned)reg1->getValueAsInt() % (unsigned)reg2->getValueAsInt()));
+    registers->LO->setValue((int)((unsigned)reg1->getValueAsInt() / (unsigned)reg2->getValueAsInt()));   
+    registers->HI->setValue((int)((unsigned)reg1->getValueAsInt() % (unsigned)reg2->getValueAsInt()));
 }
 
 void Executor::_jr(Register *reg) {
@@ -271,15 +278,15 @@ void Executor::_srlv(Register *reg1, Register *reg2, Register *reg3){
 
 
 void Executor::_move(Register *reg1, Register *reg2) {
-    _or(reg1, reg2, registers.ZERO);
+    _or(reg1, reg2, registers->ZERO);
 }
 
 void Executor::_clear(Register *reg){
-    _or(reg, registers.ZERO , registers.ZERO);
+    _or(reg, registers->ZERO , registers->ZERO);
 }
 
 void Executor::_li(Register *reg1, short immediate){
-    _ori(reg1, registers.ZERO, (int)immediate);
+    _ori(reg1, registers->ZERO, (int)immediate);
 }
 
 void Executor::_li(Register *reg1, int immediate){
@@ -296,7 +303,7 @@ void Executor::_nor(Register *reg1, Register *reg2,Register *reg3){
 }
 
 void Executor::_not(Register *reg1, Register *reg2){
-    _nor(reg1, reg2, registers.ZERO);
+    _nor(reg1, reg2, registers->ZERO);
 }
 
 
@@ -307,9 +314,9 @@ void Executor::_not(Register *reg1, Register *reg2){
 //////////////////////////////////////////////////////////////////////////////////
 
 void Executor::syscall() {
-    int operationCode = registers.V0->getValueAsInt();
+    int operationCode = registers->V0->getValueAsInt();
     if (operationCode == 1) {
-        std::cout << registers.A0->getValueAsInt();
+        std::cout << registers->A0->getValueAsInt();
     }
     else if (operationCode == 2){
         std::cout << "WARNING: Syscall not implemented" << std::endl;
@@ -319,7 +326,7 @@ void Executor::syscall() {
     }
     else if (operationCode == 4){
         //TODO: permitir acesso a outras regiões que não a stack
-        int stringAddress = registers.A0->getValueAsInt();
+        int stringAddress = registers->A0->getValueAsInt();
         char c;
         while ((c = stack.loadByte(stringAddress++)) != '\0') std::cout << c;
         std::cout << std::endl;
@@ -327,7 +334,7 @@ void Executor::syscall() {
     else if (operationCode == 5){
         int temp;
         std::cin >> temp;
-        registers.V0->setValue(temp);
+        registers->V0->setValue(temp);
     }
     else if (operationCode == 6){
         std::cout << "WARNING: Syscall not implemented" << std::endl;                
@@ -338,9 +345,9 @@ void Executor::syscall() {
     else if (operationCode == 8){
         int offset = 0;
         char c;
-        for (int i = 0; i < registers.A1->getValueAsInt(); i++) {
+        for (int i = 0; i < registers->A1->getValueAsInt(); i++) {
             std::cin >> c;
-            stack.writeByte(registers.A0->getValueAsInt() + offset++, c);
+            stack.writeByte(registers->A0->getValueAsInt() + offset++, c);
         }
     }
     else if (operationCode == 9){
@@ -352,7 +359,7 @@ void Executor::syscall() {
     }
     else if (operationCode == 11){
         //TODO: verificar qual é o low-order byte (vide https://i.imgur.com/HhQsemz.png)
-        std::cout << registers.A0->getValue().asByteArray()[0];
+        std::cout << registers->A0->getValue().asByteArray()[0];
     }
     else if (operationCode == 12){
         std::cout << "WARNING: Syscall not implemented" << std::endl;                

@@ -10,6 +10,6 @@ vector<string> split(string str, const string delimiter=" ");
 string trim(string str);
 string replaceAllChars(string str, char toReplace, char substitute);
 void printLine(int size);
-
+bool isInteger(const std::string & s);
 
 #endif

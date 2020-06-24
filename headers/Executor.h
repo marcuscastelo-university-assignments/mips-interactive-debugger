@@ -5,17 +5,15 @@
 #include <string>
 
 #include "Stack.h"
-#include "Word.h"
 #include "Register.h"
 #include "Registers.h"
-#include "Instruction.h"
 #include "Interpreter.h"
+#include "Instruction.h"
 
+class Interpreter;
 
 class Executor{
     private:
-        std::map<std::string,int> registerNameToId;
-        std::vector<Word> registerValues;
         Interpreter *interpreter;
         Registers *registers;
         Stack stack;
@@ -23,7 +21,9 @@ class Executor{
         Executor();
         ~Executor();
 
-        Instruction executeInstruction(std::string instruction);
+        Registers *getRegisters();
+
+        Instruction *executeInstruction(std::string instruction);
 
         void _lw(Register *reg1, Register *reg2, int offset);
         void _sw(Register *reg1, Register *reg2, int offset);
@@ -45,8 +45,8 @@ class Executor{
         void _ble(Register *reg1, Register *reg2, int jumpAddress);
         void _bgtu(Register *reg1, Register *reg2, int jumpAddress);
         void _beqz(Register *reg, int jumpAddress);
-        void _beq(Register *reg1, int immediate, int jumpAddress);
-        void _jump(int jumpAddress);
+        void _beqi(Register *reg1, int immediate, int jumpAddress);
+        void _jump(int);
         void _add(Register *reg1,Register *reg2,Register *reg3);
         void _addi(Register *reg1, Register *reg2, int immediate);
         void _sub(Register *reg1,Register *reg2,Register *reg3);
@@ -54,8 +54,8 @@ class Executor{
         void _mflo(Register *reg);
         void _mfhi(Register *reg);
         void _mul(Register *reg1,Register *reg2,Register *reg3);
-        void _div(Register *reg1,Register *reg2);
-        void _div(Register *reg1,Register *reg2, Register *reg3);
+        void _div2(Register *reg1,Register *reg2);
+        void _div3(Register *reg1,Register *reg2, Register *reg3);
         void _rem(Register *reg1,Register *reg2, Register *reg3);
         void _and(Register *reg1, Register *reg2, Register *reg3);
         void _or(Register *reg1, Register *reg2, Register *reg3);

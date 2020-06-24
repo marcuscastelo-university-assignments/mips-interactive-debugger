@@ -1,10 +1,11 @@
 #ifndef __INSTRUCTION__H__
 #define __INSTRUCTION__H__
 
-#include <string>
-#include <functional>
-
+#include "Executor.h"
 #include "Register.h"
+#include <string>
+
+class Executor;
 
 enum InstructionType {
     INVALID, T_3R, T_2R, T_1R, T_2R_1I, T_1R_1I, T_1I, T_1R_2I, T_2R_1U, T_V 
@@ -13,30 +14,41 @@ enum InstructionType {
 class Instruction
 {
     private:
+        Executor *executor;
         std::string repr;
         InstructionType type;
 
-        std::function<void (Register*, Register*, Register*)> executor_funcT_3R;
-        std::function<void (Register*, Register*)> executor_funcT_2R;
-        std::function<void (Register*)> executor_funcT_1R;
-        std::function<void (Register*, Register*, int)> executor_funcT_2R_1I;
-        std::function<void (Register*, Register*, unsigned)> executor_funcT_2R_1U;
-        std::function<void (Register*, int, int)> executor_funcT_1R_2I;
-        std::function<void (Register*, int)> executor_funcT_1R_1I;
-        std::function<void (int)> executor_funcT_1I;
-        std::function<void (void)> executor_funcT_V;
+        std::vector<Register *> registers; 
+        std::vector<int> integers;
+
+        void (Executor::*executor_funcT_3R)(Register*, Register*, Register*);
+        void (Executor::*executor_funcT_2R)(Register*, Register*);
+        void (Executor::*executor_funcT_1R)(Register*);
+        void (Executor::*executor_funcT_2R_1I)(Register*, Register*, int);
+        void (Executor::*executor_funcT_2R_1U)(Register*, Register*, unsigned);
+        void (Executor::*executor_funcT_1R_2I)(Register*, int, int);
+        void (Executor::*executor_funcT_1R_1I)(Register*, int);
+        void (Executor::*executor_funcT_1I)(int);
+        void (Executor::*executor_funcT_V)(void);
 
     public:
         bool isValid();
-        Instruction(std::string repr, std::function<void (Register*, Register*, Register*)> executor_func);
-        Instruction(std::string repr, std::function<void (Register*, Register*)> executor_func);
-        Instruction(std::string repr, std::function<void (Register*)> executor_func);
-        Instruction(std::string repr, std::function<void (Register*, Register*, int)> executor_func);
-        Instruction(std::string repr, std::function<void (Register*, Register*, unsigned)> executor_func);
-        Instruction(std::string repr, std::function<void (Register*, int, int)> executor_func);
-        Instruction(std::string repr, std::function<void (Register*, int)> executor_func);
-        Instruction(std::string repr, std::function<void (int)> executor_func);
-        Instruction(std::string repr, std::function<void (void)> executor_func);
+        Instruction(std::string repr, Executor *executor, void (Executor::*executor_func)(Register*, Register*, Register*));
+        Instruction(std::string repr, Executor *executor, void (Executor::*executor_func)(Register*, Register*));
+        Instruction(std::string repr, Executor *executor, void (Executor::*executor_func)(Register*));
+        Instruction(std::string repr, Executor *executor, void (Executor::*executor_func)(Register*, Register*, int));
+        Instruction(std::string repr, Executor *executor, void (Executor::*executor_func)(Register*, Register*, unsigned));
+        Instruction(std::string repr, Executor *executor, void (Executor::*executor_func)(Register*, int, int));
+        Instruction(std::string repr, Executor *executor, void (Executor::*executor_func)(Register*, int));
+        Instruction(std::string repr, Executor *executor, void (Executor::*executor_func)(int));
+        Instruction(std::string repr, Executor *executor, void (Executor::*executor_func)(void));
+        Instruction(nullptr_t null);
+
+        void execute();
+        Instruction *add(int integer);
+        Instruction *add(Register *reg);
+        Instruction *add(std::vector<int> newIntegers);
+        Instruction *add(std::vector<Register*> newRegisters);
 };
 
 #endif  //!__INSTRUCTION__H__

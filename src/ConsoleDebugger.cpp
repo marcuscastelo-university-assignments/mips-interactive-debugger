@@ -73,8 +73,9 @@ void ConsoleDebugger::start (void) {
 
         else {
             // TODO: adicionar somente se o executor não retornar erros (instrução não existente, etc...)
-            Instruction executedInstruction = executor->executeInstruction(command);
-            program->addInstruction(command);
+            Instruction *executedInstruction = executor->executeInstruction(command);
+            if (executedInstruction->isValid())
+                program->addInstruction(command);
         }
 
         // else {

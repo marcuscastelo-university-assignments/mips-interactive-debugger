@@ -1,5 +1,6 @@
 #include "string_utils.h"
 #include <iostream>
+#include <regex>
 
 using namespace std;
 
@@ -62,4 +63,8 @@ void printLine (int size) {
     for (int i = 0; i < size; i++)
             printf("%c", '-');
         printf("\n");
+}
+
+bool isInteger(const std::string & s){
+    return std::regex_match(s, std::regex("[(-|+)|][0-9]+"));
 }
