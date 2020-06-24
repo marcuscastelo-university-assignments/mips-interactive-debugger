@@ -18,7 +18,7 @@ void FileDebugger::start (void) {
     vector<string> commandParts;
 
     while (true) {
-        printf("(MipsDB) >>> ");
+        printf("(MipsDB) ");
         scanf("%m[^\n\r]", &tmp);
         if (tmp == NULL) {
             printf("\r");
@@ -71,5 +71,29 @@ void FileDebugger::exec (void) {
 }
 
 void FileDebugger::importCode (vector<string> commandParts) {
-    
+    if (commandParts.size() == 1) {
+        printf("This function needs a filename\n");
+        return;
+    }
+
+    string name = preventAbsolutePath(commandParts[1]);
+
+    FILE *file_ptr = fopen(name.c_str(), "r");
+    if (file_ptr == nullptr) {
+        printf("No file to open\n");
+        return;
+    }
+   
+    while (!feof(file_ptr)) {
+        string line = getLine(file_ptr);
+        
+        if (line.empty()) {
+            continue;
+        }
+
+        line = replaceAllChars(line, ',', ' ');
+        program->addInstruction(line);
+    }
+
+    fclose(file_ptr);
 }

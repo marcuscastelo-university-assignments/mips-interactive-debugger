@@ -20,11 +20,25 @@ void Program::addInstruction(string inst) {
     if (inst.empty())
         return;
 
-    (*instructions).push_back(inst);
 
-    if (isLabel(inst))
+    if (isLabel(inst) and hasLabel(inst)) {
+            printf("Can't have two labels with the same identifier\n");
+            return;
+    }
+
+    //TODO: parse register name
+    if (isLabel(inst)) {
+        vector<string> commandParts = split(inst);
+        if (commandParts.size() >= 2) {
+            printf("Can't have spaces in label's identifier. Ignoring this line: %s\n", inst.c_str());
+            return;
+        }
+        instructions->push_back(inst);
         addLabelPos(inst, instructions->size()-1);
-
+    }
+    else
+        instructions->push_back(inst);
+    
     return;
 }
 
@@ -75,7 +89,6 @@ void Program::addLabelPos(string label, int pos) {
         return;
 
     label.pop_back();
-    printf("label added = %s\n", label.c_str());
 
     (*labelsAddresses)[label] = pos;
 
@@ -115,6 +128,7 @@ void Program::printLabel(string label) {
     
     return;
 }
+
 
 /////BREAKPOINTS/////
 void Program::addBreakpoint(int pos) {

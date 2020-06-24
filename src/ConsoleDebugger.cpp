@@ -18,22 +18,17 @@ ConsoleDebugger::~ConsoleDebugger() {
 }
 
 void ConsoleDebugger::start (void) {
-    char *tmp;
     string command;
     vector<string> commandParts;
 
     while (true) {
         printf("(MipsDB) >>> ");
-        scanf("%m[^\n\r]", &tmp);
-        if (tmp == NULL) {
-            printf("\r");
-            getchar();
+        command = getLine();
+        
+        if (command.empty())
             continue;
-        }
 
-        /*STRING PARSING*/
-        command = string(tmp);
-        command = trim(command);
+        /*STRING PARSING*/        
         command = replaceAllChars(command, ',', ' ');
         commandParts = split(command);
 
@@ -41,11 +36,6 @@ void ConsoleDebugger::start (void) {
 
         if (size == 0)
             continue;
-        
-        for (int i = 0; i < size; i++)
-            commandParts[i] = trim(commandParts[i]);
-        /****************/
-
 
         if (commandParts[0] == "quit")
             break;
@@ -96,13 +86,9 @@ void ConsoleDebugger::exportCode(vector<string> commandParts) {
 
     //prevent to create files outside of the dir in which the program was executed
     if (commandParts.size() >= 2) {
-        name = commandParts[1];
-        auto pos = name.rfind("/");
-        if (pos != string::npos) {
-            name.erase(0, pos+1);
-        }
+        name = preventAbsolutePath(commandParts[1]);
     }
-    
+
     FILE *file = fopen(name.c_str(), "w");
     program->printInstructions("", file);
     fclose(file);
