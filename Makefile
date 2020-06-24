@@ -9,7 +9,7 @@ all: $(CLASSES) string_utils
 	$(COMP) $(SRC)/Main.cpp *.o -o mipsdb $(INC) $(FLAGS)
 	rm -f *.o
 
-run: rfile
+run: rconsole
 
 rfile: all
 	./mipsdb

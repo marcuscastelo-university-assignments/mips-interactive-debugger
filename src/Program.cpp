@@ -20,7 +20,6 @@ bool Program::addInstruction(string inst) {
     if (inst.empty())
         return false;
 
-
     if (isLabel(inst) and hasLabel(inst)) {
             printf("Can't have two labels with the same identifier\n");
             return false;
@@ -50,7 +49,7 @@ string Program::getInstruction(int pos) {
 }
 
 size_t Program::getInstructionsVectorSize(void) {
-    return getInstructionsVectorSize();
+    return instructions->size();
 }   
 
 void Program::printInstructions(string label, FILE *file_ptr) {
@@ -109,6 +108,8 @@ map<string,int>::iterator Program::getLabelPos(string label) {
 bool Program::hasLabel(string label) {
     if (label.empty())
         return false;
+
+    label.pop_back();
 
     return !(getLabelPos(label) == labelsAddresses->end());
 }

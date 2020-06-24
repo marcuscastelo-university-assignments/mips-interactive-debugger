@@ -19,11 +19,13 @@ void Debugger::start (void) {
 
 void Debugger::exec (void) {
     Register *reg = executor->getRegister("$pc");
-    reg->setValue(0);
+    reg->setValue(3);
 
     while (true) {
         int pos = reg->getValueAsInt();
         string inst;
+
+        printf("pos: %d\n", pos);
 
         try {
             inst = program->getInstruction(pos);
@@ -32,12 +34,13 @@ void Debugger::exec (void) {
             cout << e.what() << endl;
             break;
         }
-
-        reg->setValue(pos+1);
+        
+        pos++;
+        reg->setValue(pos);
     }
 }
 
-void Debugger::help (vector<string> commandParts) {
+void Debugger::help(vector<string> commandParts) {
     if (commandParts.size() <= 1) {
         printf("Help options:\n");
         printf("- console\n");
