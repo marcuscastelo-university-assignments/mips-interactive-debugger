@@ -15,7 +15,7 @@ void Debugger::start (void) {}
 
 void Debugger::exec (void) {
     Register &reg = executor.getRegister("$pc");
-    reg.setWord(3);
+    reg.setValue(3);
 
     while (true) {
         int pos = reg.asInt();
@@ -32,7 +32,7 @@ void Debugger::exec (void) {
         }
         
         pos++;
-        reg.setWord(pos);
+        reg.setValue(pos);
     }
 }
 
@@ -184,27 +184,4 @@ void Debugger::breakpoint(const vector<string>& commandParts) {
 
     else
         program.addBreakpoint(stoi(commandParts[1]));
-}
-
-bool Debugger::parseInstruction(const string& command) {
-    if (command.empty())
-        return false;
-
-    if (isLabel(command)) {
-        string str = command;
-        str.pop_back();
-        if (hasRegister(command))
-            return false;
-    }
-
-    return true;
-}
-
-bool Debugger::executeInstructionAndVerify(const string& command) {
-    Instruction *executedInstruction = executor.executeInstructionStr(command);
-    return executedInstruction->isValid();
-}
-
-bool Debugger::hasRegister(const string& name) {
-    return executor.hasRegister(name);
 }

@@ -60,13 +60,19 @@ void ConsoleDebugger::start (void) {
         }
 
         else {
-            // TODO: adicionar somente se o executor não retornar erros (instrução não existente, etc...)
-            if (parseInstruction(command) == true and executeInstructionAndVerify(command) == true) {
-                program.addInstruction(command);
+            if (isLabel(command)) {
+                // TODO: adicionar label no registro de labels blabla
+                return;
             }
-            else {
-                printf("Invalid instruction or syntax\n");
+
+            Instruction *instruction = executor.executeInstructionStr(command);
+            if (instruction->validate()) {
+                program.addInstruction(instruction->toString()); 
+
             }
+            else printf("%s\n", instruction->getErrorMessage());
+
+            delete instruction;
         }
         
     }

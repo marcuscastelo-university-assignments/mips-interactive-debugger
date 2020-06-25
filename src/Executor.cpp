@@ -6,23 +6,19 @@
 Executor::Executor()
 : interpreter(new Interpreter(this)), stack(STACK_SIZE)
 {
-    registers.SP.setWord(stack.getSize());
+    registers.SP.setValue(stack.getSize());
 }
 
 Executor::~Executor() {
     delete interpreter;
 }
 
-void printInstructionMistake(Instruction *interpretedInstruction) {
-    printf("The instruction '%s' should have recieved:\n%d Register(s) and %d Integer(s), instead \n%d Register(s) and %d Integer(s) have been passed.\n", interpretedInstruction->toString().c_str(), interpretedInstruction->getRegistersSupposedCount() , interpretedInstruction->getIntegersSupposedCount(), interpretedInstruction->getRegistersCount(), interpretedInstruction->getIntegersCount());
-}
-
 Instruction *Executor::executeInstructionStr(const std::string& instructionStr) const {
     Instruction *interpretedInstruction = interpreter->interpretInstruction(instructionStr);
-    
-    if(interpretedInstruction->isUnknown()) fprintf(stderr, "ERROR: unknown instruction: '%s'\n", interpretedInstruction->toString().c_str());
-    else if (interpretedInstruction->isValid()) interpretedInstruction->execute();
-    else if (true) printInstructionMistake(interpretedInstruction);  //this->isForUsuarioBurro())
+
+    if (interpretedInstruction->validate()) {
+        interpretedInstruction->execute((Executor*)this);
+    }
     
 
     return interpretedInstruction;
@@ -44,25 +40,35 @@ bool Executor::hasRegister(const std::string& name) const {
 //TODO: Questão da stack
 void Executor::_lw(Register *reg1, Register *reg2, int offset)  {
     int stackAddress = reg2->asInt() + offset;
-    reg1->setWord(stack.getBytes(stackAddress, 4));
+    reg1->setValue(stack.getBytes(stackAddress, 4));
 }
 
 void Executor::_sw(Register *reg1, Register *reg2, int offset)  {
     int stackAddress = reg2->asInt() + offset;
-    stack.setBytes(stackAddress, reg1->getWord().asByteArray());
+    stack.setBytes(stackAddress, reg1->asByteArray() );
 }
 
 void Executor::_lb(Register *reg1, Register *reg2,int offset)  {
     int stackAddress = reg2->asInt() + offset;
-    Word newWord = reg1->getWord();
+    Word newWord = reg1->asInt();
     newWord.setByteAt(3, stack.getByteAt(stackAddress));
-    reg1->setWord(newWord);   
+    reg1->setValue(newWord);   
 }
 
 void Executor::_sb(Register *reg1, Register *reg2,int offset) {
     int stackAddress = reg2->asInt() + offset;
-    stack.setByteAt(stackAddress, reg1->getWord().asByteArray().getByteAt(3));
+    stack.setByteAt(stackAddress, reg1->asByteArray().getByteAt(3));
 }
+
+
+void Executor::_beq(Register *reg1, Register *reg2, int jumpAddress) {
+    if(reg1->asInt() == reg2->asInt()) _jump(jumpAddress);    
+}
+
+void Executor::_beq(Register *reg1, Register *reg2, int jumpAddress) {
+    if(reg1->asInt() == reg2->asInt()) _jump(jumpAddress);    
+}
+
 
 void Executor::_beq(Register *reg1, Register *reg2, int jumpAddress) {
     if(reg1->asInt() == reg2->asInt()) _jump(jumpAddress);    
@@ -144,23 +150,23 @@ void Executor::_beqi(Register *reg1, int immediate, int jumpAddress) {
 void Executor::_jump(int jumpAddress) {
     //TODO: PEGAR O TAMANHO DO PROGRAMA
     if(jumpAddress < 0 || jumpAddress >= 50135) printf("ERROR: Jump adress not implemented.\n");
-    else registers.PC.setWord(jumpAddress);
+    else registers.PC.setValue(jumpAddress);
 }
 
 void Executor::_add(Register *reg1,Register *reg2,Register *reg3) {
-    reg1->setWord(reg2->asInt() + reg3->asInt());   
+    reg1->setValue(reg2->asInt() + reg3->asInt());   
 }
 
 void Executor::_addi(Register *reg1, Register *reg2, int immediate) {
-    reg1->setWord(reg2->asInt() + immediate);   
+    reg1->setValue(reg2->asInt() + immediate);   
 }
 
 void Executor::_sub(Register *reg1,Register *reg2,Register *reg3) {
-    reg1->setWord(reg2->asInt() - reg3->asInt());   
+    reg1->setValue(reg2->asInt() - reg3->asInt());   
 }
 
 void Executor::_mult(Register *reg1,Register *reg2) {
-    registers.LO.setWord(reg1->asInt() * reg2->asInt());   
+    registers.LO.setValue(reg1->asInt() * reg2->asInt());   
 }
 
 void Executor::_mflo(Register *reg) {
@@ -177,63 +183,68 @@ void Executor::_mul(Register *reg1,Register *reg2,Register *reg3) {
     _mflo(reg1);
 }
 
-void Executor::_div2(Register *reg1,Register *reg2) {  
-    registers.LO.setWord(reg1->asInt() / reg2->asInt());   
-    registers.HI.setWord(reg1->asInt() % reg2->asInt());
+void Executor::div2(Register *reg1,Register *reg2) {  
+    registers.LO.setValue(reg1->asInt() / reg2->asInt());   
+    registers.HI.setValue(reg1->asInt() % reg2->asInt());
 }
 
-void Executor::_div3(Register *reg1,Register *reg2,Register *reg3) {  
-    _div2(reg2,reg3);
+void Executor::div3(Register *reg1,Register *reg2,Register *reg3) {  
+    div2(reg2,reg3);
     _mflo(reg1);
 }
 
+void Executor::_div(Register *reg1,Register *reg2,Register *reg3){
+    if(reg3 == NULL) div2(reg1, reg2);
+    else div3(reg1, reg2, reg3);
+}
+
 void Executor::_rem(Register *reg1,Register *reg2,Register *reg3) {  
-    _div2(reg2,reg3);
+    div2(reg2,reg3);
     _mfhi(reg1);
 }
 
 void Executor::_and(Register *reg1, Register *reg2, Register *reg3)  {
-    reg1->setWord(reg2->asInt() & reg3->asInt());
+    reg1->setValue(reg2->asInt() & reg3->asInt());
 }
 
 void Executor::_or(Register *reg1, Register *reg2, Register *reg3)  {
-    reg1->setWord(reg2->asInt() | reg3->asInt());
+    reg1->setValue(reg2->asInt() | reg3->asInt());
 }
 
 void Executor::_xor(Register *reg1, Register *reg2, Register *reg3)  {
-    reg1->setWord(reg2->asInt() ^ reg3->asInt());
+    reg1->setValue(reg2->asInt() ^ reg3->asInt());
 }
 
 void Executor::_andi(Register *reg1, Register *reg2, int immediate)  {
-    reg1->setWord(reg2->asInt() & immediate);
+    reg1->setValue(reg2->asInt() & immediate);
 }
 
 void Executor::_ori(Register *reg1, Register *reg2, int immediate)  {
-    reg1->setWord(reg2->asInt() | immediate);
+    reg1->setValue(reg2->asInt() | immediate);
 }
 
 void Executor::_xori(Register *reg1, Register *reg2, int immediate)  {
-    reg1->setWord(reg2->asInt() ^ immediate);
+    reg1->setValue(reg2->asInt() ^ immediate);
 }
 
 void Executor::_slt(Register *reg1, Register *reg2, Register *reg3) {
-    if(reg2->asInt() < reg3->asInt()) reg1->setWord(1);
-    else reg1->setWord(0);
+    if(reg2->asInt() < reg3->asInt()) reg1->setValue(1);
+    else reg1->setValue(0);
 }
 
 void Executor::_sltu(Register *reg1, Register *reg2, Register *reg3) {
-    if((unsigned)reg2->asInt() < (unsigned)reg3->asInt()) reg1->setWord(1); 
-    else reg1->setWord(0);
+    if((unsigned)reg2->asInt() < (unsigned)reg3->asInt()) reg1->setValue(1); 
+    else reg1->setValue(0);
 }
 
 void Executor::_slti(Register *reg1, Register *reg2, int immediate) {
-    if(reg2->asInt() < immediate) reg1->setWord(1);
-    else reg1->setWord(0);
+    if(reg2->asInt() < immediate) reg1->setValue(1);
+    else reg1->setValue(0);
 }
 
 void Executor::_sltiu(Register *reg1, Register *reg2, unsigned immediate) {
-    if((unsigned)reg2->asInt() < immediate) reg1->setWord(1);
-    else reg1->setWord(0);
+    if((unsigned)reg2->asInt() < immediate) reg1->setValue(1);
+    else reg1->setValue(0);
 }
 
 void Executor::_jal(int jumpAddress) {
@@ -242,7 +253,7 @@ void Executor::_jal(int jumpAddress) {
 }
 
 void Executor::_addiu(Register *reg1, Register *reg2, unsigned int immediate) {
-    reg1->setWord((int)((unsigned)reg2->asInt() + immediate));   
+    reg1->setValue((int)((unsigned)reg2->asInt() + immediate));   
 }
 
 void Executor::_addu(Register *reg1,Register *reg2,Register *reg3) {
@@ -254,8 +265,8 @@ void Executor::_subu(Register *reg1,Register *reg2,Register *reg3) {
 }
 
 void Executor::_divu(Register *reg1,Register *reg2) {  
-    registers.LO.setWord((int)((unsigned)reg1->asInt() / (unsigned)reg2->asInt()));   
-    registers.HI.setWord((int)((unsigned)reg1->asInt() % (unsigned)reg2->asInt()));
+    registers.LO.setValue((int)((unsigned)reg1->asInt() / (unsigned)reg2->asInt()));   
+    registers.HI.setValue((int)((unsigned)reg1->asInt() % (unsigned)reg2->asInt()));
 }
 
 void Executor::_jr(Register *reg)  {
@@ -267,12 +278,12 @@ void Executor::_jalr(Register *reg)  {
 }
 
 void Executor::_lui(Register *reg, int immediate) {
-    reg->setWord(immediate << 16);
+    reg->setValue(immediate << 16);
 }
 
 void Executor::_sll(Register *reg1, Register *reg2, int immediate) {
     if (immediate < 0) _srl(reg1, reg2, -immediate);
-    else reg1->setWord(reg2->asInt() << immediate);
+    else reg1->setValue(reg2->asInt() << immediate);
 }
 
 void Executor::_sllv(Register *reg1, Register *reg2, Register *reg3) {
@@ -280,13 +291,13 @@ void Executor::_sllv(Register *reg1, Register *reg2, Register *reg3) {
 }
 
 void Executor::_sra(Register *reg1, Register *reg2, int immediate) {
-    reg1->setWord(reg2->asInt() >> immediate);
+    reg1->setValue(reg2->asInt() >> immediate);
 }
 
 void Executor::_srl(Register *reg1, Register *reg2, int immediate) {
     if (immediate == 0) return;
     int zeros = 0b01111111111111111111111111111111 >> (immediate-1);     
-    reg1->setWord(zeros & (reg2->asInt() >> immediate));
+    reg1->setValue(zeros & (reg2->asInt() >> immediate));
 }
 
 void Executor::_noop()  {}
@@ -319,7 +330,7 @@ void Executor::_la(Register *reg1, int address) {
 }
 
 void Executor::_nor(Register *reg1, Register *reg2,Register *reg3) {
-    reg1->setWord(~(reg2->asInt() | reg3->asInt()));
+    reg1->setValue(~(reg2->asInt() | reg3->asInt()));
 }
 
 void Executor::_not(Register *reg1, Register *reg2) {
@@ -354,7 +365,7 @@ void Executor::_syscall()  {
     else if (operationCode == 5){
         int temp;
         std::cin >> temp;
-        registers.V0.setWord(temp);
+        registers.V0.setValue(temp);
     }
     else if (operationCode == 6){
         std::cout << "WARNING: Syscall not implemented" << std::endl;                
@@ -379,7 +390,7 @@ void Executor::_syscall()  {
     }
     else if (operationCode == 11){
         //TODO: verificar qual é o low-order byte (vide https://i.imgur.com/HhQsemz.png)
-        std::cout << registers.A0.getWord().asByteArray().getByteAt(3);
+        std::cout << registers.A0.asByteArray().getByteAt(3);
     }
     else if (operationCode == 12){
         std::cout << "WARNING: Syscall not implemented" << std::endl;                

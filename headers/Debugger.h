@@ -25,11 +25,6 @@ class Debugger {
         void help(const vector<string>& commandParts = vector<string>(1));
         void disassemble(const vector<string>& commandParts);
         void breakpoint(const vector<string>& commandParts);
-        bool parseInstruction(const string& command);
-        bool executeInstructionAndVerify(const string& command);
-
-        bool hasRegister(const string& name);
-
 };
 
 #endif
