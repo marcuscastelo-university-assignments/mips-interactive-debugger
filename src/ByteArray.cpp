@@ -1,12 +1,19 @@
 #include "ByteArray.h"
-
+#include<stdio.h>
 ByteArray::ByteArray(int size) {
     this->size = size;
-    bytes = (char *) calloc(size, sizeof(int));
+    bytes = (unsigned char *) calloc(size, sizeof(unsigned char));
+}
+
+ByteArray::ByteArray(const ByteArray &byteArray) {
+    this->size = size;
+    bytes = (unsigned char *) calloc(size, sizeof(unsigned char));
+    for (int i = 0; i < size; i++) bytes[i] = byteArray.getByteAt(i);
+    printf("\n");
 }
 
 ByteArray::ByteArray(unsigned char *charArr, int size): ByteArray(size) {
-    for (int i = 0; i < size; i++) bytes[i] = charArr[i];
+    setBytes(charArr, size);
 }
 
 void ByteArray::setBytes(int fromPos, ByteArray subByteArray) {
@@ -15,28 +22,49 @@ void ByteArray::setBytes(int fromPos, ByteArray subByteArray) {
         bytes[i] = subByteArray.getByteAt(j);
 }
 
-void ByteArray::setBytes(ByteArray byteArray) {
+//TODO: delete
+static void printByteArray(const ByteArray *foda) {
+    for (int i = 0; i < foda->getSize(); i++)
+    {
+        printf("%02X ", foda->getByteAt(i));
+    }
+    printf("\n");
+    
+}
+
+void ByteArray::setBytes(const ByteArray& byteArray) {
+    printf("ByteArray@setBytes:\n");
+    printByteArray(&byteArray);
+
     if (byteArray.size != this->size) throw("invalid byteArr size");
     setBytes(0,byteArray);
 }
 
-int ByteArray::getSize() {
+void ByteArray::setBytes(unsigned char *charArr, int size) {
+    if (size != this->size) throw("Mismatch in array size while setting bytes");
+    for (int i = 0; i < size; i++) bytes[i] = charArr[i];
+}
+
+int ByteArray::getSize() const {
     return size;
 }
 
-ByteArray ByteArray::getBytes(int from, int size) {
+const ByteArray ByteArray::getBytes(int from, int size) const {
     ByteArray toReturn(size);
-    for(int i = 0; i < size; i++)       
-        toReturn.setByteAt(i, getByteAt(from));        
+    for(int i = from, j = 0; j < size; i++, j++)       
+        toReturn.setByteAt(j, getByteAt(i));  
+
+    printf("%d != %d\n", bytes[3], getByteAt(3));
+    printf("%d != %d\n", bytes[3], toReturn.getByteAt(3));
     return toReturn;
 }
 
-ByteArray ByteArray::getBytes() {      
-    return getBytes(0, size-1);
+const ByteArray ByteArray::getBytes() const {      
+    return getBytes(0, size);
 }
 
 
-unsigned char ByteArray::getByteAt(int pos) {
+unsigned char ByteArray::getByteAt(int pos) const {
     return bytes[pos];
 }
 

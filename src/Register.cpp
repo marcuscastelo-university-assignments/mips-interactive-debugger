@@ -5,11 +5,6 @@ Register::Register(std::string name, Word word){
     this->name = name;
 }
 
-Register::Register(std::string name) {    
-    this->word = 0;
-    this->name = name;
-}
-
 std::string Register::getName(void) {
     return this->name;
 }
@@ -27,6 +22,7 @@ void Register::copyValue(Register *reg){
 }
 
 void Register::setValue(Word word){
+    printf("Register@setValue: %d\n", word.asInt());
     this->word = word;
 }
 

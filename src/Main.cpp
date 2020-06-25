@@ -1,6 +1,7 @@
 #include "Debugger.h"
 #include "ConsoleDebugger.h"
 #include "FileDebugger.h"
+#include "Register.h"
 
 #include "string_utils.h"
 
@@ -14,7 +15,33 @@ void sigint_handler (int par) {
     return;
 }
 
+//TODO: delete
+static void printByteArray(ByteArray *foda) {
+    for (int i = 0; i < foda->getSize(); i++)
+    {
+        printf("%02X ", foda->getByteAt(i));
+    }
+    printf("\n");
+    
+}
+
 int main (int argc, char *argv[]) {
+    Register r("r", 4);
+    Register a = r;
+
+
+    a.print();
+    return 0;
+
+
+
+
+
+
+
+
+
+
     signal(SIGINT, sigint_handler);
     Debugger *debugger;
     

@@ -12,8 +12,7 @@ class Register
         std::string name;    
         Word word;
     public:
-        Register(std::string name);
-        Register(std::string name, Word word);
+        Register(std::string name, Word word = 0);
         ~Register();
         std::string getName(void);
         void copyValue(Register *reg);

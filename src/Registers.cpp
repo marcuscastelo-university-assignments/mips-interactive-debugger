@@ -100,16 +100,15 @@ bool Registers::hasRegister(std::string name) {
 
 void Registers::setValue(std::string name, int value) {
     Register *reg = getRegisterByName(name);
-    if (!reg)
-        throw std::invalid_argument("Not a valid register name");
+    //TODO: usar invalid_argument nos outros códigos
+    if (reg == NULL) throw std::invalid_argument("Not a valid register name");
 
     reg->setValue(value);
 }
 
 int Registers::getValue(std::string name) {
     Register *reg = getRegisterByName(name);
-    if (!reg)
-        throw std::invalid_argument("Not a valid register name");
+    if (reg == NULL) throw std::invalid_argument("Not a valid register name");
 
     return reg->getValueAsInt();
 }

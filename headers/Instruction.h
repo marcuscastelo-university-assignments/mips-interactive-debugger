@@ -9,7 +9,7 @@
 class Executor;
 
 enum InstructionType {
-    INVALID, T_3R, T_2R, T_1R, T_2R_1I, T_1R_1I, T_1I, T_1R_2I, T_2R_1U, T_V 
+    UNKNOWN, T_3R, T_2R, T_1R, T_2R_1I, T_1R_1I, T_1I, T_1R_2I, T_2R_1U, T_V 
 };
 
 class Instruction
@@ -36,8 +36,11 @@ class Instruction
 
     public:
         bool isValid();
+        bool isUnknown();
+        InstructionType getType();
+
+        Instruction();
         Instruction(std::string repr, Executor *executor);
-        Instruction(nullptr_t null);
 
 
         void setExecutionFunction(void (Executor::*executor_func)(Register*, Register*, Register*));

@@ -3,23 +3,27 @@
 
 #include <stdlib.h>
 
+
+//TODO: operator[]
 class ByteArray
 {
     protected:
         int size;
-        char *bytes;
+        unsigned char *bytes;
     public:
+        ByteArray(const ByteArray &byteArray);
         ByteArray(int size);
         ByteArray(unsigned char *charArr, int size);
         void setBytes(int fromPos, ByteArray subByteArray);
-        void setBytes(ByteArray byteArray);
+        void setBytes(unsigned char *charArr, int size);
+        void setBytes(const ByteArray& byteArray);
         void setByteAt(int pos, unsigned char byte);
 
-        ByteArray getBytes(int from, int to);
-        ByteArray getBytes();
-        unsigned char getByteAt(int pos);  
+        const ByteArray getBytes(int from, int to) const;
+        const ByteArray getBytes() const;
+        unsigned char getByteAt(int pos) const;  
 
-        int getSize();
+        int getSize() const;
         ~ByteArray();
 };
 
