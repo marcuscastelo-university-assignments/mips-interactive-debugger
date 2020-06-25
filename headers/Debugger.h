@@ -3,6 +3,7 @@
 
 #include "Executor.h"
 #include "Program.h"
+#include "Instruction.h"
 
 #include <vector>
 #include <string>
@@ -10,23 +11,24 @@ using namespace std;
 
 class Debugger {
     protected:
-        Program *program;
-        Executor *executor;
+        Program program;
+        Executor executor;
 
     public:
         Debugger();
+        Debugger(const Debugger& other);
 		virtual ~Debugger();
         virtual void start(void);
         void exec(void);
         
-        void info(vector<string> commandParts);
-        void help(vector<string> commandParts = vector<string>(1));
-        void disassemble(vector<string> commandParts);
-        void breakpoint(vector<string> commandParts);
-        bool parseInstruction(string command);
-        bool executeInstructionAndVerify(string command);
+        void info(const vector<string>& commandParts);
+        void help(const vector<string>& commandParts = vector<string>(1));
+        void disassemble(const vector<string>& commandParts);
+        void breakpoint(const vector<string>& commandParts);
+        bool parseInstruction(const string& command);
+        bool executeInstructionAndVerify(const string& command);
 
-        bool hasRegister(string name);
+        bool hasRegister(const string& name);
 
 };
 

@@ -1,20 +1,20 @@
 #ifndef __BYTEARRAY__H__
 #define __BYTEARRAY__H__
 
+#include <vector>
+#include <stdio.h>
 #include <stdlib.h>
-
 
 //TODO: operator[]
 class ByteArray
 {
     protected:
-        int size;
-        unsigned char *bytes;
+        std::vector<unsigned char> bytes;
     public:
         ByteArray(const ByteArray &byteArray);
         ByteArray(int size);
         ByteArray(unsigned char *charArr, int size);
-        void setBytes(int fromPos, ByteArray subByteArray);
+        void setBytes(int fromPos, const ByteArray& subByteArray);
         void setBytes(unsigned char *charArr, int size);
         void setBytes(const ByteArray& byteArray);
         void setByteAt(int pos, unsigned char byte);
@@ -23,8 +23,9 @@ class ByteArray
         const ByteArray getBytes() const;
         unsigned char getByteAt(int pos) const;  
 
+        void print(FILE *file_stream = stdout);
+
         int getSize() const;
-        ~ByteArray();
 };
 
 #endif  //!__BYTEARRAY__H__

@@ -1,32 +1,35 @@
 #include "Register.h"
 
-Register::Register(std::string name, Word word){    
-    this->word = word;
-    this->name = name;
-}
+Register::Register(const std::string& name) 
+: name(name), word(0) {}
 
-std::string Register::getName(void) {
+Register::Register(const std::string& name, const Word& word)
+: name(name), word(word) {}
+
+Register::Register(const Register& other) 
+: name(other.name), word(other.word) {}
+
+const std::string& Register::getName(void) const {
     return this->name;
 }
 
-Word Register::getValue(){
-    return this->word;
+Word& Register::getWord() const{
+    return (Word&) this->word;
 }
 
-int Register::getValueAsInt(){
+int Register::asInt() const{
     return this->word.asInt();
 }
 
-void Register::copyValue(Register *reg){
-    this->word = reg->getValue();
+void Register::copy(const Register& reg){
+    this->word = reg.getWord();
 }
 
-void Register::setValue(Word word){
-    printf("Register@setValue: %d\n", word.asInt());
+void Register::setWord(const Word& word){
     this->word = word;
 }
 
-void Register::print(FILE *file_stream) {
+void Register::print(FILE *file_stream) const {
     //TODO: colocar como bytearray e deixar bonito
     fprintf(file_stream, "|%s|%d / ", name.c_str(), word.asInt());
     for(int i=0;i<4;i++) fprintf(file_stream, "%02X ", word.asByteArray().getByteAt(i));

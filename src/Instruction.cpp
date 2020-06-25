@@ -12,14 +12,13 @@ InstructionType Instruction::getType() {
     return type;
 }
 
-Instruction::Instruction() {
-    this->type = UNKNOWN;
-}
+Instruction::Instruction(const std::string& repr, Executor *executor)
+: executor(executor), repr(repr), type(UNKNOWN) { }
 
-Instruction::Instruction(std::string repr, Executor *executor): Instruction() {
-    this->repr = repr;
-    this->executor = executor;
-}
+Instruction::Instruction(const Instruction& other)
+: executor(other.executor), repr(other.repr), type(other.type) {}
+
+Instruction::~Instruction() {}
 
 void Instruction::setExecutionFunction(void(Executor::*executor_func)(Register*, Register*, Register*)) {
     executor_funcT_3R = executor_func;

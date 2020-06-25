@@ -1,17 +1,16 @@
 #include "Interpreter.h"
 
 #include <vector>
+#include <iostream>
 #include "string_utils.h"
 
 #define sef(F) instruction->setExecutionFunction(&Executor::_##F)
 
-Interpreter::Interpreter(Executor *parentExecutor) {
-    this->parentExecutor = parentExecutor;
-}
+Interpreter::Interpreter(Executor *parentExecutor) 
+: parentExecutor(parentExecutor) 
+{}
 
-Interpreter::~Interpreter()
-{
-}
+Interpreter::~Interpreter() {}
 
 void defineExecutionFunction(Instruction *instruction) {
          if (instruction->toString() == "lw") sef(lw);
@@ -82,12 +81,12 @@ void defineExecutionFunction(Instruction *instruction) {
     else if (instruction->toString() == "not") sef(not);
 }
 
-Instruction *Interpreter::interpretInstruction(std::string instructionStr) {
+Instruction *Interpreter::interpretInstruction(const std::string& instructionStr) const {
     std::vector<std::string> instruction_parts = split(instructionStr);
     std::vector<Register*> registers;
     std::vector<int> integers;
 
-    if (instruction_parts.size() < 1) return new Instruction();
+    if (instruction_parts.size() < 1) return new Instruction("", parentExecutor);
 
     Instruction *generated_instruction = new Instruction(instruction_parts[0], parentExecutor);
 
@@ -99,12 +98,13 @@ Instruction *Interpreter::interpretInstruction(std::string instructionStr) {
             integers.push_back(stoi(instruction_parts[i]));
         } 
         else { //TODO: implement label
-            Register *reg = parentExecutor->getRegisters()->getRegisterByName(instruction_parts[i]);
-            if (reg == NULL) {
+            try {
+                Register &reg = parentExecutor->getRegisters().getRegisterByName(instruction_parts[i]);
+                registers.push_back(&reg);
+            } catch (const std::invalid_argument& e) {
                 fprintf(stderr, "ERROR: invalid register provided: '%s'\n", instruction_parts[i].c_str());
-                continue;
+                std::cout << e.what() << std::endl;
             }
-            registers.push_back(reg);
         }
     }
 

@@ -1,52 +1,47 @@
 #include "ByteArray.h"
-#include<stdio.h>
-ByteArray::ByteArray(int size) {
-    this->size = size;
-    bytes = (unsigned char *) calloc(size, sizeof(unsigned char));
+#include <stdio.h>
+#include <string.h>
+
+ByteArray::ByteArray(int size)
+: bytes(size, 0x00)
+{
+    printf("Bytearray(size)!!!\n");
 }
 
-ByteArray::ByteArray(const ByteArray &byteArray) {
-    this->size = size;
-    bytes = (unsigned char *) calloc(size, sizeof(unsigned char));
-    for (int i = 0; i < size; i++) bytes[i] = byteArray.getByteAt(i);
-    printf("\n");
+ByteArray::ByteArray(const ByteArray &byteArray)
+: bytes(byteArray.getSize(), 0x00) 
+{
+    printf("Bytearray(const ByteArray &byteArray)!!!\n");
+    for (int i = 0; i < byteArray.getSize(); i++) 
+        bytes[i] = byteArray.getByteAt(i);
 }
 
-ByteArray::ByteArray(unsigned char *charArr, int size): ByteArray(size) {
+ByteArray::ByteArray(unsigned char *charArr, int size)
+: bytes(size, 0x00)
+{
+    printf("Bytearray(unsigned char *charArr, int size)!!!\n");
     setBytes(charArr, size);
 }
 
-void ByteArray::setBytes(int fromPos, ByteArray subByteArray) {
-    if (fromPos + subByteArray.getSize() > size) throw("invalid subByteArray size");
+void ByteArray::setBytes(int fromPos, const ByteArray& subByteArray) {
+    if (fromPos + subByteArray.getSize() > getSize()) throw("invalid subByteArray size");
     for (int i = fromPos, j = 0; i < subByteArray.getSize(); i++, j++)
         bytes[i] = subByteArray.getByteAt(j);
 }
 
-//TODO: delete
-static void printByteArray(const ByteArray *foda) {
-    for (int i = 0; i < foda->getSize(); i++)
-    {
-        printf("%02X ", foda->getByteAt(i));
-    }
-    printf("\n");
-    
-}
 
 void ByteArray::setBytes(const ByteArray& byteArray) {
-    printf("ByteArray@setBytes:\n");
-    printByteArray(&byteArray);
-
-    if (byteArray.size != this->size) throw("invalid byteArr size");
-    setBytes(0,byteArray);
+    if (byteArray.getSize() != this->getSize()) throw("invalid byteArr size");
+    setBytes(0, byteArray);
 }
 
 void ByteArray::setBytes(unsigned char *charArr, int size) {
-    if (size != this->size) throw("Mismatch in array size while setting bytes");
+    if (size != this->getSize()) throw("Mismatch in array size while setting bytes");
     for (int i = 0; i < size; i++) bytes[i] = charArr[i];
 }
 
 int ByteArray::getSize() const {
-    return size;
+    return bytes.size();
 }
 
 const ByteArray ByteArray::getBytes(int from, int size) const {
@@ -60,7 +55,7 @@ const ByteArray ByteArray::getBytes(int from, int size) const {
 }
 
 const ByteArray ByteArray::getBytes() const {      
-    return getBytes(0, size);
+    return getBytes(0, getSize());
 }
 
 
@@ -68,10 +63,13 @@ unsigned char ByteArray::getByteAt(int pos) const {
     return bytes[pos];
 }
 
-void ByteArray::setByteAt(int pos, unsigned char byte) {
-    bytes[pos] = byte;
+
+void ByteArray::print(FILE *file_stream) {
+    for (int i = 0; i < getSize(); i++)
+        fprintf(file_stream, "%02X ", bytes[i]);
+    fprintf(file_stream, "\n");   
 }
 
-ByteArray::~ByteArray() {
-    free(bytes);
+void ByteArray::setByteAt(int pos, unsigned char byte) {
+    bytes[pos] = byte;
 }

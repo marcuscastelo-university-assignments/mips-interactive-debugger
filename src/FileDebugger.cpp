@@ -4,13 +4,9 @@
 #include <iostream>
 
 
-FileDebugger::FileDebugger (void) {
-    program= new Program();
-}
+FileDebugger::FileDebugger (void) {}
 
-FileDebugger::~FileDebugger () {
-    delete program;
-}
+FileDebugger::~FileDebugger () {}
 
 void FileDebugger::start (void) {
     char *tmp;
@@ -79,12 +75,9 @@ void FileDebugger::importCode (vector<string> commandParts) {
         printf("No file to open\n");
         return;
     }
-
-    delete program;
-    delete executor;
-    program = new Program();
-    executor = new Executor();
    
+    //TODO: check deletes that were here
+
     while (!feof(file_ptr)) {
         string line = getLine(file_ptr);
         
@@ -93,7 +86,7 @@ void FileDebugger::importCode (vector<string> commandParts) {
         }
 
         line = replaceAllChars(line, ',', ' ');
-        program->addInstruction(line);
+        program.addInstruction(line);
     }
 
     fclose(file_ptr);

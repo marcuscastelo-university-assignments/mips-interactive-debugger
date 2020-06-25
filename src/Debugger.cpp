@@ -1,34 +1,30 @@
 #include "Debugger.h"
+
 #include <iostream>
+#include <string.h>
 
 using namespace std;
 
-Debugger::Debugger() {
-    program = new Program;
-    executor = new Executor;
-}
+Debugger::Debugger() {}
 
-Debugger::~Debugger () {
-    delete program;
-    delete executor;
-}
+Debugger::Debugger(const Debugger& other) {}
 
-void Debugger::start (void) {
+Debugger::~Debugger () {}
 
-}
+void Debugger::start (void) {}
 
 void Debugger::exec (void) {
-    Register *reg = executor->getRegister("$pc");
-    reg->setValue(3);
+    Register &reg = executor.getRegister("$pc");
+    reg.setWord(3);
 
     while (true) {
-        int pos = reg->getValueAsInt();
+        int pos = reg.asInt();
         string inst;
 
         printf("pos: %d\n", pos);
 
         try {
-            inst = program->getInstruction(pos);
+            inst = program.getInstruction(pos);
             printSingleInstruction(inst);
         } catch (std::out_of_range &e) {
             cout << e.what() << endl;
@@ -36,11 +32,11 @@ void Debugger::exec (void) {
         }
         
         pos++;
-        reg->setValue(pos);
+        reg.setWord(pos);
     }
 }
 
-void Debugger::help(vector<string> commandParts) {
+void Debugger::help(const vector<string>& commandParts) {
     if (commandParts.size() <= 1) {
         printf("Help options:\n");
         printf("- console\n");
@@ -135,14 +131,14 @@ void Debugger::help(vector<string> commandParts) {
         printf("Command \"%s\" does not exist. Use \"help\" to see commands\n", commandParts[0].c_str());
 }
 
-void Debugger::info(vector<string> commandParts) {
+void Debugger::info(const vector<string>& commandParts) {
     if (commandParts.size() == 1) {
         printf("No argument to show help. See 'help info'\n");
         return;
     }
 
     if (commandParts[1] == "registers") { 
-        this->executor->getRegisters()->printRegisters();
+        this->executor.getRegisters().printRegisters();
     }
 
     // else if (commandParts[1] in registers_name_to_id.keys()) {
@@ -151,46 +147,46 @@ void Debugger::info(vector<string> commandParts) {
     //     print('-'*33)
 
     else if (commandParts[1] == "labels") {
-        program->printLabel();
+        program.printLabel();
     }
 
-    else if (program->hasLabel(commandParts[1])) {
-        program->printLabel(commandParts[1]);
+    else if (program.hasLabel(commandParts[1])) {
+        program.printLabel(commandParts[1]);
     }
 }
 
-void Debugger::disassemble(vector<string> commandParts) {
+void Debugger::disassemble(const vector<string>& commandParts) {
     if (commandParts.size() == 1) {
-        program->printInstructions();
+        program.printInstructions();
         return;
     }
     
     size_t size = commandParts.size();
     for (size_t i = 1; i < size; i++) {
-        if (program->hasLabel(commandParts[i]) == false)
+        if (program.hasLabel(commandParts[i]) == false)
             printf("Label '%s' undefined\n", commandParts[i].c_str());
         
         else
-            program->printInstructions(commandParts[i]);
+            program.printInstructions(commandParts[i]);
         
         printf("---------------\n");
     }
 }
 
-void Debugger::breakpoint(vector<string> commandParts) {
+void Debugger::breakpoint(const vector<string>& commandParts) {
     if (commandParts.size() == 1) {
         printf("No argument with '%s'\n", commandParts[0].c_str());
         return;
     }
 
     if (commandParts[0] == "break-remove")
-        program->removeBreakpoint(stoi(commandParts[1]));
+        program.removeBreakpoint(stoi(commandParts[1]));
 
     else
-        program->addBreakpoint(stoi(commandParts[1]));
+        program.addBreakpoint(stoi(commandParts[1]));
 }
 
-bool Debugger::parseInstruction(string command) {
+bool Debugger::parseInstruction(const string& command) {
     if (command.empty())
         return false;
 
@@ -204,11 +200,11 @@ bool Debugger::parseInstruction(string command) {
     return true;
 }
 
-bool Debugger::executeInstructionAndVerify(string command) {
-    Instruction *executedInstruction = executor->executeInstructionStr(command);
+bool Debugger::executeInstructionAndVerify(const string& command) {
+    Instruction *executedInstruction = executor.executeInstructionStr(command);
     return executedInstruction->isValid();
 }
 
-bool Debugger::hasRegister(string name) {
-    return executor->hasRegister(name);
+bool Debugger::hasRegister(const string& name) {
+    return executor.hasRegister(name);
 }

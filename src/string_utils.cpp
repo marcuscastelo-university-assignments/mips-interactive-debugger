@@ -5,7 +5,8 @@
 
 using namespace std;
 
-vector<string> split(string str, const string delimiter) {
+vector<string> split(const string& str_orig, const string& delimiter) {
+    string str = str_orig;
     size_t pos = 0;
     string token;
     vector<string> vec;
@@ -25,7 +26,8 @@ vector<string> split(string str, const string delimiter) {
     return vec;
 }
 
-string rtrim (string str) {
+string rtrim (const string& str_orig) {
+    string str = str_orig;
     int size = str.size();
 
     while (size > 0 and (str[size-1] == '\n' or str[size-1] == '\r' or str[size-1] == '\t' or str[size-1] == '\v' or str[size-1] == '\f' or str[size-1] == ' ')) {
@@ -36,19 +38,21 @@ string rtrim (string str) {
     return str;
 }
 
-string ltrim (string str) {
+string ltrim (const string& str_orig) {
+    string str = str_orig;
     str.erase(0, str.find_first_not_of("\n\r\t\v\f "));
     
     return str;
 }
 
 
-string trim (string str) {
+string trim (const string& str) {
     return ltrim(rtrim(str));       
 }
 
 
-string replaceAllChars (string str, char toReplace, char substitute) {
+string replaceAllChars (const string& str_orig, char toReplace, char substitute) {
+    string str = str_orig;
     if (str.empty())
         return str;
 
@@ -84,7 +88,8 @@ string getLine(FILE *file_ptr) {
     return str;
 }
 
-string preventAbsolutePath(string str) {
+string preventAbsolutePath(const string& str_orig) {
+    string str = str_orig;
     if (str.empty())
         return str;
 
@@ -95,6 +100,6 @@ string preventAbsolutePath(string str) {
 
     return str;
 }
-bool isInteger(const std::string & s){
+bool isInteger(const std::string& s){
     return std::regex_match(s, std::regex("[(-|+)|]?[0-9]+"));
 }

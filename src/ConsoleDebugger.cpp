@@ -62,7 +62,7 @@ void ConsoleDebugger::start (void) {
         else {
             // TODO: adicionar somente se o executor não retornar erros (instrução não existente, etc...)
             if (parseInstruction(command) == true and executeInstructionAndVerify(command) == true) {
-                program->addInstruction(command);
+                program.addInstruction(command);
             }
             else {
                 printf("Invalid instruction or syntax\n");
@@ -83,7 +83,7 @@ void ConsoleDebugger::exportCode(vector<string> commandParts) {
     }
 
     FILE *file = fopen(name.c_str(), "w");
-    program->printInstructions("", file);
+    program.printInstructions("", file);
     fclose(file);
     
     return;

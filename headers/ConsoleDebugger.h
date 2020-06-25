@@ -2,7 +2,6 @@
 #define CONSOLEDEBUGGER_H
 
 #include "Debugger.h"
-#include "ConsoleDebugger.h"
 
 class ConsoleDebugger : public Debugger {
     public:

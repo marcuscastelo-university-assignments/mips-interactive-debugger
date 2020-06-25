@@ -4,36 +4,36 @@
 #include <map>
 #include <string>
 
-#include "Register.h"
-#include "Registers.h"
 #include "Interpreter.h"
-#include "Instruction.h"
+#include "Registers.h"
 #include "ByteArray.h"
 
 typedef ByteArray Stack;
-class Interpreter;
+#define STACK_SIZE 4096 //4KB
 
+class Interpreter;
+class Instruction;
 class Executor{
     private:
         Interpreter *interpreter;
-        Registers *registers;
-        Stack *stack;
+        Registers registers;
+        Stack stack;
     public:
         Executor();
         ~Executor();
 
-        Registers *getRegisters();
-        Register *getRegister(std::string name);
+        const Registers &getRegisters() const;
+        Register &getRegister(const std::string& name) const;
 
-        Instruction *executeInstructionStr(std::string instruction);
-        bool hasRegister(std::string name);
+        Instruction *executeInstructionStr(const std::string& instruction) const;
+        bool hasRegister(const std::string& name) const;
 
         //void getInstructionInformation();
 
         void _lw(Register *reg1, Register *reg2, int offset);
         void _sw(Register *reg1, Register *reg2, int offset);
         void _lb(Register *reg1, Register *reg2,int offset);
-        void _sb(Register *reg1, Register *reg2,int offset);
+        void _sb(Register *reg1, Register *reg2,int offset);;
         void _beq(Register *reg1, Register *reg2, int jumpAddress);
         void _bgez(Register *reg, int jumpAddress);
         void _bgezal(Register *reg, int jumpAddress);

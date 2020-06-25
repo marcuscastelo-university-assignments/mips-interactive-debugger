@@ -7,7 +7,6 @@
 #include <vector>
 
 class Executor;
-
 enum InstructionType {
     UNKNOWN, T_3R, T_2R, T_1R, T_2R_1I, T_1R_1I, T_1I, T_1R_2I, T_2R_1U, T_V 
 };
@@ -15,9 +14,9 @@ enum InstructionType {
 class Instruction
 {
     private:
+        Executor *executor;
         std::string repr;
         InstructionType type;
-        Executor *executor;
 
         std::vector<Register *> registers; 
         std::vector<int> integers;
@@ -39,9 +38,9 @@ class Instruction
         bool isUnknown();
         InstructionType getType();
 
-        Instruction();
-        Instruction(std::string repr, Executor *executor);
-
+        Instruction(const std::string& repr, Executor* executor_ref);
+        Instruction(const Instruction& other);
+        ~Instruction();
 
         void setExecutionFunction(void (Executor::*executor_func)(Register*, Register*, Register*));
         void setExecutionFunction(void (Executor::*executor_func)(Register*, Register*));
