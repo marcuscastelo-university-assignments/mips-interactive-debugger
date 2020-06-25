@@ -6,12 +6,12 @@
 
 using namespace std;
 
-vector<string> split(string str, const string delimiter=" ");
-string trim(string str);
-string replaceAllChars(string str, char toReplace, char substitute);
+vector<string> split(const string& str, const string& delimiter=" ");
+string trim(const string& str);
+string replaceAllChars(const string& str, char toReplace, char substitute);
 void printLine(int size);
 string getLine(FILE *file_ptr=stdin);
-string preventAbsolutePath(string str);
+string preventAbsolutePath(const string& str);
 
 bool isInteger(const std::string & s);
 

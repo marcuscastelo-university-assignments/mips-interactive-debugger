@@ -12,15 +12,16 @@ class Register
         std::string name;    
         Word word;
     public:
-        Register(std::string name);
-        Register(std::string name, Word word);
+        Register(const std::string& name);
+        Register(const std::string& name, const Word& word);
+        Register(const Register& other);
         ~Register();
-        std::string getName(void);
-        void copyValue(Register *reg);
-        void setValue(Word word);
-        Word getValue();
-        int getValueAsInt();
-        void print(FILE *file_stream = stdout);
+        const std::string& getName(void) const;
+        void copy(const Register& reg);
+        void setWord(const Word& word);
+        Word& getWord() const;
+        int asInt() const;
+        void print(FILE *file_stream = stdout) const;
 };
 
 #endif

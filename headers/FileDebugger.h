@@ -1,5 +1,5 @@
-#ifndef FILEDEBUGGER_H
-#define FILEDEBUGGER_H
+#ifndef __FILEDEBUGGER__H__
+#define __FILEDEBUGGER__H__
 
 #include "Debugger.h"
 #include "FileDebugger.h"

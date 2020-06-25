@@ -4,13 +4,9 @@
 #include <iostream>
 
 
-FileDebugger::FileDebugger (void) {
-    program= new Program();
-}
+FileDebugger::FileDebugger (void) {}
 
-FileDebugger::~FileDebugger () {
-    delete program;
-}
+FileDebugger::~FileDebugger () {}
 
 void FileDebugger::start (void) {
     char *tmp;
@@ -61,7 +57,23 @@ void FileDebugger::start (void) {
         }
 
         else if (commandParts[0] == "r" or commandParts[0] == "run") {
+            exec(0);
+        }
+
+        else if (commandParts[0] == "c" or commandParts[0] == "continue") {
             exec();
+        }
+
+        else if (commandParts[0] == "next") {
+            try {
+                next();
+            } catch (std::out_of_range &e) {
+                printf("There is no next instruction to be executed\n");
+            }
+        }
+
+        else {
+            printf("Command '%s' undefined\n", commandParts[0].c_str());
         }
     }
 }
@@ -79,12 +91,9 @@ void FileDebugger::importCode (vector<string> commandParts) {
         printf("No file to open\n");
         return;
     }
-
-    delete program;
-    delete executor;
-    program = new Program();
-    executor = new Executor();
    
+    //TODO: check deletes that were here
+
     while (!feof(file_ptr)) {
         string line = getLine(file_ptr);
         
@@ -93,7 +102,7 @@ void FileDebugger::importCode (vector<string> commandParts) {
         }
 
         line = replaceAllChars(line, ',', ' ');
-        program->addInstruction(line);
+        program.addInstruction(line);
     }
 
     fclose(file_ptr);

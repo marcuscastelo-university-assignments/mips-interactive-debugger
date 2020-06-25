@@ -1,19 +1,17 @@
 #ifndef __INTERPRETER__H__
 #define __INTERPRETER__H__
 
-#include "Executor.h"
 #include "Instruction.h"
 
 class Executor;
 class Instruction;
-
 class Interpreter
 {
     private:
         Executor *parentExecutor;
     public:
         Interpreter(Executor *parentExecutor);
-        Instruction *interpretInstruction(std::string instruction);
+        Instruction *interpretInstruction(const std::string& instructionStr) const;
         ~Interpreter();
 };
 

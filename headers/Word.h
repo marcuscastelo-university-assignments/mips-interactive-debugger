@@ -10,14 +10,15 @@ class Word : public ByteArray
 {
     public:
         Word();
-        Word(ByteArray byteArray);
+        Word(const ByteArray& byteArray);
         Word(unsigned char *bytes);
         Word(int integer);
+
         void setValue(int integer);
-        void setValue(ByteArray byteArray);
-        int asInt();
-        ByteArray asByteArray();
-        Word clone();
+        void setValue(const ByteArray& byteArray);
+        int asInt() const;
+        const ByteArray& asByteArray() const;
+        const Word clone() const;
 };
 
 #endif 

@@ -1,8 +1,7 @@
-#ifndef CONSOLEDEBUGGER_H
-#define CONSOLEDEBUGGER_H
+#ifndef __CONSOLEDEBUGGER__H__
+#define __CONSOLEDEBUGGER__H__
 
 #include "Debugger.h"
-#include "ConsoleDebugger.h"
 
 class ConsoleDebugger : public Debugger {
     public:
