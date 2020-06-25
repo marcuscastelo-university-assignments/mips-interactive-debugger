@@ -61,12 +61,12 @@ void ConsoleDebugger::start (void) {
 
         else {
             // TODO: adicionar somente se o executor não retornar erros (instrução não existente, etc...)
-            if (parseInstruction(command) == true and executeInstructionAndVerify(command) == true) {
+            // if (parseInstruction(command) == true and executeInstructionAndVerify(command) == true) {
                 program->addInstruction(command);
-            }
-            else {
-                printf("Invalid instruction or syntax\n");
-            }
+            // }
+            // else {
+            //     printf("Invalid instruction or syntax\n");
+            // }
         }
         
     }
