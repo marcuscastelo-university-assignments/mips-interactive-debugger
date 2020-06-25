@@ -18,6 +18,9 @@ class Executor{
         Interpreter *interpreter;
         Registers registers;
         Stack stack;
+
+        void div2(Register *reg1,Register *reg2);
+        void div3(Register *reg1,Register *reg2, Register *reg3);
     public:
         Executor();
         ~Executor();
@@ -59,8 +62,8 @@ class Executor{
         void _mflo(Register *reg);
         void _mfhi(Register *reg);
         void _mul(Register *reg1,Register *reg2,Register *reg3);
-        void _div2(Register *reg1,Register *reg2);
-        void _div3(Register *reg1,Register *reg2, Register *reg3);
+
+        void _div(Register *reg1,Register *reg2, Register *reg3 = NULL);
         void _rem(Register *reg1,Register *reg2, Register *reg3);
         void _and(Register *reg1, Register *reg2, Register *reg3);
         void _or(Register *reg1, Register *reg2, Register *reg3);

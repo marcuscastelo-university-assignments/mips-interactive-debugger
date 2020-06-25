@@ -73,9 +73,15 @@ void ConsoleDebugger::start (void) {
             if (verifyLabel(command) == true and executeInstructionAndVerify(command) == true) {
                 program.addInstruction(command);
             }
-            else {
-                printf("Invalid instruction or syntax\n");
+
+            Instruction *instruction = executor.executeInstructionStr(command);
+            if (instruction->validate()) {
+                program.addInstruction(instruction->toString()); 
+
             }
+            else printf("%s\n", instruction->getErrorMessage());
+
+            delete instruction;
         }
         
     }

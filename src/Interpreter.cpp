@@ -42,8 +42,7 @@ void defineExecutionFunction(Instruction *instruction) {
     else if (instruction->toString() == "mflo") sef(mflo);
     else if (instruction->toString() == "mfhi") sef(mfhi);
     else if (instruction->toString() == "mul") sef(mul);
-    else if (instruction->toString() == "div2") sef(div2);
-    else if (instruction->toString() == "div3") sef(div3);
+    else if (instruction->toString() == "div") sef(div);
     else if (instruction->toString() == "rem") sef(rem);
     else if (instruction->toString() == "and") sef(and);
     else if (instruction->toString() == "or") sef(or);
@@ -86,9 +85,8 @@ Instruction *Interpreter::interpretInstruction(const std::string& instructionStr
     std::vector<Register*> registers;
     std::vector<int> integers;
 
-    if (instruction_parts.size() < 1) return new Instruction("", parentExecutor);
-
-    Instruction *generated_instruction = new Instruction(instruction_parts[0], parentExecutor);
+    //TODO: no_advance
+    if (instruction_parts.size() < 1) return new Instruction("");
 
     defineExecutionFunction(generated_instruction);
     if (generated_instruction->isUnknown()) return generated_instruction;
