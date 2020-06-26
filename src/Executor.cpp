@@ -27,6 +27,13 @@ Instruction *Executor::executeInstructionStr(const std::string& instructionStr) 
             fprintf(stderr, "%s\n", e.what());
             return NULL;
         }
+        #include <iostream>
+        using namespace std;
+        ByteArray b = stack.getBytes();
+        for (int i = b.getSize()-40; i < b.getSize(); i+=4) {
+            Word wuw(stack.getBytes(i, 4));
+            cout << wuw.asInt() << endl;
+        }
 
         int advanceOffset = interpretedInstruction->getAdvancePcType();
         ((Register&)registers.PC).setValue(registers.PC.asInt() + advanceOffset);

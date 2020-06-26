@@ -47,8 +47,6 @@ const ByteArray ByteArray::getBytes(int from, int size) const {
     for(int i = from, j = 0; j < size; i++, j++)       
         toReturn.setByteAt(j, getByteAt(i));  
 
-    printf("%d != %d\n", bytes[3], getByteAt(3));
-    printf("%d != %d\n", bytes[3], toReturn.getByteAt(3));
     return toReturn;
 }
 
