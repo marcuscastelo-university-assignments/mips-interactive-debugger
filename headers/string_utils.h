@@ -16,7 +16,7 @@ void printLine(int size);
 std::string getLine(FILE *file_ptr=stdin);
 std::string preventAbsolutePath(const std::string& str);
 std::string removeComments(std::string str_vec);
-std::pair<std::string, std::string> parseRegisterOffset(std::string& str);
+std::pair<std::string, std::string> parseRegisterOffset(std::string str);
 bool isInteger(const std::string & s);
 
 #endif

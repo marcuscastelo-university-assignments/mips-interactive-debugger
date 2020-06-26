@@ -134,7 +134,7 @@ string removeAllChars (string str, char c) {
     return str;
 }
 
-pair<string, string> parseRegisterOffset(string& str) {
+pair<string, string> parseRegisterOffset(string str) {
     int pos = str.find('(');
     str.erase(str.end()-1);
     int size = str.size();
