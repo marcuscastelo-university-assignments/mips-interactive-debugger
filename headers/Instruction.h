@@ -12,7 +12,7 @@ enum ExecutionType {
 };
 
 enum AdvancePcType {
-    A_PASS = 0, A_NORMAL = 4, A_LINK = 8 
+    A_PASS = 0, A_NORMAL = 4 
 };
 
 

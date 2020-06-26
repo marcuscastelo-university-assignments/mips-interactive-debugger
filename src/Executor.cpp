@@ -275,7 +275,7 @@ void Executor::_sltiu(Register *reg1, Register *reg2, unsigned immediate) {
 }
 
 void Executor::_jal(int jumpAddress) {
-    registers.RA.copy(registers.PC);
+    registers.RA.setValue(registers.PC.asInt() + 8);
     _j(jumpAddress);
 }
 
