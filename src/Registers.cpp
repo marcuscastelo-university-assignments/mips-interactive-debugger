@@ -2,7 +2,7 @@
 #include <stdexcept>
 
 Registers::Registers():
-ZERO(Register("$zero", READONLY)), AT(Register("$at")), V0(Register("$v0")), V1(Register("$v1")), A0(Register("$a0")), A1(Register("$a1")), A2(Register("$a2")), A3(Register("$a3")), T0(Register("$t0"), TEMPORARY), T1(Register("$t1"), TEMPORARY), T2(Register("$t2"),TEMPORARY), T3(Register("$t3"),TEMPORARY), T4(Register("$t4"),TEMPORARY), T5(Register("$t5"),TEMPORARY), T6(Register("$t6"),TEMPORARY), T7(Register("$t7"),TEMPORARY), S0(Register("$s0")), S1(Register("$s1")), S2(Register("$s2")), S3(Register("$s3")), S4(Register("$s4")), S5(Register("$s5")), S6(Register("$s6")), S7(Register("$s7")), T8(Register("$t8"),TEMPORARY), T9(Register("$t9"),TEMPORARY), K0(Register("$k0", -1, READONLY)), K1(Register("$k1", -1, READONLY)), GP(Register("$gp")), SP(Register("$sp")), FP(Register("$fp")), F0(Register("$f0")), F1(Register("$f1")), F2(Register("$f2")), F3(Register("$f3")), F4(Register("$f4", 0, TEMPORARY)), F5(Register("$f5", 0, TEMPORARY)), F6(Register("$f6", 0, TEMPORARY)), F7(Register("$f7", 0, TEMPORARY)), F8(Register("$f8", 0, TEMPORARY)), F9(Register("$f9", 0, TEMPORARY)), F10(Register("$f10", 0, TEMPORARY)), F11(Register("$f11"),TEMPORARY), F12(Register("$f12"),TEMPORARY), F13(Register("$f13"),TEMPORARY), F14(Register("$f14"),TEMPORARY), F15(Register("$f15"),TEMPORARY), F16(Register("$f16"),TEMPORARY), F17(Register("$f17"),TEMPORARY), F18(Register("$f18"),TEMPORARY), F19(Register("$f19"),TEMPORARY), F20(Register("$f20")), F21(Register("$f21")), F22(Register("$f22")), F23(Register("$f23")), F24(Register("$f24")), F25(Register("$f25")), F26(Register("$f26")), F27(Register("$f27")), F28(Register("$f28")), F29(Register("$f29")), F30(Register("$f30")), F31(Register("$f31")), HI(Register("$hi")), LO(Register("$lo")), RA(Register("$ra")), PC(Register("$pc", -4))
+ZERO("$zero", READONLY), AT("$at"), V0("$v0"), V1("$v1"), A0("$a0"), A1("$a1"), A2("$a2"), A3("$a3"), T0("$t0", TEMPORARY), T1("$t1", TEMPORARY), T2("$t2",TEMPORARY), T3("$t3",TEMPORARY), T4("$t4",TEMPORARY), T5("$t5",TEMPORARY), T6("$t6",TEMPORARY), T7("$t7",TEMPORARY), S0("$s0"), S1("$s1"), S2("$s2"), S3("$s3"), S4("$s4"), S5("$s5"), S6("$s6"), S7("$s7"), T8("$t8",TEMPORARY), T9("$t9",TEMPORARY), K0("$k0", -1,READONLY), K1("$k1", -1,READONLY),GP("$gp"), SP("$sp"), FP("$fp"), F0("$f0"), F1("$f1"), F2("$f2"), F3("$f3"), F4("$f4", TEMPORARY), F5("$f5", TEMPORARY), F6("$f6", TEMPORARY), F7("$f7", TEMPORARY), F8("$f8", TEMPORARY), F9("$f9", TEMPORARY), F10("$f10", TEMPORARY), F11("$f11",TEMPORARY), F12("$f12",TEMPORARY), F13("$f13",TEMPORARY), F14("$f14",TEMPORARY), F15("$f15",TEMPORARY), F16("$f16",TEMPORARY), F17("$f17",TEMPORARY), F18("$f18",TEMPORARY), F19("$f19",TEMPORARY), F20("$f20"), F21("$f21"), F22("$f22"), F23("$f23"), F24("$f24"), F25("$f25"), F26("$f26"), F27("$f27"), F28("$f28"), F29("$f29"), F30("$f30"), F31("$f31"), HI("$hi"), LO("$lo"), RA("$ra"), PC("$pc", -4)
 {
     this->registerNamesMap[s("$zero")] = &ZERO;
     this->registerNamesMap[s("$at")]   = &AT;
@@ -72,9 +72,10 @@ ZERO(Register("$zero", READONLY)), AT(Register("$at")), V0(Register("$v0")), V1(
     this->registerNamesMap[s("$ra")]   = &RA;
     this->registerNamesMap[s("$pc")]   = &PC;
 }
-/*
-Registers::Registers(const Registers& ):
-ZERO(Register("$zero",, READONLY)), AT(Register("$at",)), V0(Register("$v0",)), V1(Register("$v1",)), A0(Register("$a0",)), A1(Register("$a1",)), A2(Register("$a2",)), A3(Register("$a3",)), T0(Register("$t0",), TEMPORARY), T1(Register("$t1",), TEMPORARY), T2(Register("$t2",),TEMPORARY), T3(Register("$t3",),TEMPORARY), T4(Register("$t4",),TEMPORARY), T5(Register("$t5",),TEMPORARY), T6(Register("$t6",),TEMPORARY), T7(Register("$t7",),TEMPORARY), S0(Register("$s0",)), S1(Register("$s1",)), S2(Register("$s2",)), S3(Register("$s3",)), S4(Register("$s4",)), S5(Register("$s5",)), S6(Register("$s6",)), S7(Register("$s7",)), T8(Register("$t8",),TEMPORARY), T9(Register("$t9",),TEMPORARY), K0(Register("$k0",, -1, READONLY)), K1(Register("$k1",, -1, READONLY)), GP(Register("$gp",)), SP(Register("$sp",)), FP(Register("$fp",)), F0(Register("$f0",)), F1(Register("$f1",)), F2(Register("$f2",)), F3(Register("$f3",)), F4(Register("$f4",, 0, TEMPORARY)), F5(Register("$f5",, 0, TEMPORARY)), F6(Register("$f6",, 0, TEMPORARY)), F7(Register("$f7",, 0, TEMPORARY)), F8(Register("$f8",, 0, TEMPORARY)), F9(Register("$f9",, 0, TEMPORARY)), F10(Register("$f10",, 0, TEMPORARY)), F11(Register("$f11",),TEMPORARY), F12(Register("$f12",),TEMPORARY), F13(Register("$f13",),TEMPORARY), F14(Register("$f14",),TEMPORARY), F15(Register("$f15",),TEMPORARY), F16(Register("$f16",),TEMPORARY), F17(Register("$f17",),TEMPORARY), F18(Register("$f18",),TEMPORARY), F19(Register("$f19",),TEMPORARY), F20(Register("$f20",)), F21(Register("$f21",)), F22(Register("$f22",)), F23(Register("$f23",)), F24(Register("$f24",)), F25(Register("$f25",)), F26(Register("$f26",)), F27(Register("$f27",)), F28(Register("$f28",)), F29(Register("$f29",)), F30(Register("$f30",)), F31(Register("$f31",)), HI(Register("$hi",)), LO(Register("$lo",)), RA(Register("$ra",)), PC(Register("$pc",, -4))
+
+
+Registers::Registers(const Registers& other):
+ZERO(other.ZERO), AT(other.AT), V0(other.V0), V1(other.V1), A0(other.A0), A1(other.A1), A2(other.A2), A3(other.A3), T0(other.T0), T1(other.T1), T2(other.T2), T3(other.T3), T4(other.T4), T5(other.T5), T6(other.T6), T7(other.T7), S0(other.S0), S1(other.S1), S2(other.S2), S3(other.S3), S4(other.S4), S5(other.S5), S6(other.S6), S7(other.S7), T8(other.T8), T9(other.T9), K0(other.K0),K1(other.K1),GP(other.GP), SP(other.SP), FP(other.FP), F0(other.F0), F1(other.F1), F2(other.F2), F3(other.F3), F4(other.F4), F5(other.F5), F6(other.F6), F7(other.F7), F8(other.F8), F9(other.F9), F10(other.F10), F11(other.F11), F12(other.F12), F13(other.F13), F14(other.F14), F15(other.F15), F16(other.F16), F17(other.F17), F18(other.F18), F19(other.F19), F20(other.F20), F21(other.F21), F22(other.F22), F23(other.F23), F24(other.F24), F25(other.F25), F26(other.F26), F27(other.F27), F28(other.F28), F29(other.F29), F30(other.F30), F31(other.F31), HI(other.HI), LO(other.LO), RA(other.RA), PC(other.PC)
 {
     this->registerNamesMap[s("$zero")] = &ZERO;
     this->registerNamesMap[s("$at")]   = &AT;
@@ -144,8 +145,8 @@ ZERO(Register("$zero",, READONLY)), AT(Register("$at",)), V0(Register("$v0",)), 
     this->registerNamesMap[s("$ra")]   = &RA;
     this->registerNamesMap[s("$pc")]   = &PC;
 }
-*/
-std::map<std::string, Register*> Registers::getRegisterMap() {
+
+std::map<std::string, Register*> Registers::getRegisterMap() const {
     return this->registerNamesMap;
 }
 

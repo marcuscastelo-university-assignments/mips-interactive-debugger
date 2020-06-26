@@ -43,7 +43,6 @@ bool Program::addInstruction(std::string inst) {
             return false;
     }
 
-    //TODO: parse register name
     if (isLabel(inst)) {
         std::vector<std::string> commandParts = split(inst);
         if (commandParts.size() >= 2) {

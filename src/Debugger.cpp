@@ -277,11 +277,15 @@ bool Debugger::executeInstructionAndVerify(const string& command) {
     }
 
     if (executedInstruction == NULL) {
+        cerr << "A runtime error has occurred" << endl;
         return false;
     }
 
     bool valid = executedInstruction->validate();
-    if (!valid) printf("%s\n", executedInstruction->getErrorMessage().c_str());
+    if (!valid) {
+        if (executedInstruction->toString() == "invalid") printf("Unknown instrution in statement: '%s'\n", command.c_str());
+        else printf("%s\n", executedInstruction->getErrorMessage().c_str());
+    } 
     return valid;
 }
 

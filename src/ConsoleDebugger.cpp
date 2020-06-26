@@ -69,43 +69,33 @@ void ConsoleDebugger::start (void) {
         else {
             //verifyLabel() verifies if a possible label is valid, or if it is not a label at all, returning true
             //if it is a in fact label, and is not valid, returns false
-            //#TODO
-            //Registers previousRegisters = this->executor.getRegisters();
+            Registers previousRegisters = this->executor.getRegisters();
 
             if (validatePossibleLabel(command) == true and executeInstructionAndVerify(command) == true) {
                 program.addInstruction(commandWithCommas);
+                printModifiedRegisters(previousRegisters,this->executor.getRegisters());            
             } 
-
-
-            // printModifiedRegisters(previousRegisters,this->executor.getRegisters());            
         }
-
-        // }
         
     }
 
     return;
 }
 
-//#TODO
-/*
 void ConsoleDebugger::printModifiedRegisters(const Registers& oldRegisters, const Registers& newRegisters){
-    std::map<std::string, Register*> oldRegisterMap = oldRegisters.getRegisterMap(); TODO: FAZER DEPOIS EM REGISTERS
+    std::map<std::string, Register*> oldRegisterMap = oldRegisters.getRegisterMap();
     bool modified = false;
+    printf("Modified Registers: Old Value -> New Value:\n");
     for(auto it = oldRegisterMap.begin(); it != oldRegisterMap.end(); it++){
         if(it->second->asInt() != newRegisters.getRegisterByName(it->first).asInt()){
-            if(!modified) { 
-                printf("Some Registers have been modified, this is expressed as: Register: OldValue -> NewValue. The modified registers are described below:\n ");
-                modified = true;
-            }
-            
-            printf("\t%s: %d -> %d\n",it->first.c_str(),it->second->asInt(),newRegisters.getRegisterByName(it->first).asInt());
+            if(!modified) modified = true;             
+            printf("\t%s: %d\t->\t%d\n",it->first.c_str(),it->second->asInt(),newRegisters.getRegisterByName(it->first).asInt());
         }
     }
-    if(!modified) printf("No Register has been modified.\n");
+    if(!modified) printf("\tNo Register has been modified.\n");
 
 }
-*/
+
 void ConsoleDebugger::exportCode(std::vector<std::string> commandParts) {
     std::string name = "code.asm";
 

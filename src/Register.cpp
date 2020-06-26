@@ -48,7 +48,6 @@ void Register::copy(const Register& reg){
 }
 
 void Register::print(FILE *file_stream) const {
-    //TODO: colocar como bytearray e deixar bonito
     fprintf(file_stream, "|%s|%d / ", name.c_str(), word.asInt());
     for(int i=0;i<4;i++) fprintf(file_stream, "%02X ", word.asByteArray().getByteAt(i));
     fprintf(file_stream,"|\n");

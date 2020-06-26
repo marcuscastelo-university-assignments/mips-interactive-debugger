@@ -38,7 +38,7 @@ void FileDebugger::start (void) {
         if (commandParts[0] == "quit")
             break;
         
-        else if (commandParts[0] == "info") //TODO: info registers
+        else if (commandParts[0] == "info")
             info(commandParts);
 
         else if (commandParts[0] == "help")
@@ -93,8 +93,6 @@ void FileDebugger::importCode (vector<string> commandParts) {
     }
 
     program.clear();
-   
-    //TODO: check deletes that were here
 
     while (!feof(file_ptr)) {
         string line = getLine(file_ptr);
@@ -105,7 +103,6 @@ void FileDebugger::importCode (vector<string> commandParts) {
 
         program.addInstruction(line);
     }
-    cout << "Tamanho final do programa = " << program.getInstructionsVectorSize() << endl; 
 
     fclose(file_ptr);
 }

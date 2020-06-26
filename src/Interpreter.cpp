@@ -17,7 +17,6 @@ Instruction *Interpreter::interpretInstruction(const std::string& instructionStr
 
     if (isLabel(instructionStr)) return MipsInstructions::getInstructionByName("label");
 
-    //TODO: no_advance
     if (instruction_parts.size() < 1) return MipsInstructions::getInstructionByName("invalid");
 
     Instruction *instruction = MipsInstructions::getInstructionByName(instruction_parts[0]);
@@ -32,7 +31,7 @@ Instruction *Interpreter::interpretInstruction(const std::string& instructionStr
                 std::cerr << e.what() << '\n';
             }   
         }
-        else { //TODO: implement label
+        else {
 
             if (parentExecutor->getRegisters().hasRegister(instruction_parts[i])) {
                 registers.push_back(&parentExecutor->getRegisters().getRegisterByName(instruction_parts[i]));
@@ -55,6 +54,5 @@ Instruction *Interpreter::interpretInstruction(const std::string& instructionStr
 
     instruction->feed(registers, integers);
 
-    //TODO: arrumar beqi, div2, div3, etc
     return instruction;
 }
