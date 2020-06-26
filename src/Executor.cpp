@@ -89,7 +89,7 @@ void Executor::bne(Register *reg1, Register *reg2, int jumpAddress) {
     if(reg1->asInt() != reg2->asInt()) _j(jumpAddress);    
 }
 
-void Executor::_bne(Register *reg1, Register *reg2, int jumpAddress, int immediate) {
+void Executor::_bne(Register *reg1, Register *reg2, int immediate, int jumpAddress) {
     if(reg2 == NULL) bnei(reg1,immediate,jumpAddress);
     else bne(reg1,reg2,jumpAddress);
 }
@@ -103,7 +103,7 @@ void Executor::beq(Register *reg1, Register *reg2, int jumpAddress) {
     if(reg1->asInt() == reg2->asInt()) _j(jumpAddress);    
 }
 
-void Executor::_beq(Register *reg1, Register *reg2, int jumpAddress, int immediate) {
+void Executor::_beq(Register *reg1, Register *reg2, int immediate, int jumpAddress) {
     if(reg2 == NULL) _beqi(reg1,immediate,jumpAddress);
     else beq(reg1,reg2,jumpAddress);
 }
