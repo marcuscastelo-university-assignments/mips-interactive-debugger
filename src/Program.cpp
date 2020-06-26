@@ -76,7 +76,7 @@ void Program::printInstructions(std::string label, FILE *file_ptr) const {
     
     if (label.empty()) {
         for (int i = 0; i < size; i++)
-            printSingleInstruction(getInstruction(i, true), file_ptr);
+            printSingleInstruction(getInstruction(i, true), i, file_ptr);
         return;
     }
 
@@ -86,13 +86,13 @@ void Program::printInstructions(std::string label, FILE *file_ptr) const {
         return;
     }
 
-    printSingleInstruction(getInstruction(it->second, true), file_ptr);
+    printSingleInstruction(getInstruction(it->second, true), it->second, file_ptr);
     for (int i = it->second+1; i < size; i++) {
         std::string inst = getInstruction(i, true);
         if (isLabel(inst))
             break;
         
-        printSingleInstruction(inst, file_ptr);
+        printSingleInstruction(inst, i, file_ptr);
     }  
 
     return;
@@ -206,8 +206,13 @@ bool isLabel(std::string str) {
     return false;
 }
 
-void printSingleInstruction(std::string line, FILE *file_ptr) {
-    fprintf(file_ptr, "%c%s\n", isLabel(line) ? '\n' : '\t', line.c_str());
+void printSingleInstruction(std::string line, int pos, FILE *file_ptr) {
+    if (isLabel(line))
+        fprintf(file_ptr, "%c%d", '\n', pos);
+    else
+        fprintf(file_ptr, "%d%c", pos, '\t');
+        
+    fprintf(file_ptr, "%c%s\n", '\t', line.c_str());
 }
 
 void printSingleLabel(std::string label, int addr) {

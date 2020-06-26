@@ -18,7 +18,7 @@ class Debugger {
         Debugger(const Debugger& other);
 		virtual ~Debugger();
         virtual void start(void);
-        void exec(int pos=-1);
+        void exec(int pos=-5);
         void next();
         
         void info(const std::vector<std::string>& commandParts);
