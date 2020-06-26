@@ -91,6 +91,8 @@ void FileDebugger::importCode (vector<string> commandParts) {
         printf("No file to open\n");
         return;
     }
+
+    program = Program();
    
     //TODO: check deletes that were here
 

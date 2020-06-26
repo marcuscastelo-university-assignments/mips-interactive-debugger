@@ -12,7 +12,7 @@ using namespace std;
 class Debugger {
     protected:
         Program program;
-        Executor executor;
+        Executor executor(&program);
 
     public:
         Debugger();
