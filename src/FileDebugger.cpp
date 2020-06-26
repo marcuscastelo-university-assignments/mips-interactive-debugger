@@ -55,7 +55,7 @@ void FileDebugger::start (void) {
         }
 
         else if (commandParts[0] == "r" or commandParts[0] == "run") {
-            exec(0);
+            exec(-4);
         }
 
         else if (commandParts[0] == "c" or commandParts[0] == "continue") {

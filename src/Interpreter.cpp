@@ -23,6 +23,7 @@ Instruction *Interpreter::interpretInstruction(const std::string& instructionStr
     Instruction *instruction = MipsInstructions::getInstructionByName(instruction_parts[0]);
     if (instruction == NULL) return MipsInstructions::getInstructionByName("invalid");
 
+    printf("size: %d\n", (int) instruction_parts.size());
     for (unsigned i = 1; i < instruction_parts.size(); i++) {
         if (isInteger(instruction_parts[i])) {
             try {
@@ -43,7 +44,8 @@ Instruction *Interpreter::interpretInstruction(const std::string& instructionStr
             }
         }
     }
-
+    printf("reg size = %d\n", registers.size());
+    printf("ints size = %d\n", integers.size());
     instruction->feed(registers, integers);
 
     //TODO: arrumar beqi, div2, div3, etc

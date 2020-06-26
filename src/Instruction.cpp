@@ -4,6 +4,7 @@
 #include <stdexcept>
 
 bool Instruction::validate() {
+    printf("shinitai\n");
     if (!errorMessage.empty()) return false;
 
     errorMessage = "";

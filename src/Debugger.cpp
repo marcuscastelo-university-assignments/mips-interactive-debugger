@@ -39,6 +39,7 @@ void Debugger::exec(int pos) {
         }
 
         pos = reg.asInt();
+        pos = (pos/4)+1;
         if (program.isBreakpoint(pos) == true) {
             printSingleBreakpoint(pos);
             break;
@@ -60,10 +61,6 @@ void Debugger::next() {
             // printSingleInstruction(inst);
             if (executeInstructionAndVerify(inst) == false)
                 throw std::invalid_argument("Invalid instruction or syntax");
-        }
-        else
-        {
-            printf("porra\n");
         }
         
         // printSingleInstruction(inst);
@@ -264,7 +261,6 @@ bool Debugger::executeInstructionAndVerify(const string& command) {
 
     if (executedInstruction == NULL) {
         //deu runtime error TODO: sei la mano
-        printf("era null\n");
         return false;
     }
 
