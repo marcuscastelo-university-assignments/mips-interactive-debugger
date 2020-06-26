@@ -11,6 +11,7 @@ class ConsoleDebugger : public Debugger {
 
     private:
       void exportCode(std::vector<std::string> commandParts);
+      void printModifiedRegisters(const Registers& oldRegisters, const Registers& newRegisters);
 };
 
 #endif
