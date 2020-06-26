@@ -75,7 +75,7 @@ ZERO(Register("$zero", READONLY)), AT(Register("$at")), V0(Register("$v0")), V1(
 
 Register &Registers::getRegisterByName(const std::string& registerName) const {
     auto it = this->registerNamesMap.find(registerName);
-    if (it == registerNamesMap.end()) throw new std::invalid_argument("Trying to get invalid register name");
+    if (it == registerNamesMap.end()) throw std::invalid_argument("Trying to get invalid register name");
     return *it->second;
 }
 

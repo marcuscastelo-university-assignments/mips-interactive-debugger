@@ -243,7 +243,9 @@ bool Debugger::validatePossibleLabel(const string& command) {
 
 bool Debugger::executeInstructionAndVerify(const string& command) {
     Instruction *executedInstruction = executor.executeInstructionStr(command);
-    return executedInstruction->validate();
+    bool valid = executedInstruction->validate();
+    if (!valid) printf("%s\n", executedInstruction->getErrorMessage().c_str());
+    return valid;
 }
 
 bool Debugger::hasRegister(const string& name) {
