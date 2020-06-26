@@ -30,7 +30,7 @@ void Debugger::exec(int pos) {
         try {
             next();
         } catch (std::out_of_range &e) {
-            printf("End of program\n");
+            printf("Program finished execution\n");
             break;
         } catch (std::invalid_argument &e) {
             printf("%s\n", e.what());
@@ -56,7 +56,6 @@ void Debugger::next() {
     int pos = reg.asInt();
     pos = (pos/4)+1;
     string inst = program.getInstruction(pos);
-    printf("pos: %d\n", pos);
 
     try {
         if (validatePossibleLabel(inst) == true) {
@@ -230,14 +229,13 @@ void Debugger::breakpoint(const vector<string>& commandParts) {
     }
 
     try {
-
         if (commandParts[0] == "break-remove")
-            program.removeBreakpoint(stoi(commandParts[1]));
+            program.removeBreakpoint(stoi(commandParts[1], 0, 16));
         else
-            program.addBreakpoint(stoi(commandParts[1]));
+            program.addBreakpoint(stoi(commandParts[1], 0, 16));
 
     } catch (std::invalid_argument &e) {
-        printf("Invalid argument to add breakpoint at. Use an int\n");
+        printf("Invalid argument to add breakpoint at. Use an int in hexadecimal\n");
     } catch (std::out_of_range &e) {
         printf("%s\n", e.what());
     }
@@ -255,6 +253,12 @@ bool Debugger::validatePossibleLabel(const string& command) {
             return false;
             
         str.pop_back();
+        if (str.empty())
+            return false;
+        
+        if (str[0] != '$')
+            str = "$"+str;
+
         if (hasRegister(command))
             return false;
     }
@@ -273,7 +277,6 @@ bool Debugger::executeInstructionAndVerify(const string& command) {
     }
 
     if (executedInstruction == NULL) {
-        //deu runtime error TODO: sei la mano
         return false;
     }
 

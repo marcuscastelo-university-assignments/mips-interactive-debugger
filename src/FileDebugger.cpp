@@ -1,10 +1,7 @@
 #include "Debugger.h"
 #include "FileDebugger.h"
 #include "string_utils.h"
-#include <utility>
 #include <iostream>
-
-using namespace std;
 
 
 FileDebugger::FileDebugger (void) {}
@@ -53,7 +50,7 @@ void FileDebugger::start (void) {
         else if (commandParts[0] == "disassemble")
             disassemble(commandParts);
 
-        else if (commandParts[0] == "break" or commandParts[0] == "break-remove"){
+        else if (commandParts[0] == "break" or commandParts[0] == "break-remove") {
             breakpoint(commandParts);
         }
 
@@ -71,7 +68,7 @@ void FileDebugger::start (void) {
             } catch (std::out_of_range &e) {
                 printf("There is no next instruction to be executed\n");
             } catch (std::domain_error &e) {
-                printf("End of program\n");
+                printf("Program finished execution\n");
             }
         }
 
@@ -95,7 +92,7 @@ void FileDebugger::importCode (vector<string> commandParts) {
         return;
     }
 
-    // program = Program();
+    program.clear();
    
     //TODO: check deletes that were here
 

@@ -24,6 +24,14 @@ Program::~Program() {
     delete breakpointsAddresses;
 }
 
+void Program::clear() {
+    delete instructions;
+    delete labelsAddresses;
+    delete breakpointsAddresses;
+    instructions = new std::vector<std::string>();
+    labelsAddresses = new std::map<std::string, int>();
+    breakpointsAddresses = new std::map<int, bool>();
+}
 
 /////INSTRUCTION/////
 bool Program::addInstruction(std::string inst) {
@@ -164,6 +172,7 @@ void Program::printLabel(std::string label) const {
 
 /////BREAKPOINTS/////
 void Program::addBreakpoint(int pos) {
+    printf("alow\n");
     if (pos < 0 or pos >= (int) getInstructionsVectorSize())
         throw std::out_of_range("Position not allowed");
 
@@ -179,19 +188,22 @@ void Program::removeBreakpoint(int pos) {
 }
 
 bool Program::isBreakpoint(int pos) const {
-    return (*breakpointsAddresses)[pos];
+    return !(breakpointsAddresses->find(pos) == breakpointsAddresses->end()); 
 }
 
 void Program::printBreakpoints(void) const {
     auto it = breakpointsAddresses->begin();
     
+    int size = breakpointsAddresses->size();
+    printf("size: %d\n", size);
+
     if (breakpointsAddresses->end() == it) {
         printf("No breakpoints added\n");
         return;
     }
 
     for (; it != breakpointsAddresses->end(); it++)
-        printSingleBreakpoint(it->second);
+        printSingleBreakpoint(it->first);
 }
 
 //////////////////////////////////////////////
@@ -208,10 +220,10 @@ bool isLabel(std::string str) {
 
 void printSingleInstruction(std::string line, int pos, FILE *file_ptr) {
     if (isLabel(line))
-        fprintf(file_ptr, "%c%d", '\n', pos);
+        fprintf(file_ptr, "%c0x%04x", '\n', pos);
     else
-        fprintf(file_ptr, "%d%c", pos, '\t');
-        
+        fprintf(file_ptr, "0x%04x%c", pos, '\t');
+
     fprintf(file_ptr, "%c%s\n", '\t', line.c_str());
 }
 

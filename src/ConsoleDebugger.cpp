@@ -77,8 +77,7 @@ void ConsoleDebugger::start (void) {
             } 
 
 
-            //#TODO
-            //printModifiedRegisters(previousRegisters,this->executor.getRegisters());            
+            // printModifiedRegisters(previousRegisters,this->executor.getRegisters());            
         }
 
         // }

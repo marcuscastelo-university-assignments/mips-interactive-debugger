@@ -15,6 +15,8 @@ class Program {
         Program(const Program& program);
         ~Program();
         
+        void clear();
+
         bool addInstruction(std::string inst);
         std::string getInstruction(int pos, bool withCommas=false) const;
         size_t getInstructionsVectorSize(void) const;
