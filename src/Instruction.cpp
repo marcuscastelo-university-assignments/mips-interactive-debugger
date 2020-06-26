@@ -22,7 +22,7 @@ bool Instruction::validate() {
     }
     
     //Checks if user is trying to modify read-only register
-    if(registers[0]->isReadOnly()){
+    if(registers.size() > 0 && registers[0]->isReadOnly()){
         errorMessage += "Invalid attribution of value to register " + registers[0]->getName() + ", which is read only.\n";
         return false; 
     }

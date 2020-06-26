@@ -11,7 +11,6 @@ ByteArray::ByteArray(int size)
 ByteArray::ByteArray(const ByteArray &byteArray)
 : bytes(byteArray.getSize(), 0x00) 
 {
-    printf("Bytearray(const ByteArray &byteArray)!!!\n");
     for (int i = 0; i < byteArray.getSize(); i++) 
         bytes[i] = byteArray.getByteAt(i);
 }
@@ -19,7 +18,6 @@ ByteArray::ByteArray(const ByteArray &byteArray)
 ByteArray::ByteArray(unsigned char *charArr, int size)
 : bytes(size, 0x00)
 {
-    printf("Bytearray(unsigned char *charArr, int size)!!!\n");
     setBytes(charArr, size);
 }
 
