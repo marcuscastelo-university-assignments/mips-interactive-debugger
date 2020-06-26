@@ -13,7 +13,7 @@ void FileDebugger::start (void) {
     std::vector<std::string> commandParts;
         
     while (true) {
-        printf("(MipsDB) >>> ");
+        printf("(MipsDB) ");
         commandWithCommas = getLine();
         commandWithCommas = removeComments(commandWithCommas);
         command = commandWithCommas;

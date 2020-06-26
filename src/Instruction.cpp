@@ -1,6 +1,7 @@
 #include "Instruction.h"
 
 #include <sstream>
+#include <stdexcept>
 
 bool Instruction::validate() {
     if (!errorMessage.empty()) return false;
@@ -287,7 +288,7 @@ void Instruction::execute(Executor *executor) {
     if (!validate()) {
         printf("validate errado\n");
         fflush(stdout);
-        throw("Invalid Instruction:" + errorMessage);
+        throw std::domain_error("Invalid Instruction:" + errorMessage);
     }
     else if (executionType == T_3R) (executor->*executor_func.T_3R)(registers[0], registers[1], registers[2]);
     else if (executionType == T_2R) (executor->*executor_func.T_2R)(registers[0], registers[1]);
