@@ -84,7 +84,6 @@ class Instruction
         bool hasOverload();
 
         void execute(Executor *executor);
-        void feed(std::vector<Register*> newRegisters, std::vector<int> newIntegers);
 };
 
 #endif  //!__INSTRUCTION__H__

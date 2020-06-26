@@ -74,76 +74,13 @@ static const std::map<std::string,Instruction*> instructionByName = {
 };
 
 namespace MipsInstructions {
+#include <string>
+
     Instruction *getInstructionByName(const std::string& instructionName) {
         auto pair = instructionByName.find(instructionName);
         if (pair == instructionByName.end()) return NULL;
         return pair->second;
     }
-
-    Instruction *lwInstruction;
-    Instruction *swInstruction;
-    Instruction *lbInstruction;
-    Instruction *sbInstruction;
-    Instruction *beqInstruction;
-    Instruction *bgezInstruction;
-    Instruction *bgezalInstruction;
-    Instruction *bgtzInstruction;
-    Instruction *blezInstruction;
-    Instruction *bltzInstruction;
-    Instruction *bltzalInstruction;
-    Instruction *bneInstruction;
-    Instruction *bInstruction;
-    Instruction *balInstruction;
-    Instruction *bgtInstruction;
-    Instruction *bltInstruction;
-    Instruction *bgeInstruction;
-    Instruction *bleInstruction;
-    Instruction *bgtuInstruction;
-    Instruction *beqzInstruction;
-    Instruction *beqiInstruction;
-    Instruction *jumpInstruction;
-    Instruction *addInstruction;
-    Instruction *addiInstruction;
-    Instruction *subInstruction;
-    Instruction *multInstruction;
-    Instruction *mfloInstruction;
-    Instruction *mfhiInstruction;
-    Instruction *mulInstruction;
-    Instruction *div2Instruction;
-    Instruction *div3Instruction;
-    Instruction *remInstruction;
-    Instruction *andInstruction;
-    Instruction *orInstruction;
-    Instruction *xorInstruction;
-    Instruction *andiInstruction;
-    Instruction *oriInstruction;
-    Instruction *xoriInstruction;
-    Instruction *sltInstruction;
-    Instruction *sltuInstruction;
-    Instruction *sltiInstruction;
-    Instruction *sltiuInstruction;
-    Instruction *jalInstruction;
-    Instruction *addiuInstruction;
-    Instruction *adduInstruction;
-    Instruction *subuInstruction;
-    Instruction *divuInstruction;
-    Instruction *sllvInstruction;
-    Instruction *jrInstruction;
-    Instruction *jalrInstruction;
-    Instruction *luiInstruction;
-    Instruction *sllInstruction;
-    Instruction *noopInstruction;
-    Instruction *nopInstruction;
-    Instruction *sraInstruction;
-    Instruction *srlInstruction;
-    Instruction *syscallInstruction;
-    Instruction *moveInstruction;
-    Instruction *srlvInstruction;
-    Instruction *clearInstruction;
-    Instruction *liInstruction;
-    Instruction *laInstruction;
-    Instruction *norInstruction;
-    Instruction *notInstruction;
 };
 
 #endif  //!__INSTRUCTIONS__H__

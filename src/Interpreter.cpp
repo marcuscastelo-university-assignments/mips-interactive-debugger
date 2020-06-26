@@ -23,20 +23,18 @@ Instruction *Interpreter::interpretInstruction(const std::string& instructionStr
 
     for (unsigned i = 1; i < instruction_parts.size(); i++) {
         if (isInteger(instruction_parts[i])) {
-            instruction->feedIntegers(intPos, stoi(instruction_parts[i]));
+            instruction->feedIntegers(intPos++, stoi(instruction_parts[i]));
         } 
         else { //TODO: implement label
             try {
                 Register &reg = parentExecutor->getRegisters().getRegisterByName(instruction_parts[i]);
-                instruction->feedRegisters(regPos,&reg);
+                instruction->feedRegisters(regPos++,&reg);
             } catch (const std::invalid_argument& e) {
                 fprintf(stderr, "ERROR: invalid register provided: '%s'\n", instruction_parts[i].c_str());
                 std::cout << e.what() << std::endl;
             }
         }
     }
-
-    instruction->feed(registers, integers);
 
     //TODO: arrumar beqi, div2, div3, etc
     return instruction;

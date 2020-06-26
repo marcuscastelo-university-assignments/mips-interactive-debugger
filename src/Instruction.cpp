@@ -295,10 +295,7 @@ Instruction *Instruction::setSupposedIntegerCount(int count) {
 }
 
 
-void Instruction::feed(std::vector<Register*> newRegisters, std::vector<int> newIntegers) {
-    if (!newRegisters.empty()) registers.insert(registers.end(), newRegisters.begin(), newRegisters.end());
-    if (!newIntegers.empty()) integers.insert(integers.end(), newIntegers.begin(), newIntegers.end());
-}
+
 
 void Instruction::execute(Executor *executor) {
     if (!validate()) throw("Invalid Instruction:\n" + errorMessage);
