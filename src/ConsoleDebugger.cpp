@@ -73,9 +73,14 @@ void ConsoleDebugger::start (void) {
             // TODO: adicionar somente se o executor não retornar erros (instrução não existente, etc...)
             //verifyLabel() verifies if a possible label is valid, or if it is not a possible label, returning true
             //if it is a possible label, and is not valid, returns false
+            //#TODO
+            //Registers previousRegisters = this->executor.getRegisters();
+
             if (validatePossibleLabel(command) == true and executeInstructionAndVerify(command) == true) {
                 program.addInstruction(commandWithCommas);
             }
+            //#TODO
+            //printModifiedRegisters(previousRegisters,this->executor.getRegisters());            
         } //else //TODO: msg de erro
 
         // }
@@ -85,6 +90,25 @@ void ConsoleDebugger::start (void) {
     return;
 }
 
+//#TODO
+/*
+void ConsoleDebugger::printModifiedRegisters(const Registers& oldRegisters, const Registers& newRegisters){
+    std::map<string, Register*> oldRegisterPairs;// = oldRegisters.getRegisterPairs(); TODO: FAZER DEPOIS EM REGISTERS
+    bool modified = false;
+    for(auto it = oldRegisterPairs.begin(); it != oldRegisterPairs.end(); it++){
+        if(it->second->asInt() != newRegisters.getRegisterByName(it->first).asInt()){
+            if(!modified) { 
+                printf("Some Registers have been modified, this is expressed as: Register: OldValue -> NewValue. The modified registers are described below:\n ");
+                modified = true;
+            }
+            
+            printf("\t%s: %d -> %d\n",it->first.c_str(),it->second->asInt(),newRegisters.getRegisterByName(it->first).asInt());
+        }
+    }
+    if(!modified) printf("No Register has been modified.\n");
+
+}
+*/
 void ConsoleDebugger::exportCode(std::vector<std::string> commandParts) {
     std::string name = "code.asm";
 
