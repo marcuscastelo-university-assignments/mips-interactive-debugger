@@ -38,7 +38,17 @@ Instruction *Interpreter::interpretInstruction(const std::string& instructionStr
                 registers.push_back(&parentExecutor->getRegisters().getRegisterByName(instruction_parts[i]));
             } else if (parentExecutor->getProgram().hasLabel(instruction_parts[i])) {
                 integers.push_back(parentExecutor->getProgram().getLabelPos(instruction_parts[i])->second * 4);
-            } else {
+            } else if (parentExecutor->getRegisters().hasRegister(parseRegisterOffset(instruction_parts[i])->first()) {
+                try{
+                    stoi(parseRegisterOffset(instruction_parts[i])->second);
+                }
+                catch(const std::exception& e) {
+                    std::cerr << e.what() << '\n';
+                }
+                registers.push_back(&parentExecutor->getRegisters().getRegisterByName(parseRegisterOffset(instruction_parts[i])->first));
+                integers.push_back(stoi(parseRegisterOffset(instruction_parts[i])->second));
+            }
+            else {
                 fprintf(stderr, "ERROR: '%s' is neither a register nor a label\n", instruction_parts[i].c_str());
             }
         }
