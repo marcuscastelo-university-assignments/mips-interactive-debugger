@@ -4,6 +4,8 @@
 #include "Debugger.h"
 #include "FileDebugger.h"
 
+using namespace std;
+
 class FileDebugger : public Debugger {
     public:
         FileDebugger(void);

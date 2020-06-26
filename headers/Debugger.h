@@ -7,7 +7,6 @@
 
 #include <vector>
 #include <string>
-using namespace std;
 
 class Debugger {
     protected:
@@ -22,15 +21,15 @@ class Debugger {
         void exec(int pos=-1);
         void next();
         
-        void info(const vector<string>& commandParts);
-        void help(const vector<string>& commandParts = vector<string>(1));
-        void disassemble(const vector<string>& commandParts);
-        void breakpoint(const vector<string>& commandParts);
+        void info(const std::vector<std::string>& commandParts);
+        void help(const std::vector<std::string>& commandParts = std::vector<std::string>(1));
+        void disassemble(const std::vector<std::string>& commandParts);
+        void breakpoint(const std::vector<std::string>& commandParts);
         
-        bool validatePossibleLabel(const string& command);
-        bool executeInstructionAndVerify(const string& command);
+        bool validatePossibleLabel(const std::string& command);
+        bool executeInstructionAndVerify(const std::string& command);
 
-        bool hasRegister(const string& name);
+        bool hasRegister(const std::string& name);
 
 };
 

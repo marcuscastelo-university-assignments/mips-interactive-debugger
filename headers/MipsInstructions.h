@@ -7,6 +7,7 @@
 
 class Instruction;
 
+//TODO: create .cpp
 static const std::map<std::string,Instruction*> instructionByName = {
             { std::string("lw"), (new Instruction("lw"))->setExecutionFunction(&Executor::_lw) },
             { std::string("sw"), (new Instruction("sw"))->setExecutionFunction(&Executor::_sw) },
@@ -70,7 +71,10 @@ static const std::map<std::string,Instruction*> instructionByName = {
             { std::string("li"), (new Instruction("li"))->setExecutionFunction(&Executor::_li) },
             { std::string("la"), (new Instruction("la"))->setExecutionFunction(&Executor::_la) },
             { std::string("nor"), (new Instruction("nor"))->setExecutionFunction(&Executor::_nor) },
-            { std::string("not"), (new Instruction("not"))->setExecutionFunction(&Executor::_not) }
+            { std::string("not"), (new Instruction("not"))->setExecutionFunction(&Executor::_not) },
+            { std::string("label"), (new Instruction("label"))->setExecutionFunction(&Executor::_label) },
+            { std::string("invalid"), (new Instruction("invalid", A_PASS))->setExecutionFunction(&Executor::_invalid) }
+
 };
 
 namespace MipsInstructions {

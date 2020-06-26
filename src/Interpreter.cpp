@@ -15,11 +15,13 @@ Instruction *Interpreter::interpretInstruction(const std::string& instructionStr
     std::vector<Register*> registers;
     std::vector<int> integers;
 
+    if (isLabel(instructionStr)) return MipsInstructions::getInstructionByName("label");
+
     //TODO: no_advance
-    if (instruction_parts.size() < 1) return new Instruction("", A_PASS);
+    if (instruction_parts.size() < 1) return MipsInstructions::getInstructionByName("invalid");
 
     Instruction *instruction = MipsInstructions::getInstructionByName(instruction_parts[0]);
-    if (instruction == NULL) return new Instruction(instruction_parts[0], A_PASS);
+    if (instruction == NULL) return MipsInstructions::getInstructionByName("invalid");
 
     for (unsigned i = 1; i < instruction_parts.size(); i++) {
         if (isInteger(instruction_parts[i])) {
@@ -31,12 +33,13 @@ Instruction *Interpreter::interpretInstruction(const std::string& instructionStr
             }   
         }
         else { //TODO: implement label
-            try {
-                Register &reg = parentExecutor->getRegisters().getRegisterByName(instruction_parts[i]);
-                registers.push_back(&reg);
-            } catch (const std::invalid_argument& e) {
-                fprintf(stderr, "ERROR: invalid register provided: '%s'\n", instruction_parts[i].c_str());
-                std::cout << e.what() << std::endl;
+
+            if (parentExecutor->getRegisters().hasRegister(instruction_parts[i])) {
+                registers.push_back(&parentExecutor->getRegisters().getRegisterByName(instruction_parts[i]));
+            } else if (parentExecutor->getProgram().hasLabel(instruction_parts[i])) {
+                integers.push_back(parentExecutor->getProgram().getLabelPos(instruction_parts[i])->second + 4);
+            } else {
+                fprintf(stderr, "ERROR: '%s' is neither a register nor a label\n", instruction_parts[i].c_str());
             }
         }
     }

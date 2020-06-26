@@ -7,7 +7,7 @@ bool Instruction::validate() {
 
     errorMessage = "";
     if (executionType == T_UNKNOWN){
-        errorMessage += "T_Unknown instruction: " + toString() + ".";        
+        errorMessage += "Unknown instruction: " + toString() + ".";        
         return false;
     }
 
@@ -85,9 +85,6 @@ typeIntegerCount(other.typeIntegerCount) {}
 
 Instruction *Instruction::setExecutionFunction(void(Executor::*executor_func_param)(Register*, Register*, Register*)) {
 
-    for(int i = 0; i<3;i++) registers.push_back(NULL);
-    for(int i=0;i<0;i++) integers.push_back(0xF0DA);
-
     typeRegisterCount = 3;
     typeIntegerCount = 0;
     
@@ -103,9 +100,6 @@ Instruction *Instruction::setExecutionFunction(void(Executor::*executor_func_par
 }
 
 Instruction *Instruction::setExecutionFunction(void(Executor::*executor_func_param)(Register*, Register*)) {
-
-    for(int i = 0; i<2;i++) registers.push_back(NULL);
-    for(int i=0;i<0;i++) integers.push_back(0xF0DA);
 
     typeRegisterCount = 2;
     typeIntegerCount = 0;
@@ -123,9 +117,6 @@ Instruction *Instruction::setExecutionFunction(void(Executor::*executor_func_par
 
 Instruction *Instruction::setExecutionFunction(void(Executor::*executor_func_param)(Register*)) {
 
-    for(int i = 0; i<1;i++) registers.push_back(NULL);
-    for(int i=0;i<0;i++) integers.push_back(0xF0DA);
-
     typeRegisterCount = 1;
     typeIntegerCount = 0;
     
@@ -141,9 +132,6 @@ Instruction *Instruction::setExecutionFunction(void(Executor::*executor_func_par
 }
 
 Instruction *Instruction::setExecutionFunction(void(Executor::*executor_func_param)(Register*, Register*, int)) {
-
-    for(int i = 0; i<2;i++) registers.push_back(NULL);
-    for(int i=0;i<1;i++) integers.push_back(0xF0DA);
 
     typeRegisterCount = 2;
     typeIntegerCount = 1;
@@ -161,9 +149,6 @@ Instruction *Instruction::setExecutionFunction(void(Executor::*executor_func_par
 
 Instruction *Instruction::setExecutionFunction(void(Executor::*executor_func_param)(Register*,Register*,int, int)) {
 
-    for(int i = 0; i<2;i++) registers.push_back(NULL);
-    for(int i=0;i<2;i++) integers.push_back(0xF0DA);
-
     typeRegisterCount = 2;
     typeIntegerCount = 2;
     
@@ -179,9 +164,6 @@ Instruction *Instruction::setExecutionFunction(void(Executor::*executor_func_par
 }
 
 Instruction *Instruction::setExecutionFunction(void(Executor::*executor_func_param)(Register*, Register*, unsigned)) {
-
-    for(int i = 0; i<2;i++) registers.push_back(NULL);
-    for(int i=0;i<1;i++) integers.push_back(0xF0DA);
 
     typeRegisterCount = 2;
     typeIntegerCount = 1;
@@ -199,9 +181,6 @@ Instruction *Instruction::setExecutionFunction(void(Executor::*executor_func_par
 
 Instruction *Instruction::setExecutionFunction(void(Executor::*executor_func_param)(Register*, int, int)) {
 
-    for(int i = 0; i<1;i++) registers.push_back(NULL);
-    for(int i=0;i<2;i++) integers.push_back(0xF0DA);
-
     typeRegisterCount = 1;
     typeIntegerCount = 2;
     
@@ -217,9 +196,6 @@ Instruction *Instruction::setExecutionFunction(void(Executor::*executor_func_par
 }
 
 Instruction *Instruction::setExecutionFunction(void(Executor::*executor_func_param)(Register*, int)) {
-
-    for(int i = 0; i<1;i++) registers.push_back(NULL);
-    for(int i=0;i<1;i++) integers.push_back(0xF0DA);
 
     typeRegisterCount = 1;
     typeIntegerCount = 1;
@@ -237,9 +213,6 @@ Instruction *Instruction::setExecutionFunction(void(Executor::*executor_func_par
 
 Instruction *Instruction::setExecutionFunction(void(Executor::*executor_func_param)(int)) {
 
-    for(int i = 0; i<0;i++) registers.push_back(NULL);
-    for(int i=0;i<1;i++) integers.push_back(0xF0DA);
-
     typeRegisterCount = 0;
     typeIntegerCount = 1;
     
@@ -256,9 +229,6 @@ Instruction *Instruction::setExecutionFunction(void(Executor::*executor_func_par
 
 Instruction *Instruction::setExecutionFunction(void(Executor::*executor_func_param)(void)) {
 
-    for(int i = 0; i<0;i++) registers.push_back(NULL);
-    for(int i=0;i<0;i++) integers.push_back(0xF0DA);
-
     typeRegisterCount = 0;
     typeIntegerCount =  0;
     
@@ -272,6 +242,23 @@ Instruction *Instruction::setExecutionFunction(void(Executor::*executor_func_par
     this->executionType = T_V;
     return this;
 }
+
+Instruction *Instruction::setExecutionFunction(void (Executor::*executor_func_param)(nullptr_t)) {
+
+    typeRegisterCount = 0;
+    typeIntegerCount =  0;
+    
+    overloadedRegisterCount = 0;
+    overloadedIntegerCount =  0;
+    
+    supposedRegisterCount = 0;
+    supposedIntegerCount =  0;
+    
+    this->executor_func.T_UNKNOWN = executor_func_param;
+    this->executionType = T_UNKNOWN;
+    return this;
+}
+
 
 Instruction *Instruction::setOverloadedRegisterCount(int count) {
     overloadedRegisterCount = count;

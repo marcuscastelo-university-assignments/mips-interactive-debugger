@@ -10,7 +10,7 @@ class ConsoleDebugger : public Debugger {
       void start(void);
 
     private:
-      void exportCode(vector<string> commandParts);
+      void exportCode(std::vector<std::string> commandParts);
 };
 
 #endif

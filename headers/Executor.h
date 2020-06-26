@@ -7,6 +7,7 @@
 #include "Interpreter.h"
 #include "Registers.h"
 #include "ByteArray.h"
+#include "Program.h"
 
 typedef ByteArray Stack;
 #define STACK_SIZE 4096 //4KB
@@ -16,6 +17,7 @@ class Instruction;
 class Executor{
     private:
         Interpreter *interpreter;
+        Program& program;
         Registers registers;
         Stack stack;
 
@@ -26,14 +28,17 @@ class Executor{
         void bnei(Register *reg, int immediate, int jumpAddress);
         void bne(Register *reg1, Register *reg2, int jumpAddress);
     public:
-        Executor();
+        Executor(Program& program);
         ~Executor();
 
+        const Program &getProgram() const;
         const Registers &getRegisters() const;
         Register &getRegister(const std::string& name) const;
 
         Instruction *executeInstructionStr(const std::string& instruction) const;
         bool hasRegister(const std::string& name) const;
+
+
 
         //void getInstructionInformation();
 
@@ -105,6 +110,9 @@ class Executor{
         void _la(Register *reg1, int address);
         void _nor(Register *reg1, Register *reg2,Register *reg3);
         void _not(Register *reg1, Register *reg2);
+        void _label();
+        void _invalid(nullptr_t _);
+
 };
 
 #endif
