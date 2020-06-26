@@ -21,6 +21,10 @@ class Executor{
 
         void div2(Register *reg1,Register *reg2);
         void div3(Register *reg1,Register *reg2, Register *reg3);
+        void beqi(Register *reg, int immediate, int jumpAddress);
+        void beq(Register *reg1, Register *reg2, int jumpAddress);
+        void bnei(Register *reg, int immediate, int jumpAddress);
+        void bne(Register *reg1, Register *reg2, int jumpAddress);
     public:
         Executor();
         ~Executor();
@@ -36,15 +40,15 @@ class Executor{
         void _lw(Register *reg1, Register *reg2, int offset);
         void _sw(Register *reg1, Register *reg2, int offset);
         void _lb(Register *reg1, Register *reg2,int offset);
-        void _sb(Register *reg1, Register *reg2,int offset);;
-        void _beq(Register *reg1, Register *reg2, int jumpAddress);
+        void _sb(Register *reg1, Register *reg2,int offset);
+        void _beq(Register *reg1, Register *reg2, int jumpAddress, int immediate);
+        void _bne(Register *reg1, Register *reg2, int jumpAddress, int immediate);
         void _bgez(Register *reg, int jumpAddress);
         void _bgezal(Register *reg, int jumpAddress);
         void _bgtz(Register *reg, int jumpAddress);
         void _blez(Register *reg, int jumpAddress);
         void _bltz(Register *reg, int jumpAddress);
         void _bltzal(Register *reg, int jumpAddress);
-        void _bne(Register *reg1, Register *reg2, int jumpAddress);
         void _b(int jumpAddress);
         void _bal(int jumpAddress);
         void _bgt(Register *reg1, Register *reg2, int jumpAddress);

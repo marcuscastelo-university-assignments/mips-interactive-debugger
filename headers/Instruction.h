@@ -8,11 +8,11 @@
 
 class Executor;
 enum ExecutionType {
-    UNKNOWN, T_3R, T_2R, T_1R, T_2R_1I, T_1R_1I, T_1I, T_1R_2I, T_2R_1U, T_V 
+    T_UNKNOWN, T_3R, T_2R, T_1R, T_2R_1I, T_2R_2I, T_1R_1I, T_1I, T_1R_2I, T_2R_1U, T_V 
 };
 
 enum AdvancePcType {
-    NORMAL = 4, LINK = 8 
+    A_NORMAL = 4, A_LINK = 8 
 };
 
 
@@ -22,18 +22,24 @@ class Instruction
         std::string repr;
         ExecutionType executionType;
         AdvancePcType advancePc;
+        bool overloaded;
         std::string errorMessage;
+
+        int supposedRegisterCount, supposedIntegerCount;
+        int overloadedRegisterCount, overloadedIntegerCount;
+        int typeRegisterCount, typeIntegerCount;
 
         std::vector<Register *> registers; 
         std::vector<int> integers;
 
-        int supposedRegisterCount, supposedIntegerCount, overloadedRegisterCount, overloadedIntegerCount;
+
 
         union {
             void (Executor::*T_3R)(Register*, Register*, Register*);
             void (Executor::*T_2R)(Register*, Register*);
             void (Executor::*T_1R)(Register*);
             void (Executor::*T_2R_1I)(Register*, Register*, int);
+            void (Executor::*T_2R_2I)(Register*, Register*, int, int);
             void (Executor::*T_2R_1U)(Register*, Register*, unsigned);
             void (Executor::*T_1R_2I)(Register*, int, int);
             void (Executor::*T_1R_1I)(Register*, int);
@@ -45,14 +51,14 @@ class Instruction
         bool validate();
         ExecutionType getExecutionType();
 
-        Instruction(const std::string& repr, AdvancePcType advanceType = NORMAL);
+        Instruction(const std::string& repr, AdvancePcType advanceType = A_NORMAL);
         Instruction(const Instruction& other);
-        ~Instruction();
 
         Instruction *setExecutionFunction(void (Executor::*executor_func_param)(Register*, Register*, Register*));
         Instruction *setExecutionFunction(void (Executor::*executor_func_param)(Register*, Register*));
         Instruction *setExecutionFunction(void (Executor::*executor_func_param)(Register*));
         Instruction *setExecutionFunction(void (Executor::*executor_func_param)(Register*, Register*, int));
+        Instruction *setExecutionFunction(void (Executor::*executor_func_param)(Register*,Register*,int, int));
         Instruction *setExecutionFunction(void (Executor::*executor_func_param)(Register*, Register*, unsigned));
         Instruction *setExecutionFunction(void (Executor::*executor_func_param)(Register*, int, int));
         Instruction *setExecutionFunction(void (Executor::*executor_func_param)(Register*, int));
@@ -62,12 +68,21 @@ class Instruction
         Instruction *overloadSupposedRegisterCount(int count);
         Instruction *overloadSupposedIntegerCount(int count);
 
+        Instruction *setOverloadedRegisterCount(int count);
+        Instruction *setOverloadedIntegerCount(int count);
+        Instruction *setSupposedRegisterCount(int count);
+        Instruction *setSupposedIntegerCount(int count);
+
+        void adjustParameters();
+        void feedRegisters(int pos,Register* value);
+        void feedIntegers(int pos,int value);
+
         const std::string& toString();
         const std::string& getErrorMessage();
         int getRegistersCount();
         int getIntegersCount();
-        bool isRegisterCountOK();
-        bool isIntegerCountOK();
+        bool areParametersCountOK();
+        bool hasOverload();
 
         void execute(Executor *executor);
         void feed(std::vector<Register*> newRegisters, std::vector<int> newIntegers);

@@ -61,17 +61,33 @@ void Executor::_sb(Register *reg1, Register *reg2,int offset) {
 }
 
 
-void Executor::_beq(Register *reg1, Register *reg2, int jumpAddress) {
+//TODO: retificar os ATs
+void Executor::bnei(Register *reg1, int immediate, int jumpAddress) {
+    _ori(&registers.AT,&registers.ZERO,immediate);
+    bne(reg1,&registers.AT,jumpAddress);
+}
+
+void Executor::bne(Register *reg1, Register *reg2, int jumpAddress) {
+    if(reg1->asInt() != reg2->asInt()) _jump(jumpAddress);    
+}
+
+void Executor::_bne(Register *reg1, Register *reg2, int jumpAddress, int immediate) {
+    if(reg2 == NULL) bnei(reg1,immediate,jumpAddress);
+    else bne(reg1,reg2,jumpAddress);
+}
+
+void Executor::_beqi(Register *reg1, int immediate, int jumpAddress) {
+    _ori(&registers.AT,&registers.ZERO,immediate);
+    beq(reg1,&registers.AT,jumpAddress);
+}
+
+void Executor::beq(Register *reg1, Register *reg2, int jumpAddress) {
     if(reg1->asInt() == reg2->asInt()) _jump(jumpAddress);    
 }
 
-void Executor::_beq(Register *reg1, Register *reg2, int jumpAddress) {
-    if(reg1->asInt() == reg2->asInt()) _jump(jumpAddress);    
-}
-
-
-void Executor::_beq(Register *reg1, Register *reg2, int jumpAddress) {
-    if(reg1->asInt() == reg2->asInt()) _jump(jumpAddress);    
+void Executor::_beq(Register *reg1, Register *reg2, int jumpAddress, int immediate) {
+    if(reg2 == NULL) _beqi(reg1,immediate,jumpAddress);
+    else beq(reg1,reg2,jumpAddress);
 }
 
 void Executor::_bgez(Register *reg, int jumpAddress) {
@@ -99,12 +115,8 @@ void Executor::_bltzal(Register *reg, int jumpAddress) {
     if(reg->asInt() < 0) _jal(jumpAddress);    
 }
 
-void Executor::_bne(Register *reg1, Register *reg2, int jumpAddress) {
-    if(reg1->asInt() != reg2->asInt()) _jump(jumpAddress);    
-}
-
 void Executor::_b(int jumpAddress) {
-    _beq((Register*)&registers.ZERO, (Register*)&registers.ZERO, jumpAddress);
+    beq((Register*)&registers.ZERO, (Register*)&registers.ZERO, jumpAddress);
 }
 
 void Executor::_bal(int jumpAddress) {
@@ -113,37 +125,32 @@ void Executor::_bal(int jumpAddress) {
 
 void Executor::_bgt(Register *reg1, Register *reg2, int jumpAddress) {
     _slt((Register*)&registers.AT, reg2,reg1);
-    _bne((Register*)&registers.AT, (Register*)&registers.ZERO, jumpAddress);    
+    bne((Register*)&registers.AT, (Register*)&registers.ZERO, jumpAddress);    
 }
 
 
 void Executor::_blt(Register *reg1, Register *reg2, int jumpAddress) {
     _slt((Register*)&registers.AT, reg1, reg2);
-    _bne((Register*)&registers.AT, (Register*)&registers.ZERO, jumpAddress);    
+    bne((Register*)&registers.AT, (Register*)&registers.ZERO, jumpAddress);    
 }
 
 void Executor::_bge(Register *reg1, Register *reg2, int jumpAddress) {
     _slt((Register*)&registers.AT, reg1, reg2);
-    _beq((Register*)&registers.AT, (Register*)&registers.ZERO, jumpAddress);    
+    beq((Register*)&registers.AT, (Register*)&registers.ZERO, jumpAddress);    
 }
 
 void Executor::_ble(Register *reg1, Register *reg2, int jumpAddress) {
     _slt((Register*)&registers.AT, reg2, reg1);
-    _beq((Register*)&registers.AT, (Register*)&registers.ZERO, jumpAddress);    
+    beq((Register*)&registers.AT, (Register*)&registers.ZERO, jumpAddress);    
 }
 
 void Executor::_bgtu(Register *reg1, Register *reg2, int jumpAddress) {
     _sltu((Register*)&registers.AT, reg2, reg1);
-    _bne((Register*)&registers.AT, (Register*)&registers.ZERO, jumpAddress);    
+    bne((Register*)&registers.AT, (Register*)&registers.ZERO, jumpAddress);    
 }
 
 void Executor::_beqz(Register *reg, int jumpAddress) {
-    _beq(reg, (Register*)&registers.ZERO, jumpAddress);    
-}
-
-void Executor::_beqi(Register *reg1, int immediate, int jumpAddress) {
-    _ori((Register*)&registers.AT, (Register*)&registers.ZERO, immediate);    
-    _bne(reg1, (Register*)&registers.AT, jumpAddress);    
+    beq(reg, (Register*)&registers.ZERO, jumpAddress);    
 }
 
 //TODO: Questão do jump e tamanho da stack

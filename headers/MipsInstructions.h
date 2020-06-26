@@ -5,74 +5,79 @@
 #include <map>
 #include <string>
 
-class MipsInstructions {
-    private:
-        std::map<std::string, Instruction*> instructionByName; 
-    public:
-    MipsInstructions(void) {
-        instructionByName[std::string("lw")] = lwInstruction = (new Instruction("lw"))->setExecutionFunction(Executor::_lw);
-        instructionByName[std::string("sw")] = swInstruction = (new Instruction("sw"))->setExecutionFunction(Executor::_sw);
-        instructionByName[std::string("lb")] = lbInstruction = (new Instruction("lb"))->setExecutionFunction(Executor::_lb);
-        instructionByName[std::string("sb")] = sbInstruction = (new Instruction("sb"))->setExecutionFunction(Executor::_sb);
-        instructionByName[std::string("beq")] = beqInstruction = (new Instruction("beq"))->setExecutionFunction(Executor::_beq);
-        instructionByName[std::string("bgez")] = bgezInstruction = (new Instruction("bgez"))->setExecutionFunction(Executor::_bgez);
-        instructionByName[std::string("bgezal")] = bgezalInstruction = (new Instruction("bgezal",LINK))->setExecutionFunction(Executor::_bgezal);
-        instructionByName[std::string("bgtz")] = bgtzInstruction = (new Instruction("bgtz"))->setExecutionFunction(Executor::_bgtz);
-        instructionByName[std::string("blez")] = blezInstruction = (new Instruction("blez"))->setExecutionFunction(Executor::_blez);
-        instructionByName[std::string("bltz")] = bltzInstruction = (new Instruction("bltz"))->setExecutionFunction(Executor::_bltz);
-        instructionByName[std::string("bltzal")] = bltzalInstruction = (new Instruction("bltzal",LINK))->setExecutionFunction(Executor::_bltzal);
-        instructionByName[std::string("bne")] = bneInstruction = (new Instruction("bne"))->setExecutionFunction(Executor::_bne);
-        instructionByName[std::string("b")] = bInstruction = (new Instruction("b"))->setExecutionFunction(Executor::_b);
-        instructionByName[std::string("bal")] = balInstruction = (new Instruction("bal"))->setExecutionFunction(Executor::_bal);
-        instructionByName[std::string("bgt")] = bgtInstruction = (new Instruction("bgt"))->setExecutionFunction(Executor::_bgt);
-        instructionByName[std::string("blt")] = bltInstruction = (new Instruction("blt"))->setExecutionFunction(Executor::_blt);
-        instructionByName[std::string("bge")] = bgeInstruction = (new Instruction("bge"))->setExecutionFunction(Executor::_bge);
-        instructionByName[std::string("ble")] = bleInstruction = (new Instruction("ble"))->setExecutionFunction(Executor::_ble);
-        instructionByName[std::string("bgtu")] = bgtuInstruction = (new Instruction("bgtu"))->setExecutionFunction(Executor::_bgtu);
-        instructionByName[std::string("beqz")] = beqzInstruction = (new Instruction("beqz"))->setExecutionFunction(Executor::_beqz);
-        instructionByName[std::string("beqi")] = beqiInstruction = (new Instruction("beqi"))->setExecutionFunction(Executor::_beqi);
-        instructionByName[std::string("jump")] = jumpInstruction = (new Instruction("jump"))->setExecutionFunction(Executor::_jump);
-        instructionByName[std::string("add")] = addInstruction = (new Instruction("add"))->setExecutionFunction(Executor::_add);
-        instructionByName[std::string("addi")] = addiInstruction = (new Instruction("addi"))->setExecutionFunction(Executor::_addi);
-        instructionByName[std::string("sub")] = subInstruction = (new Instruction("sub"))->setExecutionFunction(Executor::_sub);
-        instructionByName[std::string("mult")] = multInstruction = (new Instruction("mult"))->setExecutionFunction(Executor::_mult);
-        instructionByName[std::string("mflo")] = mfloInstruction = (new Instruction("mflo"))->setExecutionFunction(Executor::_mflo);
-        instructionByName[std::string("mfhi")] = mfhiInstruction = (new Instruction("mfhi"))->setExecutionFunction(Executor::_mfhi);
-        instructionByName[std::string("mul")] = mulInstruction = (new Instruction("mul"))->setExecutionFunction(Executor::_mul);
-        instructionByName[std::string("div")] = div2Instruction = (new Instruction("div"))->setExecutionFunction(Executor::_div)->overloadSupposedIntegerCount(2);
-        instructionByName[std::string("rem")] = remInstruction = (new Instruction("rem"))->setExecutionFunction(Executor::_rem);
-        instructionByName[std::string("and")] = andInstruction = (new Instruction("and"))->setExecutionFunction(Executor::_and);
-        instructionByName[std::string("or")] = orInstruction = (new Instruction("or"))->setExecutionFunction(Executor::_or);
-        instructionByName[std::string("xor")] = xorInstruction = (new Instruction("xor"))->setExecutionFunction(Executor::_xor);
-        instructionByName[std::string("andi")] = andiInstruction = (new Instruction("andi"))->setExecutionFunction(Executor::_andi);
-        instructionByName[std::string("ori")] = oriInstruction = (new Instruction("ori"))->setExecutionFunction(Executor::_ori);
-        instructionByName[std::string("xori")] = xoriInstruction = (new Instruction("xori"))->setExecutionFunction(Executor::_xori);
-        instructionByName[std::string("slt")] = sltInstruction = (new Instruction("slt"))->setExecutionFunction(Executor::_slt);
-        instructionByName[std::string("sltu")] = sltuInstruction = (new Instruction("sltu"))->setExecutionFunction(Executor::_sltu);
-        instructionByName[std::string("slti")] = sltiInstruction = (new Instruction("slti"))->setExecutionFunction(Executor::_slti);
-        instructionByName[std::string("sltiu")] = sltiuInstruction = (new Instruction("sltiu"))->setExecutionFunction(Executor::_sltiu);
-        instructionByName[std::string("jal")] = jalInstruction = (new Instruction("jal",LINK))->setExecutionFunction(Executor::_jal);
-        instructionByName[std::string("addiu")] = addiuInstruction = (new Instruction("addiu"))->setExecutionFunction(Executor::_addiu);
-        instructionByName[std::string("addu")] = adduInstruction = (new Instruction("addu"))->setExecutionFunction(Executor::_addu);
-        instructionByName[std::string("subu")] = subuInstruction = (new Instruction("subu"))->setExecutionFunction(Executor::_subu);
-        instructionByName[std::string("divu")] = divuInstruction = (new Instruction("divu"))->setExecutionFunction(Executor::_divu);
-        instructionByName[std::string("sllv")] = sllvInstruction = (new Instruction("sllv"))->setExecutionFunction(Executor::_sllv);
-        instructionByName[std::string("jr")] = jrInstruction = (new Instruction("jr"))->setExecutionFunction(Executor::_jr);
-        instructionByName[std::string("jalr")] = jalrInstruction = (new Instruction("jalr",LINK))->setExecutionFunction(Executor::_jalr);
-        instructionByName[std::string("lui")] = luiInstruction = (new Instruction("lui"))->setExecutionFunction(Executor::_lui);
-        instructionByName[std::string("sll")] = sllInstruction = (new Instruction("sll"))->setExecutionFunction(Executor::_sll);
-        instructionByName[std::string("noop")] = noopInstruction = (new Instruction("noop"))->setExecutionFunction(Executor::_noop);
-        instructionByName[std::string("nop")] = nopInstruction = (new Instruction("nop"))->setExecutionFunction(Executor::_nop);
-        instructionByName[std::string("sra")] = sraInstruction = (new Instruction("sra"))->setExecutionFunction(Executor::_sra);
-        instructionByName[std::string("srl")] = srlInstruction = (new Instruction("srl"))->setExecutionFunction(Executor::_srl);
-        instructionByName[std::string("syscall")] = syscallInstruction = (new Instruction("syscall"))->setExecutionFunction(Executor::_syscall);
-        instructionByName[std::string("move")] = moveInstruction = (new Instruction("move"))->setExecutionFunction(Executor::_move);
-        instructionByName[std::string("srlv")] = srlvInstruction = (new Instruction("srlv"))->setExecutionFunction(Executor::_srlv);
-        instructionByName[std::string("clear")] = clearInstruction = (new Instruction("clear"))->setExecutionFunction(Executor::_clear);
-        instructionByName[std::string("li")] = liInstruction = (new Instruction("li"))->setExecutionFunction(Executor::_li);
-        instructionByName[std::string("la")] = laInstruction = (new Instruction("la"))->setExecutionFunction(Executor::_la);
-        instructionByName[std::string("nor")] = norInstruction = (new Instruction("nor"))->setExecutionFunction(Executor::_nor);
-        instructionByName[std::string("not")] = notInstruction = (new Instruction("not"))->setExecutionFunction(Executor::_not);
+class Instruction;
+
+static const std::map<std::string,Instruction*> instructionByName = {
+            { std::string("lw"), (new Instruction("lw"))->setExecutionFunction(&Executor::_lw) },
+            { std::string("sw"), (new Instruction("sw"))->setExecutionFunction(&Executor::_sw) },
+            { std::string("lb"), (new Instruction("lb"))->setExecutionFunction(&Executor::_lb) },
+            { std::string("sb"), (new Instruction("sb"))->setExecutionFunction(&Executor::_sb) },
+            { std::string("beq"), (new Instruction("beq"))->setExecutionFunction(&Executor::_beq)->setOverloadedIntegerCount(2)->setOverloadedRegisterCount(1)->setSupposedIntegerCount(1) },
+            { std::string("bgez"), (new Instruction("bgez"))->setExecutionFunction(&Executor::_bgez) },
+            { std::string("bgezal"), (new Instruction("bgezal",A_LINK))->setExecutionFunction(&Executor::_bgezal) },
+            { std::string("bgtz"), (new Instruction("bgtz"))->setExecutionFunction(&Executor::_bgtz) },
+            { std::string("blez"), (new Instruction("blez"))->setExecutionFunction(&Executor::_blez) },
+            { std::string("bltz"), (new Instruction("bltz"))->setExecutionFunction(&Executor::_bltz) },
+            { std::string("bltzal"), (new Instruction("bltzal",A_LINK))->setExecutionFunction(&Executor::_bltzal) },
+            { std::string("bne"), (new Instruction("bne"))->setExecutionFunction(&Executor::_bne)->setOverloadedIntegerCount(2)->setOverloadedRegisterCount(1)->setSupposedIntegerCount(1) },
+            { std::string("b"), (new Instruction("b"))->setExecutionFunction(&Executor::_b) },
+            { std::string("bal"), (new Instruction("bal"))->setExecutionFunction(&Executor::_bal) },
+            { std::string("bgt"), (new Instruction("bgt"))->setExecutionFunction(&Executor::_bgt) },
+            { std::string("blt"), (new Instruction("blt"))->setExecutionFunction(&Executor::_blt) },
+            { std::string("bge"), (new Instruction("bge"))->setExecutionFunction(&Executor::_bge) },
+            { std::string("ble"), (new Instruction("ble"))->setExecutionFunction(&Executor::_ble) },
+            { std::string("bgtu"), (new Instruction("bgtu"))->setExecutionFunction(&Executor::_bgtu) },
+            { std::string("beqz"), (new Instruction("beqz"))->setExecutionFunction(&Executor::_beqz) },
+            { std::string("beqi"), (new Instruction("beqi"))->setExecutionFunction(&Executor::_beqi) },
+            { std::string("jump"), (new Instruction("jump"))->setExecutionFunction(&Executor::_jump) },
+            { std::string("add"), (new Instruction("add"))->setExecutionFunction(&Executor::_add) },
+            { std::string("addi"), (new Instruction("addi"))->setExecutionFunction(&Executor::_addi) },
+            { std::string("sub"), (new Instruction("sub"))->setExecutionFunction(&Executor::_sub) },
+            { std::string("mult"), (new Instruction("mult"))->setExecutionFunction(&Executor::_mult) },
+            { std::string("mflo"), (new Instruction("mflo"))->setExecutionFunction(&Executor::_mflo) },
+            { std::string("mfhi"), (new Instruction("mfhi"))->setExecutionFunction(&Executor::_mfhi) },
+            { std::string("mul"), (new Instruction("mul"))->setExecutionFunction(&Executor::_mul) },
+            { std::string("div"), (new Instruction("div"))->setExecutionFunction(&Executor::_div)->setOverloadedIntegerCount(2) },
+            { std::string("rem"), (new Instruction("rem"))->setExecutionFunction(&Executor::_rem) },
+            { std::string("and"), (new Instruction("and"))->setExecutionFunction(&Executor::_and) },
+            { std::string("or"), (new Instruction("or"))->setExecutionFunction(&Executor::_or) },
+            { std::string("xor"), (new Instruction("xor"))->setExecutionFunction(&Executor::_xor) },
+            { std::string("andi"), (new Instruction("andi"))->setExecutionFunction(&Executor::_andi) },
+            { std::string("ori"), (new Instruction("ori"))->setExecutionFunction(&Executor::_ori) },
+            { std::string("xori"), (new Instruction("xori"))->setExecutionFunction(&Executor::_xori) },
+            { std::string("slt"), (new Instruction("slt"))->setExecutionFunction(&Executor::_slt) },
+            { std::string("sltu"), (new Instruction("sltu"))->setExecutionFunction(&Executor::_sltu) },
+            { std::string("slti"), (new Instruction("slti"))->setExecutionFunction(&Executor::_slti) },
+            { std::string("sltiu"), (new Instruction("sltiu"))->setExecutionFunction(&Executor::_sltiu) },
+            { std::string("jal"), (new Instruction("jal",A_LINK))->setExecutionFunction(&Executor::_jal) },
+            { std::string("addiu"), (new Instruction("addiu"))->setExecutionFunction(&Executor::_addiu) },
+            { std::string("addu"), (new Instruction("addu"))->setExecutionFunction(&Executor::_addu) },
+            { std::string("subu"), (new Instruction("subu"))->setExecutionFunction(&Executor::_subu) },
+            { std::string("divu"), (new Instruction("divu"))->setExecutionFunction(&Executor::_divu) },
+            { std::string("sllv"), (new Instruction("sllv"))->setExecutionFunction(&Executor::_sllv) },
+            { std::string("jr"), (new Instruction("jr"))->setExecutionFunction(&Executor::_jr) },
+            { std::string("jalr"), (new Instruction("jalr",A_LINK))->setExecutionFunction(&Executor::_jalr) },
+            { std::string("lui"), (new Instruction("lui"))->setExecutionFunction(&Executor::_lui) },
+            { std::string("sll"), (new Instruction("sll"))->setExecutionFunction(&Executor::_sll) },
+            { std::string("noop"), (new Instruction("noop"))->setExecutionFunction(&Executor::_noop) },
+            { std::string("nop"), (new Instruction("nop"))->setExecutionFunction(&Executor::_nop) },
+            { std::string("sra"), (new Instruction("sra"))->setExecutionFunction(&Executor::_sra) },
+            { std::string("srl"), (new Instruction("srl"))->setExecutionFunction(&Executor::_srl) },
+            { std::string("syscall"), (new Instruction("syscall"))->setExecutionFunction(&Executor::_syscall) },
+            { std::string("move"), (new Instruction("move"))->setExecutionFunction(&Executor::_move) },
+            { std::string("srlv"), (new Instruction("srlv"))->setExecutionFunction(&Executor::_srlv) },
+            { std::string("clear"), (new Instruction("clear"))->setExecutionFunction(&Executor::_clear) },
+            { std::string("li"), (new Instruction("li"))->setExecutionFunction(&Executor::_li) },
+            { std::string("la"), (new Instruction("la"))->setExecutionFunction(&Executor::_la) },
+            { std::string("nor"), (new Instruction("nor"))->setExecutionFunction(&Executor::_nor) },
+            { std::string("not"), (new Instruction("not"))->setExecutionFunction(&Executor::_not) }
+};
+
+namespace MipsInstructions {
+    Instruction *getInstructionByName(const std::string& instructionName) {
+        auto pair = instructionByName.find(instructionName);
+        if (pair == instructionByName.end()) return NULL;
+        return pair->second;
     }
 
     Instruction *lwInstruction;

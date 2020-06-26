@@ -12,7 +12,6 @@ class Interpreter
     public:
         Interpreter(Executor *parentExecutor);
         Instruction *interpretInstruction(const std::string& instructionStr) const;
-        ~Interpreter();
 };
 
 

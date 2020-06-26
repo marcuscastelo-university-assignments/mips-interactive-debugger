@@ -70,7 +70,7 @@ void ConsoleDebugger::start (void) {
                 program.addInstruction(instruction->toString()); 
 
             }
-            else printf("%s\n", instruction->getErrorMessage());
+            else printf("%s\n", instruction->getErrorMessage().c_str());
 
             delete instruction;
         }

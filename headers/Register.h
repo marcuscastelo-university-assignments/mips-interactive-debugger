@@ -13,9 +13,9 @@ enum RegisterType {
 class Register
 {
     private:
-        RegisterType type;
         std::string name;    
         Word word;
+        RegisterType type;
     public:
         Register(const std::string& name, RegisterType type = NORMAL);
         Register(const std::string& name, const Word& word, RegisterType type = NORMAL);
