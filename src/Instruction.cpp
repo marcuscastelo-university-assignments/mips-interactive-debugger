@@ -3,7 +3,7 @@
 #include <sstream>
 
 bool Instruction::validate() {
-    if (!errorMessage.empty()) return false;
+    if (!errorMessage.empty()) return errorMessage == "OK";
 
     errorMessage = "";
     if (executionType == T_UNKNOWN){
@@ -30,7 +30,7 @@ bool Instruction::validate() {
     
     if(hasOverload()) adjustParameters();
 
-
+    errorMessage = "OK";
     return true;
 }
 
