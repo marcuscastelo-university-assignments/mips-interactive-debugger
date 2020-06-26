@@ -70,18 +70,13 @@ void ConsoleDebugger::start (void) {
 
         else {
             // TODO: adicionar somente se o executor não retornar erros (instrução não existente, etc...)
-            if (verifyLabel(command) == true and executeInstructionAndVerify(command) == true) {
-                program.addInstruction(command);
+            //verifyLabel() verifies if a possible label is valid, or if it is not a possible label, returning true
+            //if it is a possible label, and is not valid, returns false
+            if (validatePossibleLabel(command) == true) {
+                if (executeInstructionAndVerify(command) == true) {
+                    program.addInstruction(command);
+                }
             }
-
-            Instruction *instruction = executor.executeInstructionStr(command);
-            if (instruction->validate()) {
-                program.addInstruction(instruction->toString()); 
-
-            }
-            else printf("%s\n", instruction->getErrorMessage());
-
-            delete instruction;
         }
         
     }

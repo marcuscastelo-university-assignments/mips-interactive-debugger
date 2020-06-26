@@ -15,32 +15,26 @@ void Debugger::start (void) {}
 
 void Debugger::exec(int pos) {
     Register &reg = executor.getRegister("$pc");
-    
-    if (pos == -1)
-        pos = reg.asInt();
-    else
-        reg.setWord(pos);
+    if (pos <= -1)
+        pos = 0;
+
+    //reg.setWord(pos);
 
     while (true) {
         string inst;
 
         try {
-            inst = program.getInstruction(pos);
-            
-            if (verifyLabel(inst) == true and executeInstructionAndVerify(inst) == true) {
-                program.addInstruction(inst);
-            }
-            else {
-                printf("Invalid instruction or syntax\n");
-            }
-
+            next();
         } catch (std::out_of_range &e) {
+            printf("End of program\n");
             break;
+        } catch (std::invalid_argument &e) {
+            printf("%s\n", e.what());
         }
 
         pos = reg.asInt();
         if (program.isBreakpoint(pos) == true) {
-            printf("Breakpoint in in address '0x%4x'\n", pos);
+            printSingleBreakpoint(pos);
             break;
         }
     }
@@ -49,7 +43,20 @@ void Debugger::exec(int pos) {
 }
 
 void Debugger::next() {
+    Register &reg = executor.getRegister("$pc");
+    int pos = reg.asInt();
+    string inst = program.getInstruction(pos);
+
+    try {
+        if (validatePossibleLabel(inst) == true) {
+            if (executeInstructionAndVerify(inst) == false)
+                throw std::invalid_argument("Invalid instruction or syntax");
+        }
+    } catch (std::out_of_range& e) {
+        throw std::out_of_range(e.what());
+    }   
     
+    return;
 }
 
 void Debugger::help(const vector<string>& commandParts) {
@@ -220,7 +227,7 @@ void Debugger::breakpoint(const vector<string>& commandParts) {
     return;
 }
 
-bool Debugger::verifyLabel(const string& command) {
+bool Debugger::validadePossibleLabel(const string& command) {
     if (command.empty())
         return false;
 
@@ -236,7 +243,7 @@ bool Debugger::verifyLabel(const string& command) {
 
 bool Debugger::executeInstructionAndVerify(const string& command) {
     Instruction *executedInstruction = executor.executeInstructionStr(command);
-    return executedInstruction->isValid();
+    return executedInstruction->validate();
 }
 
 bool Debugger::hasRegister(const string& name) {
