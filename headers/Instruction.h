@@ -73,8 +73,7 @@ class Instruction
         Instruction *setSupposedIntegerCount(int count);
 
         void adjustParameters();
-        void feedRegisters(int pos,Register* value);
-        void feedIntegers(int pos,int value);
+        void feed(const std::vector<Register*>& newRegisters, const std::vector<int>& newIntegers);
 
         const std::string& toString();
         const std::string& getErrorMessage();

@@ -58,7 +58,7 @@ class Executor{
         void _bgtu(Register *reg1, Register *reg2, int jumpAddress);
         void _beqz(Register *reg, int jumpAddress);
         void _beqi(Register *reg1, int immediate, int jumpAddress);
-        void _jump(int);
+        void _j(int);
         void _add(Register *reg1,Register *reg2,Register *reg3);
         void _addi(Register *reg1, Register *reg2, int immediate);
         void _sub(Register *reg1,Register *reg2,Register *reg3);

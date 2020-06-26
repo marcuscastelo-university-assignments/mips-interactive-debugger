@@ -1,5 +1,7 @@
 #include "Executor.h"
 #include "Instruction.h"
+
+#include "string_utils.h"
 #include <iostream>
 
 //TODO: implementar comportamentos esquisitos de registradores temporarios (j label, etc) (e outros obscutos)
@@ -70,7 +72,7 @@ void Executor::bnei(Register *reg1, int immediate, int jumpAddress) {
 }
 
 void Executor::bne(Register *reg1, Register *reg2, int jumpAddress) {
-    if(reg1->asInt() != reg2->asInt()) _jump(jumpAddress);    
+    if(reg1->asInt() != reg2->asInt()) _j(jumpAddress);    
 }
 
 void Executor::_bne(Register *reg1, Register *reg2, int jumpAddress, int immediate) {
@@ -84,7 +86,7 @@ void Executor::_beqi(Register *reg1, int immediate, int jumpAddress) {
 }
 
 void Executor::beq(Register *reg1, Register *reg2, int jumpAddress) {
-    if(reg1->asInt() == reg2->asInt()) _jump(jumpAddress);    
+    if(reg1->asInt() == reg2->asInt()) _j(jumpAddress);    
 }
 
 void Executor::_beq(Register *reg1, Register *reg2, int jumpAddress, int immediate) {
@@ -93,7 +95,7 @@ void Executor::_beq(Register *reg1, Register *reg2, int jumpAddress, int immedia
 }
 
 void Executor::_bgez(Register *reg, int jumpAddress) {
-    if(reg->asInt() >= 0) _jump(jumpAddress);    
+    if(reg->asInt() >= 0) _j(jumpAddress);    
 }
 
 void Executor::_bgezal(Register *reg, int jumpAddress) {
@@ -102,15 +104,15 @@ void Executor::_bgezal(Register *reg, int jumpAddress) {
 }
 
 void Executor::_bgtz(Register *reg, int jumpAddress) {
-    if(reg->asInt() > 0) _jump(jumpAddress);    
+    if(reg->asInt() > 0) _j(jumpAddress);    
 }
 
 void Executor::_blez(Register *reg, int jumpAddress) {
-    if(reg->asInt() <= 0) _jump(jumpAddress);    
+    if(reg->asInt() <= 0) _j(jumpAddress);    
 }
 
 void Executor::_bltz(Register *reg, int jumpAddress) {
-    if(reg->asInt() < 0) _jump(jumpAddress);    
+    if(reg->asInt() < 0) _j(jumpAddress);    
 }
 
 void Executor::_bltzal(Register *reg, int jumpAddress) {
@@ -156,10 +158,10 @@ void Executor::_beqz(Register *reg, int jumpAddress) {
 }
 
 //TODO: Questão do jump e tamanho da stack
-void Executor::_jump(int jumpAddress) {
+void Executor::_j(int jumpAddress) {
     //TODO: PEGAR O TAMANHO DO PROGRAMA
     if(jumpAddress < 0 || jumpAddress >= 50135) printf("ERROR: Jump adress not implemented.\n");
-    else registers.PC.setValue(jumpAddress);
+    else registers.PC.setValue(jumpAddress - 4);
 }
 
 void Executor::_add(Register *reg1,Register *reg2,Register *reg3) {
@@ -258,7 +260,7 @@ void Executor::_sltiu(Register *reg1, Register *reg2, unsigned immediate) {
 
 void Executor::_jal(int jumpAddress) {
     registers.RA.copy(registers.PC);
-    _jump(jumpAddress);
+    _j(jumpAddress);
 }
 
 void Executor::_addiu(Register *reg1, Register *reg2, unsigned int immediate) {
@@ -279,7 +281,7 @@ void Executor::_divu(Register *reg1,Register *reg2) {
 }
 
 void Executor::_jr(Register *reg)  {
-    _jump(reg->asInt());
+    _j(reg->asInt());
 }
 
 void Executor::_jalr(Register *reg)  {
@@ -372,9 +374,7 @@ void Executor::_syscall()  {
         std::cout << std::endl;
     }
     else if (operationCode == 5){
-        int temp;
-        std::cin >> temp;
-        registers.V0.setValue(temp);
+        registers.V0.setValue(stoi(getLine()));
     }
     else if (operationCode == 6){
         std::cout << "WARNING: Syscall not implemented" << std::endl;                

@@ -5,25 +5,26 @@
 bool Instruction::validate() {
     if (!errorMessage.empty()) return false;
 
+    errorMessage = "";
     if (executionType == T_UNKNOWN){
-        errorMessage += "T_Unknown instruction: " + toString() + ".\n";        
+        errorMessage += "T_Unknown instruction: " + toString() + ".";        
         return false;
     }
 
     if(!areParametersCountOK()){
-        errorMessage += "Wrong number of Register(s) and/or Integer(s).\n";
+        errorMessage += "Wrong number of Register(s) and/or Integer(s).";
         std::stringstream correctSupossedNumbers;
         correctSupossedNumbers << supposedRegisterCount << " Register(s) and " << supposedIntegerCount << " Integer(s) have been passed, but:\n\t" << supposedRegisterCount << " Register(s) and " << supposedIntegerCount << " Integers";
-        if(hasOverload()) correctSupossedNumbers <<", or\n\t" << overloadedRegisterCount << " Register(s) and " << overloadedIntegerCount << " Integers.\n";
-        else correctSupossedNumbers <<".\n";
-        errorMessage += correctSupossedNumbers.str() + "Should have been passed.\n";
+        if(hasOverload()) correctSupossedNumbers <<", or\n\t" << overloadedRegisterCount << " Register(s) and " << overloadedIntegerCount << " Integers.";
+        else correctSupossedNumbers << ".";
+        errorMessage += correctSupossedNumbers.str() + "\nShould have been passed.";
 
         return false;
     }
     
     //Checks if user is trying to modify read-only register
     if(registers.size() > 0 && registers[0]->isReadOnly()){
-        errorMessage += "Invalid attribution of value to register " + registers[0]->getName() + ", which is read only.\n";
+        errorMessage += "Invalid attribution of value to register " + registers[0]->getName() + ", which is read only.";
         return false; 
     }
     
@@ -34,19 +35,19 @@ bool Instruction::validate() {
 }
 
 void Instruction::adjustParameters(){
-    for(int i=getRegistersCount();i<typeRegisterCount;i++) feedRegisters(i,NULL);
-    for(int i=getIntegersCount();i<typeIntegerCount;i++) feedIntegers(i,0xF0DA);
+    for(int i=getRegistersCount();i<typeRegisterCount;i++) registers.push_back(NULL);
+    for(int i=getIntegersCount();i<typeIntegerCount;i++) integers.push_back(0xF0DA);
 }
 
+void Instruction::feed(const std::vector<Register*>& newRegisters, const std::vector<int>& newIntegers) {
+    registers.clear();
+    integers.clear();
+    registers.insert(registers.end(), newRegisters.begin(), newRegisters.end());
+    integers.insert(integers.end(), newIntegers.begin(), newIntegers.end());
 
-void Instruction::feedRegisters(int pos, Register* value){
-    registers[pos] = value;
+
+
 }
-
-void Instruction::feedIntegers(int pos,int value){
-    integers[pos] = value;
-}
-
 
 ExecutionType Instruction::getExecutionType() {
     return executionType;
@@ -295,15 +296,14 @@ Instruction *Instruction::setSupposedIntegerCount(int count) {
 }
 
 
-
-
 void Instruction::execute(Executor *executor) {
-    if (!validate()) throw("Invalid Instruction:\n" + errorMessage);
+    if (!validate()) throw("Invalid Instruction:" + errorMessage);
     else if (executionType == T_3R) (executor->*executor_func.T_3R)(registers[0], registers[1], registers[2]);
     else if (executionType == T_2R) (executor->*executor_func.T_2R)(registers[0], registers[1]);
     else if (executionType == T_1R) (executor->*executor_func.T_1R)(registers[0]);
     else if (executionType == T_2R_1I) (executor->*executor_func.T_2R_1I)(registers[0], registers[1], integers[0]);
     else if (executionType == T_2R_1U) (executor->*executor_func.T_2R_1U)(registers[0], registers[1], (unsigned) integers[0]);
+    else if (executionType == T_2R_2I) (executor->*executor_func.T_2R_2I)(registers[0], registers[1], integers[0], integers[1]);
     else if (executionType == T_1R_2I) (executor->*executor_func.T_1R_2I)(registers[0], integers[0], integers[1]);
     else if (executionType == T_1R_1I) (executor->*executor_func.T_1R_1I)(registers[0], integers[0]);
     else if (executionType == T_1I) (executor->*executor_func.T_1I)(integers[0]);
@@ -330,6 +330,7 @@ int Instruction::getIntegersCount(){
 bool Instruction::areParametersCountOK(){
     return ((getRegistersCount() == supposedRegisterCount && getIntegersCount() == supposedIntegerCount) || (getRegistersCount() == overloadedRegisterCount && getIntegersCount() == overloadedIntegerCount));
 }
+
 
 const std::string& Instruction::toString() {
     return repr;
