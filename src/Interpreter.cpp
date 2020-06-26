@@ -16,10 +16,10 @@ Instruction *Interpreter::interpretInstruction(const std::string& instructionStr
     int intPos = 0,regPos = 0;
 
     //TODO: no_advance
-    if (instruction_parts.size() < 1) return new Instruction("");
+    if (instruction_parts.size() < 1) return new Instruction("", A_PASS);
 
     Instruction *instruction = MipsInstructions::getInstructionByName(instruction_parts[0]);
-    if (instruction == NULL) return new Instruction(instruction_parts[0]);
+    if (instruction == NULL) return new Instruction(instruction_parts[0], A_PASS);
 
     for (unsigned i = 1; i < instruction_parts.size(); i++) {
         if (isInteger(instruction_parts[i])) {

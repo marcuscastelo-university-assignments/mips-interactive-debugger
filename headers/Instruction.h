@@ -12,7 +12,7 @@ enum ExecutionType {
 };
 
 enum AdvancePcType {
-    A_NORMAL = 4, A_LINK = 8 
+    A_PASS = 0, A_NORMAL = 4, A_LINK = 8 
 };
 
 
@@ -32,8 +32,6 @@ class Instruction
         std::vector<Register *> registers; 
         std::vector<int> integers;
 
-
-
         union {
             void (Executor::*T_3R)(Register*, Register*, Register*);
             void (Executor::*T_2R)(Register*, Register*);
@@ -50,6 +48,7 @@ class Instruction
     public:
         bool validate();
         ExecutionType getExecutionType();
+        AdvancePcType getAdvancePcType();
 
         Instruction(const std::string& repr, AdvancePcType advanceType = A_NORMAL);
         Instruction(const Instruction& other);

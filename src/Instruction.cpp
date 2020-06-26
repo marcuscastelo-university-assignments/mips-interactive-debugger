@@ -52,6 +52,10 @@ ExecutionType Instruction::getExecutionType() {
     return executionType;
 }
 
+AdvancePcType Instruction::getAdvancePcType() {
+    return advancePc;
+}
+
 Instruction::Instruction(const std::string& repr, AdvancePcType advancePc) :
 repr(repr),
 executionType(T_UNKNOWN),
@@ -64,6 +68,7 @@ overloadedRegisterCount(0),
 overloadedIntegerCount(0), 
 typeRegisterCount(0),
 typeIntegerCount(0) {}
+
 Instruction::Instruction(const Instruction& other) : 
 repr(other.repr), 
 executionType(other.executionType), 

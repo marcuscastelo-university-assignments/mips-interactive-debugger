@@ -76,7 +76,7 @@ void ConsoleDebugger::start (void) {
                 if (executeInstructionAndVerify(command) == true) {
                     program.addInstruction(command);
                 }
-            } else //TODO: msg de erro
+            } //else //TODO: msg de erro
 
         }
         

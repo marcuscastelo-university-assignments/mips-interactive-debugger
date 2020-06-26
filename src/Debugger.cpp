@@ -227,7 +227,7 @@ void Debugger::breakpoint(const vector<string>& commandParts) {
     return;
 }
 
-bool Debugger::validadePossibleLabel(const string& command) {
+bool Debugger::validatePossibleLabel(const string& command) {
     if (command.empty())
         return false;
 

@@ -18,6 +18,8 @@ Instruction *Executor::executeInstructionStr(const std::string& instructionStr) 
 
     if (interpretedInstruction->validate()) {
         interpretedInstruction->execute((Executor*)this);
+        int advanceOffset = interpretedInstruction->getAdvancePcType();
+        ((Register&)registers.PC).setValue(registers.PC.asInt() + advanceOffset);
     }
     
 
