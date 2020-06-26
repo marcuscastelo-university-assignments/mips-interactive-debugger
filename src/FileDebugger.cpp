@@ -41,7 +41,7 @@ void FileDebugger::start (void) {
         if (commandParts[0] == "quit")
             break;
         
-        else if (commandParts[0] == "info") //TODO: info registers
+        else if (commandParts[0] == "info")
             info(commandParts);
 
         else if (commandParts[0] == "help")
@@ -95,9 +95,7 @@ void FileDebugger::importCode (vector<string> commandParts) {
         return;
     }
 
-    // program = Program();
-   
-    //TODO: check deletes that were here
+    //TODO: limpar estado do programa
 
     while (!feof(file_ptr)) {
         string line = getLine(file_ptr);

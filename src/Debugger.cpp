@@ -273,7 +273,7 @@ bool Debugger::executeInstructionAndVerify(const string& command) {
     }
 
     if (executedInstruction == NULL) {
-        //deu runtime error TODO: sei la mano
+        cerr << "A runtime error has occurred" << endl;
         return false;
     }
 

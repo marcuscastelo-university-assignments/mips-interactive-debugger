@@ -5,7 +5,6 @@
 #include <iostream>
 #include <stdexcept>
 
-//TODO: implementar comportamentos esquisitos de registradores temporarios (j label, etc) (e outros obscutos)
 Executor::Executor(Program &program)
 : interpreter(new Interpreter(this)), program(program), stack(STACK_SIZE)
 {
@@ -25,7 +24,7 @@ Instruction *Executor::executeInstructionStr(const std::string& instructionStr) 
         } catch (const std::overflow_error& e) {
             throw std::overflow_error(e.what());
         } catch (const std::exception& e) {
-            fprintf(stderr, "%s\n", e.what());
+            fprintf(stderr, "Runtime exception: %s\n", e.what());
             return NULL;
         } 
 
@@ -33,7 +32,6 @@ Instruction *Executor::executeInstructionStr(const std::string& instructionStr) 
         ((Register&)registers.PC).setValue(registers.PC.asInt() + advanceOffset);
     }
     
-
     return interpretedInstruction;
 }
 
@@ -58,7 +56,6 @@ void Executor::_label(void) { }
 
 void Executor::_invalid(nullptr_t _) { }
 
-//TODO: Questão da stack
 void Executor::_lw(Register *reg1, Register *reg2, int offset)  {
     int stackAddress = reg2->asInt() + offset;
     reg1->setValue(stack.getBytes(stackAddress, 4));
@@ -68,7 +65,6 @@ void Executor::_sw(Register *reg1, Register *reg2, int offset)  {
     int stackAddress = reg2->asInt() + offset;
     reg1->asByteArray().print();
     stack.setBytes(stackAddress, reg1->asByteArray() );
-    // stack.print();
 }
 
 void Executor::_lb(Register *reg1, Register *reg2,int offset)  {
@@ -83,8 +79,6 @@ void Executor::_sb(Register *reg1, Register *reg2,int offset) {
     stack.setByteAt(stackAddress, reg1->asByteArray().getByteAt(3));
 }
 
-
-//TODO: retificar os ATs
 void Executor::bnei(Register *reg1, int immediate, int jumpAddress) {
     _ori(&registers.AT,&registers.ZERO,immediate);
     bne(reg1,&registers.AT,jumpAddress);
@@ -176,11 +170,7 @@ void Executor::_beqz(Register *reg, int jumpAddress) {
     beq(reg, (Register*)&registers.ZERO, jumpAddress);    
 }
 
-//TODO: Questão do jump e tamanho da stack
-    //TODO: PEGAR O TAMANHO DO PROGRAMA
 void Executor::_j(int jumpAddress) {
-    //TODO: tirar print
-    printf("Trying to jump to 4Foda = %d\n", jumpAddress);
     if(jumpAddress < -4 || jumpAddress > 4 * (int) program.getInstructionsVectorSize()) throw std::out_of_range("ERROR: Jump address out of range.\n");
     else registers.PC.setValue(jumpAddress - 4);
 }
@@ -374,13 +364,6 @@ void Executor::_not(Register *reg1, Register *reg2) {
     _nor(reg1, reg2, (Register*)&registers.ZERO);
 }
 
-
-//TODO: tirar foda
-//Área FODA do syscall
-//////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-
 void Executor::_syscall()  {
     int operationCode = registers.V0.asInt();
     if (operationCode == 1) {
@@ -393,7 +376,6 @@ void Executor::_syscall()  {
         std::cout << "WARNING: Syscall not implemented" << std::endl;        
     }
     else if (operationCode == 4){
-        //TODO: permitir acesso a outras regiões que não a stack
         int stringAddress = registers.A0.asInt();
         char c;
         while ((c = stack.getByteAt(stringAddress++)) != '\0') std::cout << c;
@@ -423,10 +405,9 @@ void Executor::_syscall()  {
         
     }
     else if (operationCode == 10){
-        throw std::overflow_error("syscall exit me mata pfv TODO: renomear");// TODO:       
+        throw std::overflow_error("Syscall exit exception"); 
     }
     else if (operationCode == 11){
-        //TODO: verificar qual é o low-order byte (vide https://i.imgur.com/HhQsemz.png)
         std::cout << registers.A0.asByteArray().getByteAt(3);
     }
     else if (operationCode == 12){
