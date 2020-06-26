@@ -70,18 +70,19 @@ void ConsoleDebugger::start (void) {
         }
 
         else {
-            // TODO: adicionar somente se o executor não retornar erros (instrução não existente, etc...)
-            //verifyLabel() verifies if a possible label is valid, or if it is not a possible label, returning true
-            //if it is a possible label, and is not valid, returns false
+            //verifyLabel() verifies if a possible label is valid, or if it is not a label at all, returning true
+            //if it is a in fact label, and is not valid, returns false
             //#TODO
             //Registers previousRegisters = this->executor.getRegisters();
 
             if (validatePossibleLabel(command) == true and executeInstructionAndVerify(command) == true) {
                 program.addInstruction(commandWithCommas);
-            }
+            } 
+
+
             //#TODO
             //printModifiedRegisters(previousRegisters,this->executor.getRegisters());            
-        } //else //TODO: msg de erro
+        }
 
         // }
         
@@ -93,9 +94,9 @@ void ConsoleDebugger::start (void) {
 //#TODO
 /*
 void ConsoleDebugger::printModifiedRegisters(const Registers& oldRegisters, const Registers& newRegisters){
-    std::map<string, Register*> oldRegisterPairs;// = oldRegisters.getRegisterPairs(); TODO: FAZER DEPOIS EM REGISTERS
+    std::map<std::string, Register*> oldRegisterMap = oldRegisters.getRegisterMap(); TODO: FAZER DEPOIS EM REGISTERS
     bool modified = false;
-    for(auto it = oldRegisterPairs.begin(); it != oldRegisterPairs.end(); it++){
+    for(auto it = oldRegisterMap.begin(); it != oldRegisterMap.end(); it++){
         if(it->second->asInt() != newRegisters.getRegisterByName(it->first).asInt()){
             if(!modified) { 
                 printf("Some Registers have been modified, this is expressed as: Register: OldValue -> NewValue. The modified registers are described below:\n ");

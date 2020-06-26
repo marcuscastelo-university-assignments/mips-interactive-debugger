@@ -5,7 +5,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-//TODO: operator[]
 class ByteArray
 {
     protected:

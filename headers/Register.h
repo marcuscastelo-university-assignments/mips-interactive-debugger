@@ -9,7 +9,6 @@ enum RegisterType {
     NORMAL = 0, READONLY = 1, TEMPORARY = 2
 };
 
-//TODO: implementar registradores que não podem ser alterados
 class Register
 {
     private:
