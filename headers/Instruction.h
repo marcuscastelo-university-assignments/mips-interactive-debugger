@@ -43,6 +43,7 @@ class Instruction
             void (Executor::*T_1R_1I)(Register*, int);
             void (Executor::*T_1I)(int);
             void (Executor::*T_V)(void);
+            void (Executor::*T_UNKNOWN)(nullptr_t);
         } executor_func;
 
     public:
@@ -63,6 +64,7 @@ class Instruction
         Instruction *setExecutionFunction(void (Executor::*executor_func_param)(Register*, int));
         Instruction *setExecutionFunction(void (Executor::*executor_func_param)(int));
         Instruction *setExecutionFunction(void (Executor::*executor_func_param)(void));
+        Instruction *setExecutionFunction(void(Executor::*executor_func_param)(nullptr_t));
 
         Instruction *overloadSupposedRegisterCount(int count);
         Instruction *overloadSupposedIntegerCount(int count);

@@ -5,8 +5,8 @@
 #include <iostream>
 
 //TODO: implementar comportamentos esquisitos de registradores temporarios (j label, etc) (e outros obscutos)
-Executor::Executor()
-: interpreter(new Interpreter(this)), stack(STACK_SIZE)
+Executor::Executor(Program &program)
+: interpreter(new Interpreter(this)), program(program), stack(STACK_SIZE)
 {
     registers.SP.setValue(stack.getSize());
 }
@@ -40,6 +40,10 @@ Register &Executor::getRegister(const std::string& name) const {
 bool Executor::hasRegister(const std::string& name) const {
     return registers.hasRegister(name);
 }
+
+void Executor::_label(void) { }
+
+void Executor::_invalid(nullptr_t _) { }
 
 //TODO: Questão da stack
 void Executor::_lw(Register *reg1, Register *reg2, int offset)  {

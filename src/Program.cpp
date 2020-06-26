@@ -3,9 +3,19 @@
 #include <stdexcept>
 
 Program::Program() {
-    instructions = new vector<string>();
-    labelsAddresses = new map<string, int>();
-    breakpointsAddresses = new map<int, bool>();
+    instructions = new std::vector<std::string>();
+    labelsAddresses = new std::map<std::string, int>();
+    breakpointsAddresses = new std::map<int, bool>();
+}
+
+Program::Program(const Program& program) {
+    instructions = new std::vector<std::string>();
+    labelsAddresses = new std::map<std::string, int>();
+    breakpointsAddresses = new std::map<int, bool>();
+    
+    (*instructions) = (*program.instructions);
+    (*labelsAddresses) = (*program.labelsAddresses);
+    (*breakpointsAddresses) = (*program.breakpointsAddresses);    
 }
 
 Program::~Program() {
@@ -16,7 +26,7 @@ Program::~Program() {
 
 
 /////INSTRUCTION/////
-bool Program::addInstruction(string inst) {
+bool Program::addInstruction(std::string inst) {
     if (inst.empty())
         return false;
 
@@ -27,7 +37,7 @@ bool Program::addInstruction(string inst) {
 
     //TODO: parse register name
     if (isLabel(inst)) {
-        vector<string> commandParts = split(inst);
+        std::vector<std::string> commandParts = split(inst);
         if (commandParts.size() >= 2) {
             printf("Can't have spaces in label's identifier. Ignoring this line: %s\n", inst.c_str());
             return false;
@@ -41,11 +51,11 @@ bool Program::addInstruction(string inst) {
     return true;
 }
 
-string Program::getInstruction(int pos, bool withCommas) {
+std::string Program::getInstruction(int pos, bool withCommas) {
     if (pos < 0 or pos >= (int) getInstructionsVectorSize())
         throw std::out_of_range("Position not allowed");
 
-    string inst = (*instructions)[pos];
+    std::string inst = (*instructions)[pos];
     if (!withCommas) inst = removeAllChars(inst, ',');
 
     return inst;
@@ -55,7 +65,7 @@ size_t Program::getInstructionsVectorSize(void) {
     return instructions->size();
 }   
 
-void Program::printInstructions(string label, FILE *file_ptr) {
+void Program::printInstructions(std::string label, FILE *file_ptr) {
     int size = (int) getInstructionsVectorSize();
     
     if (label.empty()) {
@@ -72,7 +82,7 @@ void Program::printInstructions(string label, FILE *file_ptr) {
 
     printSingleInstruction(getInstruction(it->second, true), file_ptr);
     for (int i = it->second+1; i < size; i++) {
-        string inst = getInstruction(i, true);
+        std::string inst = getInstruction(i, true);
         if (isLabel(inst))
             break;
         
@@ -84,7 +94,7 @@ void Program::printInstructions(string label, FILE *file_ptr) {
 
 
 /////LABEL/////
-void Program::addLabelPos(string label, int pos) {
+void Program::addLabelPos(std::string label, int pos) {
     if (label.empty())
         return;
 
@@ -101,14 +111,14 @@ void Program::addLabelPos(string label, int pos) {
     return;
 }
 
-map<string,int>::iterator Program::getLabelPos(string label) {
+std::map<std::string,int>::iterator Program::getLabelPos(std::string label) {
     if (label.empty())
         return labelsAddresses->end();
 
     return labelsAddresses->find(label);
 }
 
-bool Program::hasLabel(string label) {
+bool Program::hasLabel(std::string label) {
     if (label.empty())
         return false;
 
@@ -118,7 +128,7 @@ bool Program::hasLabel(string label) {
     return !(getLabelPos(label) == labelsAddresses->end());
 }
 
-void Program::printLabel(string label) {
+void Program::printLabel(std::string label) {
     if (label.empty() == false) {
         if (hasLabel(label)) {
             printLine(25);    
@@ -180,7 +190,7 @@ void Program::printBreakpoints(void) {
 
 //////////////////////////////////////////////
 
-bool isLabel(string str) {
+bool isLabel(std::string str) {
     if(str.empty())
         return false;
     
@@ -190,11 +200,11 @@ bool isLabel(string str) {
     return false;
 }
 
-void printSingleInstruction(string line, FILE *file_ptr) {
+void printSingleInstruction(std::string line, FILE *file_ptr) {
     fprintf(file_ptr, "%c%s\n", isLabel(line) ? '\n' : '\t', line.c_str());
 }
 
-void printSingleLabel(string label, int addr) {
+void printSingleLabel(std::string label, int addr) {
     printf("|%-15s| 0x%04x|\n", label.c_str(), addr);
 
     return;

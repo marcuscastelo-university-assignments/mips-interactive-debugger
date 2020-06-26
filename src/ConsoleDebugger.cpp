@@ -8,8 +8,6 @@
 
 #include "string_utils.h"
 
-using namespace std;
-
 ConsoleDebugger::ConsoleDebugger(void) {
 }
 
@@ -17,8 +15,8 @@ ConsoleDebugger::~ConsoleDebugger() {
 }
 
 void ConsoleDebugger::start (void) {
-    string command, commandWithCommas;
-    vector<string> commandParts;
+    std::string command, commandWithCommas;
+    std::vector<std::string> commandParts;
         
     while (true) {
         printf("(MipsDB) >>> ");
@@ -87,8 +85,8 @@ void ConsoleDebugger::start (void) {
     return;
 }
 
-void ConsoleDebugger::exportCode(vector<string> commandParts) {
-    string name = "code.asm";
+void ConsoleDebugger::exportCode(std::vector<std::string> commandParts) {
+    std::string name = "code.asm";
 
     //prevent to create files outside of the dir in which the program was executed
     if (commandParts.size() >= 2) {

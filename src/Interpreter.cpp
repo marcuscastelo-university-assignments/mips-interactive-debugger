@@ -15,11 +15,13 @@ Instruction *Interpreter::interpretInstruction(const std::string& instructionStr
     std::vector<Register*> registers;
     std::vector<int> integers;
 
+    if (isLabel(instructionStr)) return MipsInstructions::getInstructionByName("label");
+
     //TODO: no_advance
-    if (instruction_parts.size() < 1) return new Instruction("", A_PASS);
+    if (instruction_parts.size() < 1) return MipsInstructions::getInstructionByName("invalid");
 
     Instruction *instruction = MipsInstructions::getInstructionByName(instruction_parts[0]);
-    if (instruction == NULL) return new Instruction(instruction_parts[0], A_PASS);
+    if (instruction == NULL) return MipsInstructions::getInstructionByName("invalid");
 
     for (unsigned i = 1; i < instruction_parts.size(); i++) {
         if (isInteger(instruction_parts[i])) {

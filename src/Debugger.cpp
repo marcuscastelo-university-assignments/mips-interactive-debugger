@@ -5,9 +5,13 @@
 
 using namespace std;
 
-Debugger::Debugger() {}
+Debugger::Debugger()
+: executor(program)
+{}
 
-Debugger::Debugger(const Debugger& other) {}
+Debugger::Debugger(const Debugger& other) 
+: executor(((Debugger&)other).program)
+{}
 
 Debugger::~Debugger () {}
 
