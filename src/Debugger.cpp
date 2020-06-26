@@ -264,6 +264,8 @@ bool Debugger::executeInstructionAndVerify(const string& command) {
     Instruction *executedInstruction;
     try {
         executedInstruction = executor.executeInstructionStr(command);
+    } catch (const std::invalid_argument& ia) {
+        cerr << ia.what() << endl;
     } catch (std::overflow_error& e) {
         throw std::overflow_error(e.what());
     }

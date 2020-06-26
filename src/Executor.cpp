@@ -229,6 +229,7 @@ void Executor::_mul(Register *reg1,Register *reg2,Register *reg3) {
 }
 
 void Executor::div2(Register *reg1,Register *reg2) {  
+    if (reg2->asInt() == 0) throw std::invalid_argument("Trying to divide by zero");
     registers.LO.setValue(reg1->asInt() / reg2->asInt());   
     registers.HI.setValue(reg1->asInt() % reg2->asInt());
 }
