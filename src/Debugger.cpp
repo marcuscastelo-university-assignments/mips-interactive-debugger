@@ -56,7 +56,7 @@ void Debugger::next() {
     int pos = reg.asInt();
     pos = (pos/4)+1;
     string inst = program.getInstruction(pos);
-
+    printf("%s\n", inst.c_str());
     try {
         if (validatePossibleLabel(inst) == true) {
             if (executeInstructionAndVerify(inst) == false)

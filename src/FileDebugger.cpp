@@ -101,6 +101,8 @@ void FileDebugger::importCode (vector<string> commandParts) {
             continue;
         }
 
+        line = removeComments(line);
+        line = trim(line);
         program.addInstruction(line);
     }
 
