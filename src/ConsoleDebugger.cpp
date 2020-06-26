@@ -77,7 +77,6 @@ void ConsoleDebugger::start (void) {
             } 
         }
 
-        // }
         
     }
 
