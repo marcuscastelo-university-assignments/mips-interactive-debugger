@@ -69,7 +69,7 @@ std::string Program::getInstruction(int pos, bool withCommas) const {
         throw std::out_of_range("Position not allowed");
 
     std::string inst = (*instructions)[pos];
-    if (!withCommas) inst = removeAllChars(inst, ',');
+    if (!withCommas) inst = replaceAllChars(inst, ',', ' ');
 
     return inst;
 }

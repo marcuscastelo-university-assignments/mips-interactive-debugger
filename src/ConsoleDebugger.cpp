@@ -28,7 +28,7 @@ void ConsoleDebugger::start (void) {
             continue;
 
         /*STRING PARSING*/        
-        command = removeAllChars(command, ',');
+        command = replaceAllChars(command, ',', ' ');
         commandParts = split(command);
         commandParts = trimVec(commandParts);
 
