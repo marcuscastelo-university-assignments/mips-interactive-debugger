@@ -308,6 +308,7 @@ void Instruction::execute(Executor *executor) {
     else if (executionType == T_2R) (executor->*executor_func.T_2R)(registers[0], registers[1]);
     else if (executionType == T_1R) (executor->*executor_func.T_1R)(registers[0]);
     else if (executionType == T_2R_1I) (executor->*executor_func.T_2R_1I)(registers[0], registers[1], integers[0]);
+    else if (executionType == T_3R_1I) (executor->*executor_func.T_3R_1I)(registers[0], registers[1], registers[2], integers[0]);
     else if (executionType == T_2R_1U) (executor->*executor_func.T_2R_1U)(registers[0], registers[1], (unsigned) integers[0]);
     else if (executionType == T_2R_2I) (executor->*executor_func.T_2R_2I)(registers[0], registers[1], integers[0], integers[1]);
     else if (executionType == T_1R_2I) (executor->*executor_func.T_1R_2I)(registers[0], integers[0], integers[1]);
