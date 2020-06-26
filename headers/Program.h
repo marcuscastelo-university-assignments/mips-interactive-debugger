@@ -17,7 +17,7 @@ class Program {
         ~Program();
         
         bool addInstruction(string inst);
-        string getInstruction(int pos);
+        string getInstruction(int pos, bool withCommas=false);
         size_t getInstructionsVectorSize(void);
         
         void addLabelPos(string label, int pos);

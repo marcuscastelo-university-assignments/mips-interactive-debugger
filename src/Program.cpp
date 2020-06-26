@@ -41,13 +41,14 @@ bool Program::addInstruction(string inst) {
     return true;
 }
 
-string Program::getInstruction(int pos) {
+string Program::getInstruction(int pos, bool withCommas) {
     if (pos < 0 or pos >= (int) getInstructionsVectorSize())
         throw std::out_of_range("Position not allowed");
 
-    // string inst = (*instructions)[pos];
-    // return replaceAllChars(inst, ',', ' ');
-    return (*instructions)[pos];
+    string inst = (*instructions)[pos];
+    if (!withCommas) inst = removeAllChars(inst, ',');
+
+    return inst;
 }
 
 size_t Program::getInstructionsVectorSize(void) {
@@ -59,7 +60,7 @@ void Program::printInstructions(string label, FILE *file_ptr) {
     
     if (label.empty()) {
         for (int i = 0; i < size; i++)
-            printSingleInstruction(getInstruction(i), file_ptr);
+            printSingleInstruction(getInstruction(i, true), file_ptr);
         return;
     }
 
@@ -69,9 +70,9 @@ void Program::printInstructions(string label, FILE *file_ptr) {
         return;
     }
 
-    printSingleInstruction(getInstruction(it->second), file_ptr);
+    printSingleInstruction(getInstruction(it->second, true), file_ptr);
     for (int i = it->second+1; i < size; i++) {
-        string inst = getInstruction(i);
+        string inst = getInstruction(i, true);
         if (isLabel(inst))
             break;
         

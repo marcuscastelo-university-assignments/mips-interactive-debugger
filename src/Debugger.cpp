@@ -30,6 +30,8 @@ void Debugger::exec(int pos) {
             break;
         } catch (std::invalid_argument &e) {
             printf("%s\n", e.what());
+            printf("Aborting execution\n");
+            break;
         }
 
         pos = reg.asInt();
@@ -44,7 +46,9 @@ void Debugger::exec(int pos) {
 
 void Debugger::next() {
     Register &reg = executor.getRegister("$pc");
-    int pos = reg.asInt();
+    int pos1 = reg.asInt();
+    int pos = (pos1/4)+1;
+    printf("%d\n", pos);
     string inst = program.getInstruction(pos);
 
     try {
@@ -52,10 +56,11 @@ void Debugger::next() {
             if (executeInstructionAndVerify(inst) == false)
                 throw std::invalid_argument("Invalid instruction or syntax");
         }
+        printSingleInstruction(inst);
     } catch (std::out_of_range& e) {
         throw std::out_of_range(e.what());
-    }   
-    
+    }
+
     return;
 }
 
@@ -233,6 +238,9 @@ bool Debugger::validatePossibleLabel(const string& command) {
 
     if (isLabel(command)) {
         string str = command;
+        if (str.find(' ') != string::npos)
+            return false;
+            
         str.pop_back();
         if (hasRegister(command) or program.hasLabel(command))
             return false;

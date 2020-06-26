@@ -50,6 +50,16 @@ string trim (const string& str) {
     return ltrim(rtrim(str));       
 }
 
+vector<string> trimVec(vector<string> str_vec) {
+    int size = str_vec.size();
+
+    for (int i = 0; i < size; i++) {
+        str_vec[i] = trim(str_vec[i]);
+    }
+
+    return str_vec;
+}
+
 
 string replaceAllChars (const string& str_orig, char toReplace, char substitute) {
     string str = str_orig;
@@ -100,6 +110,26 @@ string preventAbsolutePath(const string& str_orig) {
 
     return str;
 }
+
 bool isInteger(const std::string& s){
     return std::regex_match(s, std::regex("[(-|+)|]?[0-9]+"));
+}
+
+string removeComments(string str) {
+    int pos = str.find('#');
+
+    if ((unsigned long) pos != string::npos) {
+        str.erase(str.begin()+pos, str.end());
+    }
+
+    return str;
+}
+
+string removeAllChars (string str, char c) {
+    for (auto it = str.begin(); it != str.end(); it++) {
+        if (*it == c)
+            str.erase(it);
+    }
+
+    return str;
 }

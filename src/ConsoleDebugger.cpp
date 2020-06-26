@@ -17,19 +17,22 @@ ConsoleDebugger::~ConsoleDebugger() {
 }
 
 void ConsoleDebugger::start (void) {
-    string command;
+    string command, commandWithCommas;
     vector<string> commandParts;
         
     while (true) {
         printf("(MipsDB) >>> ");
-        command = getLine();
+        commandWithCommas = getLine();
+        commandWithCommas = removeComments(commandWithCommas);
+        command = commandWithCommas;
         
         if (command.empty())
             continue;
 
         /*STRING PARSING*/        
-        command = replaceAllChars(command, ',', ' ');
+        command = removeAllChars(command, ',');
         commandParts = split(command);
+        commandParts = trimVec(commandParts);
 
         int size = commandParts.size();
 
@@ -55,7 +58,7 @@ void ConsoleDebugger::start (void) {
             breakpoint(commandParts);
 
         else if (commandParts[0] == "r" or commandParts[0] == "run")
-            exec(0);
+            exec(-4);
 
         else if (commandParts[0] == "c" or commandParts[0] == "continue")
             exec();
@@ -72,13 +75,12 @@ void ConsoleDebugger::start (void) {
             // TODO: adicionar somente se o executor não retornar erros (instrução não existente, etc...)
             //verifyLabel() verifies if a possible label is valid, or if it is not a possible label, returning true
             //if it is a possible label, and is not valid, returns false
-            if (validatePossibleLabel(command) == true) {
-                if (executeInstructionAndVerify(command) == true) {
-                    program.addInstruction(command);
-                }
-            } //else //TODO: msg de erro
+            if (validatePossibleLabel(command) == true and executeInstructionAndVerify(command) == true) {
+                program.addInstruction(commandWithCommas);
+            }
+        } //else //TODO: msg de erro
 
-        }
+        // }
         
     }
 
