@@ -1,7 +1,10 @@
 #include "Debugger.h"
 #include "FileDebugger.h"
 #include "string_utils.h"
+#include <utility>
 #include <iostream>
+
+using namespace std;
 
 
 FileDebugger::FileDebugger (void) {}
@@ -82,8 +85,6 @@ void FileDebugger::importCode (vector<string> commandParts) {
         return;
     }
 
-    printf("abc");
-
     string name = preventAbsolutePath(commandParts[1]);
 
     FILE *file_ptr = fopen(name.c_str(), "r");
@@ -103,11 +104,8 @@ void FileDebugger::importCode (vector<string> commandParts) {
             continue;
         }
 
-        line = replaceAllChars(line, ',', ' ');
         program.addInstruction(line);
     }
 
     fclose(file_ptr);
-
-    printf("def\n");
 }

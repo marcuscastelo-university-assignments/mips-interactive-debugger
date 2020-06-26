@@ -23,17 +23,21 @@ Instruction *Executor::executeInstructionStr(const std::string& instructionStr) 
     if (interpretedInstruction->validate()) {
         try {
             interpretedInstruction->execute((Executor*)this);
+        } catch (const std::overflow_error& e) {
+            throw std::overflow_error(e.what());
         } catch (const std::exception& e) {
             fprintf(stderr, "%s\n", e.what());
             return NULL;
-        }
-        #include <iostream>
-        using namespace std;
-        ByteArray b = stack.getBytes();
-        for (int i = b.getSize()-40; i < b.getSize(); i+=4) {
-            Word wuw(stack.getBytes(i, 4));
-            cout << wuw.asInt() << endl;
-        }
+        } 
+
+
+        // #include <iostream>
+        // using namespace std;
+        // ByteArray b = stack.getBytes();
+        // for (int i = b.getSize()-40; i < b.getSize(); i+=4) {
+        //     Word wuw(stack.getBytes(i, 4));
+        //     // cout << wuw.asInt() << endl;
+        // }
 
         int advanceOffset = interpretedInstruction->getAdvancePcType();
         ((Register&)registers.PC).setValue(registers.PC.asInt() + advanceOffset);
@@ -74,7 +78,7 @@ void Executor::_sw(Register *reg1, Register *reg2, int offset)  {
     int stackAddress = reg2->asInt() + offset;
     reg1->asByteArray().print();
     stack.setBytes(stackAddress, reg1->asByteArray() );
-    stack.print();
+    // stack.print();
 }
 
 void Executor::_lb(Register *reg1, Register *reg2,int offset)  {

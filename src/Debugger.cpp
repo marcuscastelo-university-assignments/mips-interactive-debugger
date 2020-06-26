@@ -36,6 +36,8 @@ void Debugger::exec(int pos) {
             printf("%s\n", e.what());
             printf("Aborting execution\n");
             break;
+        } catch (std::domain_error &e) {
+            break;
         }
 
         pos = reg.asInt();
@@ -66,6 +68,8 @@ void Debugger::next() {
         // printSingleInstruction(inst);
     } catch (std::out_of_range& e) {
         throw std::out_of_range(e.what());
+    } catch (std::overflow_error& e) {
+        throw std::domain_error(e.what());
     }
 
     return;
@@ -257,7 +261,12 @@ bool Debugger::validatePossibleLabel(const string& command) {
 }
 
 bool Debugger::executeInstructionAndVerify(const string& command) {
-    Instruction *executedInstruction = executor.executeInstructionStr(command);
+    Instruction *executedInstruction;
+    try {
+        executedInstruction = executor.executeInstructionStr(command);
+    } catch (std::overflow_error& e) {
+        throw std::overflow_error(e.what());
+    }
 
     if (executedInstruction == NULL) {
         //deu runtime error TODO: sei la mano

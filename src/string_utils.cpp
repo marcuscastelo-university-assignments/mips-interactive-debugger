@@ -133,3 +133,19 @@ string removeAllChars (string str, char c) {
 
     return str;
 }
+
+pair<string, string> parseRegisterOffset(string& str) {
+    int pos = str.find('(');
+    str.erase(str.end()-1);
+    int size = str.size();
+
+    string offset;
+    if (pos == 0)
+        offset = string("0");
+    else
+        offset = str.substr(0, pos);
+
+    string reg = str.substr(pos+1, size-pos);
+
+    return make_pair(reg, offset);
+} 

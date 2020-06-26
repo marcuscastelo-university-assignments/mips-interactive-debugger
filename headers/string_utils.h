@@ -3,6 +3,9 @@
 
 #include <vector>
 #include <string>
+#include <utility>
+
+using namespace std;
 
 std::vector<std::string> split(const std::string& str, const std::string& delimiter=" ");
 std::string trim(const std::string& str);
@@ -13,7 +16,7 @@ void printLine(int size);
 std::string getLine(FILE *file_ptr=stdin);
 std::string preventAbsolutePath(const std::string& str);
 std::string removeComments(std::string str_vec);
-
+std::pair<std::string, std::string> parseRegisterOffset(std::string& str);
 bool isInteger(const std::string & s);
 
 #endif
