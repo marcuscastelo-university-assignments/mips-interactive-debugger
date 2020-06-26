@@ -28,7 +28,6 @@ static const std::map<std::string,Instruction*> instructionByName = {
             { std::string("ble"), (new Instruction("ble"))->setExecutionFunction(&Executor::_ble) },
             { std::string("bgtu"), (new Instruction("bgtu"))->setExecutionFunction(&Executor::_bgtu) },
             { std::string("beqz"), (new Instruction("beqz"))->setExecutionFunction(&Executor::_beqz) },
-            { std::string("beqi"), (new Instruction("beqi"))->setExecutionFunction(&Executor::_beqi) },
             { std::string("j"), (new Instruction("j"))->setExecutionFunction(&Executor::_j) },
             { std::string("add"), (new Instruction("add"))->setExecutionFunction(&Executor::_add) },
             { std::string("addi"), (new Instruction("addi"))->setExecutionFunction(&Executor::_addi) },

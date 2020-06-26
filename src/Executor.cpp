@@ -93,7 +93,7 @@ void Executor::_bne(Register *reg1, Register *reg2, int immediate, int jumpAddre
     else bne(reg1,reg2,immediate); //See beq for misplacemente dad
 }
 
-void Executor::_beqi(Register *reg1, int immediate, int jumpAddress) {
+void Executor::beqi(Register *reg1, int immediate, int jumpAddress) {
     _ori(&registers.AT,&registers.ZERO,immediate);
     beq(reg1,&registers.AT,jumpAddress);
 }
@@ -103,7 +103,7 @@ void Executor::beq(Register *reg1, Register *reg2, int jumpAddress) {
 }
 
 void Executor::_beq(Register *reg1, Register *reg2, int immediate, int jumpAddress) {
-    if(reg2 == NULL) _beqi(reg1, immediate, jumpAddress);
+    if(reg2 == NULL) beqi(reg1, immediate, jumpAddress);
     else beq(reg1,reg2,immediate); //immediate is actually jumpAddress when reg2 is not NULL 
 }
 
@@ -193,6 +193,10 @@ void Executor::_subi(Register *reg1, Register *reg2, int immediate) {
 
 void Executor::_mult(Register *reg1,Register *reg2) {
     registers.LO.setValue(reg1->asInt() * reg2->asInt());   
+}
+
+void Executor::_multu(Register *reg1,Register *reg2) {
+    registers.LO.setValue((int) ((unsigned)reg1->asInt() * (unsigned)reg2->asInt()));   
 }
 
 void Executor::_mflo(Register *reg) {
@@ -291,7 +295,7 @@ void Executor::_subu(Register *reg1,Register *reg2,Register *reg3) {
     _sub(reg1, reg2, reg3);
 }
 
-void Executor::_divu(Register *reg1,Register *reg2) {  
+void Executor::_divu(Register *reg1,Register *reg2) { 
     registers.LO.setValue((int)((unsigned)reg1->asInt() / (unsigned)reg2->asInt()));   
     registers.HI.setValue((int)((unsigned)reg1->asInt() % (unsigned)reg2->asInt()));
 }

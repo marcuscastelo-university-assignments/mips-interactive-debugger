@@ -69,16 +69,12 @@ void ConsoleDebugger::start (void) {
         else {
             //verifyLabel() verifies if a possible label is valid, or if it is not a label at all, returning true
             //if it is a in fact label, and is not valid, returns false
-            //#TODO
             Registers previousRegisters = this->executor.getRegisters();
 
             if (validatePossibleLabel(command) == true and executeInstructionAndVerify(command) == true) {
                 program.addInstruction(commandWithCommas);
+                printModifiedRegisters(previousRegisters,this->executor.getRegisters());            
             } 
-
-
-            //#TODO
-            printModifiedRegisters(previousRegisters,this->executor.getRegisters());            
         }
 
         // }
