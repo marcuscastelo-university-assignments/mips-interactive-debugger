@@ -34,6 +34,7 @@ static const std::map<std::string,Instruction*> instructionByName = {
             { std::string("add"), (new Instruction("add"))->setExecutionFunction(&Executor::_add) },
             { std::string("addi"), (new Instruction("addi"))->setExecutionFunction(&Executor::_addi) },
             { std::string("sub"), (new Instruction("sub"))->setExecutionFunction(&Executor::_sub) },
+            { std::string("subi"), (new Instruction("subi"))->setExecutionFunction(&Executor::_subi) },
             { std::string("mult"), (new Instruction("mult"))->setExecutionFunction(&Executor::_mult) },
             { std::string("mflo"), (new Instruction("mflo"))->setExecutionFunction(&Executor::_mflo) },
             { std::string("mfhi"), (new Instruction("mfhi"))->setExecutionFunction(&Executor::_mfhi) },

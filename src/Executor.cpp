@@ -206,6 +206,10 @@ void Executor::_sub(Register *reg1,Register *reg2,Register *reg3) {
     reg1->setValue(reg2->asInt() - reg3->asInt());   
 }
 
+void Executor::_subi(Register *reg1, Register *reg2, int immediate) {
+    reg1->setValue(reg2->asInt() - immediate);   
+}
+
 void Executor::_mult(Register *reg1,Register *reg2) {
     registers.LO.setValue(reg1->asInt() * reg2->asInt());   
 }

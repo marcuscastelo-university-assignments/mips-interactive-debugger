@@ -67,6 +67,7 @@ class Executor{
         void _add(Register *reg1,Register *reg2,Register *reg3);
         void _addi(Register *reg1, Register *reg2, int immediate);
         void _sub(Register *reg1,Register *reg2,Register *reg3);
+        void _subi(Register *reg1, Register *reg2, int immediate);
         void _mult(Register *reg1,Register *reg2);
         void _mflo(Register *reg);
         void _mfhi(Register *reg);
