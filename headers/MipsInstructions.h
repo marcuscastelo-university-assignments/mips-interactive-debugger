@@ -7,7 +7,6 @@
 
 class Instruction;
 
-//TODO: create .cpp
 static const std::map<std::string,Instruction*> instructionByName = {
             { std::string("lw"), (new Instruction("lw"))->setExecutionFunction(&Executor::_lw) },
             { std::string("sw"), (new Instruction("sw"))->setExecutionFunction(&Executor::_sw) },
@@ -39,7 +38,7 @@ static const std::map<std::string,Instruction*> instructionByName = {
             { std::string("mflo"), (new Instruction("mflo"))->setExecutionFunction(&Executor::_mflo) },
             { std::string("mfhi"), (new Instruction("mfhi"))->setExecutionFunction(&Executor::_mfhi) },
             { std::string("mul"), (new Instruction("mul"))->setExecutionFunction(&Executor::_mul) },
-            { std::string("div"), (new Instruction("div"))->setExecutionFunction(&Executor::_div)->setOverloadedIntegerCount(2) },
+            { std::string("div"), (new Instruction("div"))->setExecutionFunction(&Executor::_div)->setOverloadedRegisterCount(2) },
             { std::string("rem"), (new Instruction("rem"))->setExecutionFunction(&Executor::_rem) },
             { std::string("and"), (new Instruction("and"))->setExecutionFunction(&Executor::_and) },
             { std::string("or"), (new Instruction("or"))->setExecutionFunction(&Executor::_or) },
