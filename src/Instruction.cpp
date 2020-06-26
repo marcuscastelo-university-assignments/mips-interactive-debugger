@@ -14,7 +14,7 @@ bool Instruction::validate() {
     if(!areParametersCountOK()){
         errorMessage += "Wrong number of Register(s) and/or Integer(s).";
         std::stringstream correctSupossedNumbers;
-        correctSupossedNumbers << supposedRegisterCount << " Register(s) and " << supposedIntegerCount << " Integer(s) have been passed, but:\n\t" << supposedRegisterCount << " Register(s) and " << supposedIntegerCount << " Integers";
+        correctSupossedNumbers << getRegistersCount() << " Register(s) and " << getIntegersCount() << " Integer(s) have been passed, but:\n\t" << supposedRegisterCount << " Register(s) and " << supposedIntegerCount << " Integers";
         if(hasOverload()) correctSupossedNumbers <<", or\n\t" << overloadedRegisterCount << " Register(s) and " << overloadedIntegerCount << " Integers.";
         else correctSupossedNumbers << ".";
         errorMessage += correctSupossedNumbers.str() + "\nShould have been passed.";
