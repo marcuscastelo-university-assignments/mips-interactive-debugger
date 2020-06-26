@@ -356,7 +356,7 @@ void Executor::_not(Register *reg1, Register *reg2) {
 void Executor::_syscall()  {
     int operationCode = registers.V0.asInt();
     if (operationCode == 1) {
-        std::cout << registers.A0.asInt();
+        std::cout << registers.A0.asInt() << std::endl;
     }
     else if (operationCode == 2){
         std::cout << "WARNING: Syscall not implemented" << std::endl;
