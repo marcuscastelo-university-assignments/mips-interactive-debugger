@@ -36,6 +36,8 @@ void Debugger::exec(int pos) {
             printf("%s\n", e.what());
             printf("Aborting execution\n");
             break;
+        } catch (std::domain_error &e) {
+            break;
         }
 
         pos = reg.asInt();
@@ -66,6 +68,8 @@ void Debugger::next() {
         // printSingleInstruction(inst);
     } catch (std::out_of_range& e) {
         throw std::out_of_range(e.what());
+    } catch (std::overflow_error& e) {
+        throw std::domain_error(e.what());
     }
 
     return;

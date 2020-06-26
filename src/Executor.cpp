@@ -32,7 +32,7 @@ Instruction *Executor::executeInstructionStr(const std::string& instructionStr) 
         ByteArray b = stack.getBytes();
         for (int i = b.getSize()-40; i < b.getSize(); i+=4) {
             Word wuw(stack.getBytes(i, 4));
-            cout << wuw.asInt() << endl;
+            // cout << wuw.asInt() << endl;
         }
 
         int advanceOffset = interpretedInstruction->getAdvancePcType();
@@ -282,7 +282,7 @@ void Executor::_sltiu(Register *reg1, Register *reg2, unsigned immediate) {
 }
 
 void Executor::_jal(int jumpAddress) {
-    registers.RA.setValue(registers.PC.asInt() + 8);
+    registers.RA.setValue(registers.PC.asInt() + 4);
     _j(jumpAddress);
 }
 

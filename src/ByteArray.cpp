@@ -23,7 +23,7 @@ ByteArray::ByteArray(unsigned char *charArr, int size)
 
 void ByteArray::setBytes(int fromPos, const ByteArray& subByteArray) {
     if (fromPos + subByteArray.getSize() > getSize()) throw("invalid subByteArray size");
-    for (int i = fromPos, j = 0; i < subByteArray.getSize(); i++, j++)
+    for (int i = fromPos, j = 0; j < subByteArray.getSize(); i++, j++)
         bytes[i] = subByteArray.getByteAt(j);
 }
 
