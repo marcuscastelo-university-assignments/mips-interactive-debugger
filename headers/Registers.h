@@ -22,7 +22,7 @@ class Registers
         void printRegisters(FILE *file_stream = stdout) const;
         void printRegister(const std::string& name, FILE *file_stream = stdout) const;
         void printRegister(const Register &reg, FILE *file_stream = stdout) const;
-
+        std::map<std::string, Register*> getRegisterMap();
         int getValue(const std::string& name) const;
         void setValue(const std::string& name, int value) const;
 
