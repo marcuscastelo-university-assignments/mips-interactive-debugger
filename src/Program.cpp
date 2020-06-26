@@ -45,6 +45,8 @@ string Program::getInstruction(int pos) {
     if (pos < 0 or pos >= (int) getInstructionsVectorSize())
         throw std::out_of_range("Position not allowed");
 
+    // string inst = (*instructions)[pos];
+    // return replaceAllChars(inst, ',', ' ');
     return (*instructions)[pos];
 }
 
@@ -180,10 +182,7 @@ void Program::printBreakpoints(void) {
 bool isLabel(string str) {
     if(str.empty())
         return false;
-
-    if (str.find(' ') != string::npos)
-        return true;
-
+    
     if (*(str.rbegin()) == ':')
         return true;
     
