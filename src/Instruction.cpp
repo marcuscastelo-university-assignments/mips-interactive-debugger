@@ -284,8 +284,8 @@ Instruction *Instruction::setSupposedIntegerCount(int count) {
 
 void Instruction::execute(Executor *executor) {
     if (!validate()) {
-        printf("validate errado\n");
-        fflush(stdout);
+        // printf("validate errado\n");
+        // fflush(stdout);
         throw std::domain_error("Invalid Instruction:" + errorMessage);
     }
     else if (executionType == T_3R) (executor->*executor_func.T_3R)(registers[0], registers[1], registers[2]);

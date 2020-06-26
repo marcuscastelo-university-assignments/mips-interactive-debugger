@@ -52,9 +52,6 @@ void ConsoleDebugger::start (void) {
         else if (commandParts[0] == "disassemble")
             disassemble(commandParts);
 
-        else if (commandParts[0] == "b" or commandParts[0] == "break" or commandParts[0] == "break-remove")
-            breakpoint(commandParts);
-
         else if (commandParts[0] == "r" or commandParts[0] == "run")
             exec(-4);
 

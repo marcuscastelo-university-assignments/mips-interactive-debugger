@@ -19,10 +19,10 @@ void Debugger::start (void) {}
 
 void Debugger::exec(int pos) {
     Register &reg = executor.getRegister("$pc");
-    if (pos <= -1)
-        pos = 0;
+    if (pos >= -4) {
+        reg.setValue(pos);
+    }
 
-    //reg.setWord(pos);
 
     while (true) {
         string inst;
@@ -53,19 +53,17 @@ void Debugger::exec(int pos) {
 
 void Debugger::next() {
     Register &reg = executor.getRegister("$pc");
-    int pos1 = reg.asInt();
-    int pos = (pos1/4)+1;
-    printf("%d\n", pos);
+    int pos = reg.asInt();
+    pos = (pos/4)+1;
     string inst = program.getInstruction(pos);
+    printf("pos: %d\n", pos);
 
     try {
         if (validatePossibleLabel(inst) == true) {
-            // printSingleInstruction(inst);
             if (executeInstructionAndVerify(inst) == false)
                 throw std::invalid_argument("Invalid instruction or syntax");
         }
         
-        // printSingleInstruction(inst);
     } catch (std::out_of_range& e) {
         throw std::out_of_range(e.what());
     } catch (std::overflow_error& e) {
@@ -79,6 +77,7 @@ void Debugger::help(const vector<string>& commandParts) {
     if (commandParts.size() <= 1) {
         printf("Help options:\n");
         printf("- console\n");
+        printf("- next");
         printf("- run\n");
         printf("- disassemble\n");
         printf("- breakpoint\n");
@@ -99,7 +98,6 @@ void Debugger::help(const vector<string>& commandParts) {
 
         else {
             if (commandParts[2] == "text") {
-                printf("entrou2\n");
                 vector<string> instructions_accepted{"add", "addi", "j", "sub", "mul", "mult", "div", "rem", "bgez", "bgtz", "blez", "bltz", "beqz", "beq", "bne", "blt", "ble", "bgt", "bge", "bgezal", "bltzal", "mflo", "mfhi", "jal", "jalr", "jr", "and", "andi", "or", "ori", "xor", "xori", "li"};
                 printf("Enter instructions to be executed\n");
                 printf("List of instructions supported by the program:\n");
@@ -109,6 +107,11 @@ void Debugger::help(const vector<string>& commandParts) {
             }
         }
 
+        return;
+    }
+
+    if (commandParts[1] == "next") {
+        printf("Execute the next instruction in the flow of the program\n");
         return;
     }
 
@@ -124,14 +127,13 @@ void Debugger::help(const vector<string>& commandParts) {
     }
 
     if (commandParts[1] == "breakpoint") {
-        printf("'b' - Insert breakpoint in given line\n"); 
         printf("'break' - Insert breakpoint in given line\n");
         printf("'break-remove' - Delete breakpoint in given line\n"); 
         return;
     }
 
     if (commandParts[1] == "info") {
-        printf("PS: This command can also be used while in console mode\n");
+        printf("This command can also be used while in console mode\n");
         if (commandParts.size() == 2) {
             printf("Info help options:\n");
             printf("- registers\n");    

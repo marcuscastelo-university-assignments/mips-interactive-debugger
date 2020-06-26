@@ -34,7 +34,7 @@ class Program {
 };
 
 bool isLabel(std::string str);
-void printSingleInstruction(std::string line, FILE *file_ptr=stdout);
+void printSingleInstruction(std::string line, int pos, FILE *file_ptr=stdout);
 void printSingleLabel(std::string label, int addr);
 void printSingleBreakpoint(int addr);
 
