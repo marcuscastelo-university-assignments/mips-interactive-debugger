@@ -72,7 +72,9 @@ void Executor::_lw(Register *reg1, Register *reg2, int offset)  {
 
 void Executor::_sw(Register *reg1, Register *reg2, int offset)  {
     int stackAddress = reg2->asInt() + offset;
+    reg1->asByteArray().print();
     stack.setBytes(stackAddress, reg1->asByteArray() );
+    stack.print();
 }
 
 void Executor::_lb(Register *reg1, Register *reg2,int offset)  {
@@ -420,7 +422,7 @@ void Executor::_syscall()  {
         
     }
     else if (operationCode == 10){
-        std::cout << "WARNING: Syscall not implemented" << std::endl;                
+        throw std::overflow_error("syscall exit me mata pfv TODO: renomear");// TODO:       
     }
     else if (operationCode == 11){
         //TODO: verificar qual é o low-order byte (vide https://i.imgur.com/HhQsemz.png)

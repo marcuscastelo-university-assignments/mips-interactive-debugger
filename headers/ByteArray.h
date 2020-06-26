@@ -19,11 +19,11 @@ class ByteArray
         void setBytes(const ByteArray& byteArray);
         void setByteAt(int pos, unsigned char byte);
 
-        const ByteArray getBytes(int from, int to) const;
+        const ByteArray getBytes(int from, int size) const;
         const ByteArray getBytes() const;
         unsigned char getByteAt(int pos) const;  
 
-        void print(FILE *file_stream = stdout);
+        void print(FILE *file_stream = stdout) const;
 
         int getSize() const;
 };

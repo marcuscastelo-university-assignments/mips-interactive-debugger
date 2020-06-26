@@ -60,7 +60,7 @@ unsigned char ByteArray::getByteAt(int pos) const {
 }
 
 
-void ByteArray::print(FILE *file_stream) {
+void ByteArray::print(FILE *file_stream) const {
     for (int i = 0; i < getSize(); i++)
         fprintf(file_stream, "%02X ", bytes[i]);
     fprintf(file_stream, "\n");   
