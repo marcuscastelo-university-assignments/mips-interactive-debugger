@@ -23,7 +23,7 @@ ByteArray::ByteArray(unsigned char *charArr, int size)
 
 void ByteArray::setBytes(int fromPos, const ByteArray& subByteArray) {
     if (fromPos + subByteArray.getSize() > getSize()) throw("invalid subByteArray size");
-    for (int i = fromPos, j = 0; i < subByteArray.getSize(); i++, j++)
+    for (int i = fromPos, j = 0; j < subByteArray.getSize(); i++, j++)
         bytes[i] = subByteArray.getByteAt(j);
 }
 
@@ -47,8 +47,6 @@ const ByteArray ByteArray::getBytes(int from, int size) const {
     for(int i = from, j = 0; j < size; i++, j++)       
         toReturn.setByteAt(j, getByteAt(i));  
 
-    printf("%d != %d\n", bytes[3], getByteAt(3));
-    printf("%d != %d\n", bytes[3], toReturn.getByteAt(3));
     return toReturn;
 }
 
@@ -62,7 +60,7 @@ unsigned char ByteArray::getByteAt(int pos) const {
 }
 
 
-void ByteArray::print(FILE *file_stream) {
+void ByteArray::print(FILE *file_stream) const {
     for (int i = 0; i < getSize(); i++)
         fprintf(file_stream, "%02X ", bytes[i]);
     fprintf(file_stream, "\n");   
