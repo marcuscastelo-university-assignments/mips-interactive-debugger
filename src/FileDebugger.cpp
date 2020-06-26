@@ -57,7 +57,23 @@ void FileDebugger::start (void) {
         }
 
         else if (commandParts[0] == "r" or commandParts[0] == "run") {
+            exec(0);
+        }
+
+        else if (commandParts[0] == "c" or commandParts[0] == "continue") {
             exec();
+        }
+
+        else if (commandParts[0] == "next") {
+            try {
+                next();
+            } catch (std::out_of_range &e) {
+                printf("There is no next instruction to be executed\n");
+            }
+        }
+
+        else {
+            printf("Command '%s' undefined\n", commandParts[0].c_str());
         }
     }
 }

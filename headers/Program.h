@@ -1,5 +1,5 @@
-#ifndef PROGRAM_H
-#define PROGRAM_H
+#ifndef __PROGRAM__H__
+#define __PROGRAM__H__
 
 #include <vector>
 #include <map>
@@ -28,6 +28,7 @@ class Program {
         void addBreakpoint(int pos);
         void removeBreakpoint(int pos);
         bool isBreakpoint(int pos);
+        void printBreakpoints();
 
         void printInstructions(string label="", FILE *file_ptr=stdout);
 
@@ -35,6 +36,7 @@ class Program {
 
 bool isLabel(string str);
 void printSingleInstruction(string line, FILE *file_ptr=stdout);
-void printSingleLabel(string label, int pos);
+void printSingleLabel(string label, int addr);
+void printSingleBreakpoint(int addr);
 
 #endif

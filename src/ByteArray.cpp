@@ -5,7 +5,7 @@
 ByteArray::ByteArray(int size)
 : bytes(size, 0x00)
 {
-    printf("Bytearray(size)!!!\n");
+
 }
 
 ByteArray::ByteArray(const ByteArray &byteArray)

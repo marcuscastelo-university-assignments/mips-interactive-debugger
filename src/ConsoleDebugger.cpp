@@ -51,18 +51,27 @@ void ConsoleDebugger::start (void) {
         else if (commandParts[0] == "disassemble")
             disassemble(commandParts);
 
-        else if (commandParts[0] == "b" or commandParts[0] == "break" or commandParts[0] == "break-remove"){
+        else if (commandParts[0] == "b" or commandParts[0] == "break" or commandParts[0] == "break-remove")
             breakpoint(commandParts);
-        }
 
-        else if (commandParts[0] == "r" or commandParts[0] == "run") {
+        else if (commandParts[0] == "r" or commandParts[0] == "run")
+            exec(0);
+
+        else if (commandParts[0] == "c" or commandParts[0] == "continue")
             exec();
+
+        else if (commandParts[0] == "next") {
+            try {
+                next();
+            } catch (std::out_of_range &e) {
+                printf("There is no next instruction to be executed\n");
+            }
         }
 
         else {
-            if (isLabel(command)) {
-                // TODO: adicionar label no registro de labels blabla
-                return;
+            // TODO: adicionar somente se o executor não retornar erros (instrução não existente, etc...)
+            if (verifyLabel(command) == true and executeInstructionAndVerify(command) == true) {
+                program.addInstruction(command);
             }
 
             Instruction *instruction = executor.executeInstructionStr(command);
