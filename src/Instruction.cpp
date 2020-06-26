@@ -41,13 +41,11 @@ void Instruction::adjustParameters(){
 }
 
 void Instruction::feed(const std::vector<Register*>& newRegisters, const std::vector<int>& newIntegers) {
+    errorMessage = "";
     registers.clear();
     integers.clear();
     registers.insert(registers.end(), newRegisters.begin(), newRegisters.end());
     integers.insert(integers.end(), newIntegers.begin(), newIntegers.end());
-
-
-
 }
 
 ExecutionType Instruction::getExecutionType() {
