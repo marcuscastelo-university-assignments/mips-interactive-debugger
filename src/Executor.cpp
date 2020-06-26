@@ -1,5 +1,7 @@
 #include "Executor.h"
 #include "Instruction.h"
+
+#include "string_utils.h"
 #include <iostream>
 
 //TODO: implementar comportamentos esquisitos de registradores temporarios (j label, etc) (e outros obscutos)
@@ -372,9 +374,7 @@ void Executor::_syscall()  {
         std::cout << std::endl;
     }
     else if (operationCode == 5){
-        int temp;
-        std::cin >> temp;
-        registers.V0.setValue(temp);
+        registers.V0.setValue(stoi(getLine()));
     }
     else if (operationCode == 6){
         std::cout << "WARNING: Syscall not implemented" << std::endl;                
