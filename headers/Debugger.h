@@ -11,7 +11,7 @@
 class Debugger {
     protected:
         Program program;
-        Executor executor(&program);
+        Executor executor;
 
     public:
         Debugger();

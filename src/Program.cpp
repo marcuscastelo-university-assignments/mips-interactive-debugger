@@ -42,6 +42,12 @@ bool Program::addInstruction(std::string inst) {
             printf("Can't have spaces in label's identifier. Ignoring this line: %s\n", inst.c_str());
             return false;
         }
+
+        if (hasLabel(inst)) {
+            printf("Can't have two labels with the same identifier\n");
+            return false;
+        }
+
         instructions->push_back(inst);
         addLabelPos(inst, getInstructionsVectorSize()-1);
     }

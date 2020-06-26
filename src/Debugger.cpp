@@ -57,10 +57,16 @@ void Debugger::next() {
 
     try {
         if (validatePossibleLabel(inst) == true) {
+            // printSingleInstruction(inst);
             if (executeInstructionAndVerify(inst) == false)
                 throw std::invalid_argument("Invalid instruction or syntax");
         }
-        printSingleInstruction(inst);
+        else
+        {
+            printf("porra\n");
+        }
+        
+        // printSingleInstruction(inst);
     } catch (std::out_of_range& e) {
         throw std::out_of_range(e.what());
     }
@@ -246,7 +252,7 @@ bool Debugger::validatePossibleLabel(const string& command) {
             return false;
             
         str.pop_back();
-        if (hasRegister(command) or program.hasLabel(command))
+        if (hasRegister(command))
             return false;
     }
 
@@ -258,6 +264,7 @@ bool Debugger::executeInstructionAndVerify(const string& command) {
 
     if (executedInstruction == NULL) {
         //deu runtime error TODO: sei la mano
+        printf("era null\n");
         return false;
     }
 
