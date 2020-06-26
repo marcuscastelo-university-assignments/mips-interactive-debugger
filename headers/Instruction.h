@@ -8,7 +8,7 @@
 
 class Executor;
 enum ExecutionType {
-    T_UNKNOWN, T_3R, T_2R, T_1R, T_2R_1I, T_2R_2I, T_1R_1I, T_1I, T_1R_2I, T_2R_1U, T_V 
+    T_UNKNOWN, T_3R, T_2R, T_1R, T_2R_1I, T_3R_1I, T_2R_2I, T_1R_1I, T_1I, T_1R_2I, T_2R_1U, T_V 
 };
 
 enum AdvancePcType {
@@ -37,6 +37,7 @@ class Instruction
             void (Executor::*T_2R)(Register*, Register*);
             void (Executor::*T_1R)(Register*);
             void (Executor::*T_2R_1I)(Register*, Register*, int);
+            void (Executor::*T_3R_1I)(Register*, Register*, Register*, int);
             void (Executor::*T_2R_2I)(Register*, Register*, int, int);
             void (Executor::*T_2R_1U)(Register*, Register*, unsigned);
             void (Executor::*T_1R_2I)(Register*, int, int);
@@ -58,6 +59,7 @@ class Instruction
         Instruction *setExecutionFunction(void (Executor::*executor_func_param)(Register*, Register*));
         Instruction *setExecutionFunction(void (Executor::*executor_func_param)(Register*));
         Instruction *setExecutionFunction(void (Executor::*executor_func_param)(Register*, Register*, int));
+        Instruction *setExecutionFunction(void (Executor::*executor_func_param)(Register*, Register*, Register*, int));
         Instruction *setExecutionFunction(void (Executor::*executor_func_param)(Register*,Register*,int, int));
         Instruction *setExecutionFunction(void (Executor::*executor_func_param)(Register*, Register*, unsigned));
         Instruction *setExecutionFunction(void (Executor::*executor_func_param)(Register*, int, int));
@@ -65,6 +67,8 @@ class Instruction
         Instruction *setExecutionFunction(void (Executor::*executor_func_param)(int));
         Instruction *setExecutionFunction(void (Executor::*executor_func_param)(void));
         Instruction *setExecutionFunction(void(Executor::*executor_func_param)(nullptr_t));
+
+
 
         Instruction *overloadSupposedRegisterCount(int count);
         Instruction *overloadSupposedIntegerCount(int count);

@@ -27,6 +27,8 @@ class Executor{
         void beq(Register *reg1, Register *reg2, int jumpAddress);
         void bnei(Register *reg, int immediate, int jumpAddress);
         void bne(Register *reg1, Register *reg2, int jumpAddress);
+        void sub(Register *reg1,Register *reg2,Register *reg3);
+        void add(Register *reg1,Register *reg2,Register *reg3);
     public:
         Executor(Program& program);
         ~Executor();
@@ -63,9 +65,9 @@ class Executor{
         void _bgtu(Register *reg1, Register *reg2, int jumpAddress);
         void _beqz(Register *reg, int jumpAddress);
         void _j(int);
-        void _add(Register *reg1,Register *reg2,Register *reg3);
+        void _add(Register *reg1,Register *reg2,Register *reg3, int immediate);
         void _addi(Register *reg1, Register *reg2, int immediate);
-        void _sub(Register *reg1,Register *reg2,Register *reg3);
+        void _sub(Register *reg1,Register *reg2,Register *reg3, int immediate);
         void _subi(Register *reg1, Register *reg2, int immediate);
         void _mult(Register *reg1,Register *reg2);
         void _multu(Register *reg1,Register *reg2);
@@ -88,8 +90,8 @@ class Executor{
         void _jal(int jumpAddress);
 
         void _addiu(Register *reg1, Register *reg2, unsigned int immediate);
-        void _addu(Register *reg1,Register *reg2,Register *reg3);
-        void _subu(Register *reg1,Register *reg2,Register *reg3);
+        void _addu(Register *reg1,Register *reg2,Register *reg3, int immediate);
+        void _subu(Register *reg1,Register *reg2,Register *reg3, int immediate);
         void _divu(Register *reg1,Register *reg2);
                 
         void _sllv(Register *reg1,Register *reg2,Register *reg3);

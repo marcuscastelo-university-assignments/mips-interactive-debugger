@@ -146,6 +146,22 @@ Instruction *Instruction::setExecutionFunction(void(Executor::*executor_func_par
     return this;
 }
 
+Instruction *Instruction::setExecutionFunction(void(Executor::*executor_func_param)(Register*, Register*, Register*, int)) {
+
+    typeRegisterCount = 3;
+    typeIntegerCount = 1;
+    
+    overloadedRegisterCount = 3;
+    overloadedIntegerCount = 1;
+    
+    supposedRegisterCount = 3;
+    supposedIntegerCount = 1;
+    
+    this->executor_func.T_3R_1I = executor_func_param;
+    this->executionType = T_3R_1I;
+    return this;
+}
+
 Instruction *Instruction::setExecutionFunction(void(Executor::*executor_func_param)(Register*,Register*,int, int)) {
 
     typeRegisterCount = 2;

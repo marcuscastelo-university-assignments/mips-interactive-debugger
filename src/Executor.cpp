@@ -175,7 +175,20 @@ void Executor::_j(int jumpAddress) {
     else registers.PC.setValue(jumpAddress - 4);
 }
 
-void Executor::_add(Register *reg1,Register *reg2,Register *reg3) {
+void Executor::sub(Register *reg1,Register *reg2,Register *reg3) {
+    reg1->setValue(reg2->asInt() - reg3->asInt());   
+}
+
+void Executor::_subi(Register *reg1, Register *reg2, int immediate) {
+    reg1->setValue(reg2->asInt() - immediate);   
+}
+
+void Executor::_sub(Register *reg1, Register *reg2, Register *reg3, int immediate) {
+    if(reg3 == NULL) _subi(reg1,reg2,immediate);
+    else sub(reg1,reg2,reg3);
+}
+
+void Executor::add(Register *reg1,Register *reg2,Register *reg3) {
     reg1->setValue(reg2->asInt() + reg3->asInt());   
 }
 
@@ -183,13 +196,11 @@ void Executor::_addi(Register *reg1, Register *reg2, int immediate) {
     reg1->setValue(reg2->asInt() + immediate);   
 }
 
-void Executor::_sub(Register *reg1,Register *reg2,Register *reg3) {
-    reg1->setValue(reg2->asInt() - reg3->asInt());   
+void Executor::_add(Register *reg1, Register *reg2, Register *reg3, int immediate) {
+    if(reg3 == NULL) _addi(reg1,reg2,immediate);
+    else add(reg1,reg2,reg3);
 }
 
-void Executor::_subi(Register *reg1, Register *reg2, int immediate) {
-    reg1->setValue(reg2->asInt() - immediate);   
-}
 
 void Executor::_mult(Register *reg1,Register *reg2) {
     registers.LO.setValue(reg1->asInt() * reg2->asInt());   
@@ -287,12 +298,12 @@ void Executor::_addiu(Register *reg1, Register *reg2, unsigned int immediate) {
     reg1->setValue((int)((unsigned)reg2->asInt() + immediate));   
 }
 
-void Executor::_addu(Register *reg1,Register *reg2,Register *reg3) {
-    _add(reg1, reg2, reg3);
+void Executor::_addu(Register *reg1,Register *reg2,Register *reg3, int immediate) {
+    _add(reg1, reg2, reg3, immediate);
 }
 
-void Executor::_subu(Register *reg1,Register *reg2,Register *reg3) {
-    _sub(reg1, reg2, reg3);
+void Executor::_subu(Register *reg1,Register *reg2,Register *reg3, int immediate) {
+    _sub(reg1, reg2, reg3, immediate);
 }
 
 void Executor::_divu(Register *reg1,Register *reg2) { 
