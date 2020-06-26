@@ -106,7 +106,7 @@ void Executor::bne(Register *reg1, Register *reg2, int jumpAddress) {
 
 void Executor::_bne(Register *reg1, Register *reg2, int immediate, int jumpAddress) {
     if(reg2 == NULL) bnei(reg1,immediate,jumpAddress);
-    else bne(reg1,reg2,jumpAddress);
+    else bne(reg1,reg2,immediate); //See beq for misplacemente dad
 }
 
 void Executor::_beqi(Register *reg1, int immediate, int jumpAddress) {
@@ -119,8 +119,8 @@ void Executor::beq(Register *reg1, Register *reg2, int jumpAddress) {
 }
 
 void Executor::_beq(Register *reg1, Register *reg2, int immediate, int jumpAddress) {
-    if(reg2 == NULL) _beqi(reg1,immediate,jumpAddress);
-    else beq(reg1,reg2,jumpAddress);
+    if(reg2 == NULL) _beqi(reg1, immediate, jumpAddress);
+    else beq(reg1,reg2,immediate); //immediate is actually jumpAddress when reg2 is not NULL 
 }
 
 void Executor::_bgez(Register *reg, int jumpAddress) {
@@ -189,7 +189,8 @@ void Executor::_beqz(Register *reg, int jumpAddress) {
 //TODO: Questão do jump e tamanho da stack
     //TODO: PEGAR O TAMANHO DO PROGRAMA
 void Executor::_j(int jumpAddress) {
-    if(jumpAddress < -4 || jumpAddress >= 4 * (int) program.getInstructionsVectorSize()) throw std::out_of_range("ERROR: Jump address out of range.\n");
+    printf("Trying to jump to 4Foda = %d\n", jumpAddress);
+    if(jumpAddress < -4 || jumpAddress > 4 * (int) program.getInstructionsVectorSize()) throw std::out_of_range("ERROR: Jump address out of range.\n");
     else registers.PC.setValue(jumpAddress - 4);
 }
 

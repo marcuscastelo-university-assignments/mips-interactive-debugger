@@ -61,7 +61,7 @@ void ConsoleDebugger::start (void) {
         else if (commandParts[0] == "c" or commandParts[0] == "continue")
             exec();
 
-        else if (commandParts[0] == "next") {
+        else if (commandParts[0] == "n" or commandParts[0] == "next") {
             try {
                 next();
             } catch (std::out_of_range &e) {

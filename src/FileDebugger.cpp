@@ -65,7 +65,7 @@ void FileDebugger::start (void) {
             exec();
         }
 
-        else if (commandParts[0] == "next") {
+        else if (commandParts[0] == "n" or commandParts[0] == "next") {
             try {
                 next();
             } catch (std::out_of_range &e) {
@@ -106,6 +106,7 @@ void FileDebugger::importCode (vector<string> commandParts) {
 
         program.addInstruction(line);
     }
+    cout << "Tamanho final do programa = " << program.getInstructionsVectorSize() << endl; 
 
     fclose(file_ptr);
 }
