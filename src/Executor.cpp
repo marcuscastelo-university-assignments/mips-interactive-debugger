@@ -17,6 +17,7 @@ Executor::~Executor() {
 }
 
 Instruction *Executor::executeInstructionStr(const std::string& instructionStr) const {
+    printf("%s\n", instructionStr.c_str());
     Instruction *interpretedInstruction = interpreter->interpretInstruction(instructionStr);
 
     if (interpretedInstruction->validate()) {
@@ -26,6 +27,14 @@ Instruction *Executor::executeInstructionStr(const std::string& instructionStr) 
             fprintf(stderr, "%s\n", e.what());
             return NULL;
         }
+        #include <iostream>
+        using namespace std;
+        ByteArray b = stack.getBytes();
+        for (int i = b.getSize()-40; i < b.getSize(); i+=4) {
+            Word wuw(stack.getBytes(i, 4));
+            cout << wuw.asInt() << endl;
+        }
+
         int advanceOffset = interpretedInstruction->getAdvancePcType();
         ((Register&)registers.PC).setValue(registers.PC.asInt() + advanceOffset);
     }
@@ -176,7 +185,7 @@ void Executor::_beqz(Register *reg, int jumpAddress) {
 //TODO: Questão do jump e tamanho da stack
     //TODO: PEGAR O TAMANHO DO PROGRAMA
 void Executor::_j(int jumpAddress) {
-    if(jumpAddress < -4 || (size_t)jumpAddress >= 4 * program.getInstructionsVectorSize()) throw std::out_of_range("ERROR: Jump address out of range.\n");
+    if(jumpAddress < -4 || jumpAddress >= 4 * (int) program.getInstructionsVectorSize()) throw std::out_of_range("ERROR: Jump address out of range.\n");
     else registers.PC.setValue(jumpAddress - 4);
 }
 
@@ -390,7 +399,9 @@ void Executor::_syscall()  {
         std::cout << std::endl;
     }
     else if (operationCode == 5){
-        registers.V0.setValue(stoi(getLine()));
+        std::string line = getLine();
+        int linei = stoi(line);
+        registers.V0.setValue(linei);
     }
     else if (operationCode == 6){
         std::cout << "WARNING: Syscall not implemented" << std::endl;                

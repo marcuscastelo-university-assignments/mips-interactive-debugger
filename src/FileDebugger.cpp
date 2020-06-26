@@ -9,24 +9,22 @@ FileDebugger::FileDebugger (void) {}
 FileDebugger::~FileDebugger () {}
 
 void FileDebugger::start (void) {
-    char *tmp;
-    string command;
-    vector<string> commandParts;
-
+    std::string command, commandWithCommas;
+    std::vector<std::string> commandParts;
+        
     while (true) {
         printf("(MipsDB) ");
-        scanf("%m[^\n\r]", &tmp);
-        if (tmp == NULL) {
-            printf("\r");
-            getchar();
+        commandWithCommas = getLine();
+        commandWithCommas = removeComments(commandWithCommas);
+        command = commandWithCommas;
+        
+        if (command.empty())
             continue;
-        }
 
-        /*STRING PARSING*/
-        command = string(tmp);
-        command = trim(command);
-        command = replaceAllChars(command, ',', ' ');
+        /*STRING PARSING*/        
+        command = removeAllChars(command, ',');
         commandParts = split(command);
+        commandParts = trimVec(commandParts);
 
         int size = commandParts.size();
 
@@ -57,7 +55,7 @@ void FileDebugger::start (void) {
         }
 
         else if (commandParts[0] == "r" or commandParts[0] == "run") {
-            exec(0);
+            exec(-4);
         }
 
         else if (commandParts[0] == "c" or commandParts[0] == "continue") {
@@ -84,6 +82,8 @@ void FileDebugger::importCode (vector<string> commandParts) {
         return;
     }
 
+    printf("abc");
+
     string name = preventAbsolutePath(commandParts[1]);
 
     FILE *file_ptr = fopen(name.c_str(), "r");
@@ -91,6 +91,8 @@ void FileDebugger::importCode (vector<string> commandParts) {
         printf("No file to open\n");
         return;
     }
+
+    // program = Program();
    
     //TODO: check deletes that were here
 
@@ -106,4 +108,6 @@ void FileDebugger::importCode (vector<string> commandParts) {
     }
 
     fclose(file_ptr);
+
+    printf("def\n");
 }

@@ -39,6 +39,7 @@ void Debugger::exec(int pos) {
         }
 
         pos = reg.asInt();
+        pos = (pos/4)+1;
         if (program.isBreakpoint(pos) == true) {
             printSingleBreakpoint(pos);
             break;
@@ -57,10 +58,12 @@ void Debugger::next() {
 
     try {
         if (validatePossibleLabel(inst) == true) {
+            // printSingleInstruction(inst);
             if (executeInstructionAndVerify(inst) == false)
                 throw std::invalid_argument("Invalid instruction or syntax");
         }
-        printSingleInstruction(inst);
+        
+        // printSingleInstruction(inst);
     } catch (std::out_of_range& e) {
         throw std::out_of_range(e.what());
     }
@@ -246,7 +249,7 @@ bool Debugger::validatePossibleLabel(const string& command) {
             return false;
             
         str.pop_back();
-        if (hasRegister(command) or program.hasLabel(command))
+        if (hasRegister(command))
             return false;
     }
 
