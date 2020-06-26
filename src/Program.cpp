@@ -51,7 +51,7 @@ bool Program::addInstruction(std::string inst) {
     return true;
 }
 
-std::string Program::getInstruction(int pos, bool withCommas) {
+std::string Program::getInstruction(int pos, bool withCommas) const {
     if (pos < 0 or pos >= (int) getInstructionsVectorSize())
         throw std::out_of_range("Position not allowed");
 
@@ -61,11 +61,11 @@ std::string Program::getInstruction(int pos, bool withCommas) {
     return inst;
 }
 
-size_t Program::getInstructionsVectorSize(void) {
+size_t Program::getInstructionsVectorSize(void) const {
     return instructions->size();
 }   
 
-void Program::printInstructions(std::string label, FILE *file_ptr) {
+void Program::printInstructions(std::string label, FILE *file_ptr) const {
     int size = (int) getInstructionsVectorSize();
     
     if (label.empty()) {
@@ -111,14 +111,14 @@ void Program::addLabelPos(std::string label, int pos) {
     return;
 }
 
-std::map<std::string,int>::iterator Program::getLabelPos(std::string label) {
+std::map<std::string,int>::iterator Program::getLabelPos(const std::string& label) const {
     if (label.empty())
         return labelsAddresses->end();
 
     return labelsAddresses->find(label);
 }
 
-bool Program::hasLabel(std::string label) {
+bool Program::hasLabel(std::string label) const {
     if (label.empty())
         return false;
 
@@ -128,7 +128,7 @@ bool Program::hasLabel(std::string label) {
     return !(getLabelPos(label) == labelsAddresses->end());
 }
 
-void Program::printLabel(std::string label) {
+void Program::printLabel(std::string label) const {
     if (label.empty() == false) {
         if (hasLabel(label)) {
             printLine(25);    
@@ -172,11 +172,11 @@ void Program::removeBreakpoint(int pos) {
     return;
 }
 
-bool Program::isBreakpoint(int pos) {
+bool Program::isBreakpoint(int pos) const {
     return (*breakpointsAddresses)[pos];
 }
 
-void Program::printBreakpoints(void) {
+void Program::printBreakpoints(void) const {
     auto it = breakpointsAddresses->begin();
     
     if (breakpointsAddresses->end() == it) {

@@ -3,6 +3,7 @@
 
 #include "string_utils.h"
 #include <iostream>
+#include <stdexcept>
 
 //TODO: implementar comportamentos esquisitos de registradores temporarios (j label, etc) (e outros obscutos)
 Executor::Executor(Program &program)
@@ -19,13 +20,22 @@ Instruction *Executor::executeInstructionStr(const std::string& instructionStr) 
     Instruction *interpretedInstruction = interpreter->interpretInstruction(instructionStr);
 
     if (interpretedInstruction->validate()) {
-        interpretedInstruction->execute((Executor*)this);
+        try {
+            interpretedInstruction->execute((Executor*)this);
+        } catch (const std::exception& e) {
+            fprintf(stderr, "%s\n", e.what());
+            return NULL;
+        }
         int advanceOffset = interpretedInstruction->getAdvancePcType();
         ((Register&)registers.PC).setValue(registers.PC.asInt() + advanceOffset);
     }
     
 
     return interpretedInstruction;
+}
+
+const Program &Executor::getProgram() const {
+    return program;
 }
 
 const Registers &Executor::getRegisters() const {
@@ -162,9 +172,9 @@ void Executor::_beqz(Register *reg, int jumpAddress) {
 }
 
 //TODO: Questão do jump e tamanho da stack
-void Executor::_j(int jumpAddress) {
     //TODO: PEGAR O TAMANHO DO PROGRAMA
-    if(jumpAddress < 0 || jumpAddress >= 50135) printf("ERROR: Jump adress not implemented.\n");
+void Executor::_j(int jumpAddress) {
+    if(jumpAddress < 0 || (size_t)jumpAddress >= 4 * program.getInstructionsVectorSize()) throw std::out_of_range("ERROR: Jump address out of range.\n");
     else registers.PC.setValue(jumpAddress - 4);
 }
 

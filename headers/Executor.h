@@ -31,11 +31,14 @@ class Executor{
         Executor(Program& program);
         ~Executor();
 
+        const Program &getProgram() const;
         const Registers &getRegisters() const;
         Register &getRegister(const std::string& name) const;
 
         Instruction *executeInstructionStr(const std::string& instruction) const;
         bool hasRegister(const std::string& name) const;
+
+
 
         //void getInstructionInformation();
 
