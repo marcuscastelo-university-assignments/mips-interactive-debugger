@@ -13,17 +13,7 @@ Interpreter::Interpreter(Executor *parentExecutor)
 Instruction *Interpreter::interpretInstruction(const std::string& instructionStr) const {
     std::vector<std::string> instruction_parts = split(instructionStr);
     instruction_parts = trimVec(instruction_parts);
-
-    // printf("corno falando: ");
-    // for (int i = 0; i < instruction_parts.size(); i++) {
-    //     printf("%s ", instruction_parts[i].c_str());
-    // }
-    // printf("\n");
-    // if (instruction_parts.size() >= 2 and instruction_parts[2] == "4($sp)") {
-    //     auto abc = parseRegisterOffset(instruction_parts[2]);
-    //     printf("cornoaaaa: %s %s\n", abc.first.c_str(), abc.second.c_str());
-    // }
-    
+  
     std::vector<Register*> registers;
     std::vector<int> integers;
 
@@ -48,7 +38,7 @@ Instruction *Interpreter::interpretInstruction(const std::string& instructionStr
             if (parentExecutor->getRegisters().hasRegister(instruction_parts[i])) {
                 registers.push_back(&parentExecutor->getRegisters().getRegisterByName(instruction_parts[i]));
             } else if (parentExecutor->getProgram().hasLabel(instruction_parts[i])) {
-                integers.push_back(parentExecutor->getProgram().getLabelPos(instruction_parts[i])->second * 4);
+                integers.push_back(parentExecutor->getProgram().getLabelPos(instruction_parts[i])->second);
             } else if (parentExecutor->getRegisters().hasRegister(parseRegisterOffset(instruction_parts[i]).first)) {
                 try{
                     integers.push_back(stoi(parseRegisterOffset(instruction_parts[i]).second));
