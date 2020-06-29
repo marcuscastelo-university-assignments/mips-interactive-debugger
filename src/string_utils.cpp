@@ -142,7 +142,7 @@ string removeAllChars (string str, char c) {
 
 pair<string, string> parseRegisterOffset(string str) {
     int pos = str.find('(');
-    if (pos == string::npos) return make_pair("not", "offset");
+    if (pos == (int) string::npos) return make_pair("not", "offset");
     str.erase(str.end()-1);
     int size = str.size();
 

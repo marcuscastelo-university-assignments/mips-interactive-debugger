@@ -27,8 +27,8 @@ void Debugger::exec(int pos) {
     while (true) {
         string inst;
 
-        pos = reg.asInt();
-        pos = (pos/4)+1;
+        pos = reg.asInt()+4;
+
         if (program.isBreakpoint(pos) == true) {
             printSingleBreakpoint(pos);
             break;
@@ -44,6 +44,7 @@ void Debugger::exec(int pos) {
             printf("Aborting execution\n");
             break;
         } catch (std::domain_error &e) {
+            printf("Program finished execution\n");
             break;
         }
     }
@@ -53,10 +54,11 @@ void Debugger::exec(int pos) {
 
 void Debugger::next() {
     Register &reg = executor.getRegister("$pc");
-    int pos = reg.asInt();
-    pos = (pos/4)+1;
+    int pos = reg.asInt()+4;
     string inst = program.getInstruction(pos);
     
+    printSingleInstruction(inst, pos);
+
     try {
         if (validatePossibleLabel(inst) == true) {
             if (executeInstructionAndVerify(inst) == false)
@@ -251,20 +253,32 @@ bool Debugger::validatePossibleLabel(const string& command) {
     if (command.empty())
         return false;
 
-    if (isLabel(command)) {
-        string str = command;
-        if (str.find(' ') != string::npos)
-            return false;
-            
-        str.pop_back();
-        if (str.empty())
-            return false;
+    if (isLabel(command) == false)
+        return true;
 
-        if (str[0] == '$')
-            return false;
+    string str = command;
+    if (str.find(' ') != string::npos) {
+        printf("Can't have spaces in label identifiers\n");
+        return false;
+    }
+        
+    str.pop_back();
+    if (str.empty())
+        return false;
+
+    if (str[0] == '$') {
+        printf("Can't start label identifiers with '$'\n");
+        return false;
     }
 
-    return true;
+    try {
+        stoi(command);
+    } catch (std::exception &e) {
+        return true;
+    }
+
+    printf("Can't start label indentifiers with a number\n");
+    return false;
 }
 
 bool Debugger::executeInstructionAndVerify(const string& command) {

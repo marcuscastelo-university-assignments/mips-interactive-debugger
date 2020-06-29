@@ -3,13 +3,13 @@
 #include <stdexcept>
 
 Program::Program() {
-    instructions = new std::vector<std::string>();
+    instructions = new std::map<int, std::string>();
     labelsAddresses = new std::map<std::string, int>();
     breakpointsAddresses = new std::map<int, bool>();
 }
 
 Program::Program(const Program& program) {
-    instructions = new std::vector<std::string>();
+    instructions = new std::map<int, std::string>();
     labelsAddresses = new std::map<std::string, int>();
     breakpointsAddresses = new std::map<int, bool>();
     
@@ -28,13 +28,15 @@ void Program::clear() {
     delete instructions;
     delete labelsAddresses;
     delete breakpointsAddresses;
-    instructions = new std::vector<std::string>();
+    instructions = new std::map<int, std::string>();
     labelsAddresses = new std::map<std::string, int>();
     breakpointsAddresses = new std::map<int, bool>();
 }
 
 /////INSTRUCTION/////
 bool Program::addInstruction(std::string inst) {
+    int pos = getInstructionsMapSize();
+
     if (inst.empty())
         return false;
 
@@ -55,17 +57,18 @@ bool Program::addInstruction(std::string inst) {
             return false;
         }
 
-        instructions->push_back(inst);
-        addLabelPos(inst, getInstructionsVectorSize()-1);
+        (*instructions)[pos] = inst;
+        addLabelPos(inst, pos);
     }
-    else
-        instructions->push_back(inst);
+
+    (*instructions)[pos] = inst;
     
     return true;
 }
 
 std::string Program::getInstruction(int pos, bool withCommas) const {
-    if (pos < 0 or pos >= (int) getInstructionsVectorSize())
+    printf("size: %d\npos: %d\n", getInstructionsMapSize(), pos);
+    if (pos < 0 or pos >= (int) getInstructionsMapSize())
         throw std::out_of_range("Position not allowed");
 
     std::string inst = (*instructions)[pos];
@@ -74,15 +77,15 @@ std::string Program::getInstruction(int pos, bool withCommas) const {
     return inst;
 }
 
-size_t Program::getInstructionsVectorSize(void) const {
-    return instructions->size();
+size_t Program::getInstructionsMapSize(void) const {
+    return instructions->size()*4;
 }   
 
 void Program::printInstructions(std::string label, FILE *file_ptr) const {
-    int size = (int) getInstructionsVectorSize();
+    int size = (int) getInstructionsMapSize();
     
     if (label.empty()) {
-        for (int i = 0; i < size; i++)
+        for (int i = 0; i < size; i += 4)
             printSingleInstruction(getInstruction(i, true), i, file_ptr);
         return;
     }
@@ -94,7 +97,7 @@ void Program::printInstructions(std::string label, FILE *file_ptr) const {
     }
 
     printSingleInstruction(getInstruction(it->second, true), it->second, file_ptr);
-    for (int i = it->second+1; i < size; i++) {
+    for (int i = it->second+1; i < size; i += 4) {
         std::string inst = getInstruction(i, true);
         if (isLabel(inst))
             break;
@@ -111,7 +114,7 @@ void Program::addLabelPos(std::string label, int pos) {
     if (label.empty())
         return;
 
-    if (pos < 0 or pos >= (int) getInstructionsVectorSize())
+    if (pos < 0 or pos >= (int) getInstructionsMapSize())
         throw std::out_of_range("Position not allowed");
     
     if (isLabel(label) == false)
@@ -145,7 +148,7 @@ void Program::printLabel(std::string label) const {
     if (label.empty() == false) {
         if (hasLabel(label)) {
             printLine(25);    
-            printSingleLabel(label, getLabelPos(label)->second);
+            printSingleLabel(label, (getLabelPos(label)->second)*4);
             printLine(25);
         }
 
@@ -171,7 +174,7 @@ void Program::printLabel(std::string label) const {
 
 /////BREAKPOINTS/////
 void Program::addBreakpoint(int pos) {
-    if (pos < 0 or pos >= (int) getInstructionsVectorSize())
+    if (pos < 0 or pos >= (int) getInstructionsMapSize())
         throw std::out_of_range("Position not allowed");
 
     (*breakpointsAddresses)[pos] = true;
@@ -201,7 +204,7 @@ void Program::printBreakpoints(void) const {
     }
 
     for (; it != breakpointsAddresses->end(); it++)
-        printSingleBreakpoint(it->first);
+        printSingleBreakpoint((it->first)*4);
 }
 
 //////////////////////////////////////////////
@@ -217,7 +220,6 @@ bool isLabel(std::string str) {
 }
 
 void printSingleInstruction(std::string line, int pos, FILE *file_ptr) {
-    pos *= 4;
     if (isLabel(line))
         fprintf(file_ptr, "%c0x%04x", '\n', pos);
     else
@@ -227,11 +229,11 @@ void printSingleInstruction(std::string line, int pos, FILE *file_ptr) {
 }
 
 void printSingleLabel(std::string label, int addr) {
-    printf("|%-15s| 0x%04x|\n", label.c_str(), addr*4);
+    printf("|%-15s| 0x%04x|\n", label.c_str(), addr);
 
     return;
 }
 
 void printSingleBreakpoint(int addr) {
-    printf("Breakpoint at 0x%04x\n", addr*4);
+    printf("Breakpoint at 0x%04x\n", addr);
 }

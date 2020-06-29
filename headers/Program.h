@@ -6,7 +6,7 @@
 #include <string>
 class Program {
     private:
-        std::vector <std::string> *instructions;
+        std::map <int, std::string> *instructions;
         std::map <std::string, int> *labelsAddresses;
         std::map <int, bool> *breakpointsAddresses;
     
@@ -19,7 +19,7 @@ class Program {
 
         bool addInstruction(std::string inst);
         std::string getInstruction(int pos, bool withCommas=false) const;
-        size_t getInstructionsVectorSize(void) const;
+        size_t getInstructionsMapSize(void) const;
         
         void addLabelPos(std::string label, int pos);
         std::map<std::string, int>::iterator getLabelPos(const std::string& label) const;

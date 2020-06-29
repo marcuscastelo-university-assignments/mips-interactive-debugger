@@ -171,7 +171,7 @@ void Executor::_beqz(Register *reg, int jumpAddress) {
 }
 
 void Executor::_j(int jumpAddress) {
-    if(jumpAddress < -4 || jumpAddress > 4 * (int) program.getInstructionsVectorSize()) throw std::out_of_range("ERROR: Jump address out of range.\n");
+    if(jumpAddress < -4 || jumpAddress > 4 * (int) program.getInstructionsMapSize()) throw std::out_of_range("ERROR: Jump address out of range.\n");
     else registers.PC.setValue(jumpAddress - 4);
 }
 
