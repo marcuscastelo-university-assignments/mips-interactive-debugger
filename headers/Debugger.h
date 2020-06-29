@@ -30,6 +30,7 @@ class Debugger {
         bool executeInstructionAndVerify(const std::string& command);
 
         bool hasRegister(const std::string& name);
+        void print(const std::vector<std::string>& commandParts);
 
 };
 

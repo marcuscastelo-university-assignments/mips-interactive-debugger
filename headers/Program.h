@@ -15,7 +15,7 @@ class Program {
         Program(const Program& program);
         ~Program();
         
-        void clear();
+        void clear(std::string what="");
 
         bool addInstruction(std::string inst);
         std::string getInstruction(int pos, bool withCommas=false) const;
