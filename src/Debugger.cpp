@@ -237,8 +237,11 @@ void Debugger::breakpoint(const vector<string>& commandParts) {
     try {
         if (commandParts[0] == "break-remove")
             program.removeBreakpoint(stoi(commandParts[1], 0, 16));
-        else
+        else if (commandParts[0] == "break")
             program.addBreakpoint(stoi(commandParts[1], 0, 16));
+        else
+            program.clear("breakpoint");
+        
 
     } catch (std::invalid_argument &e) {
         printf("Invalid argument to add breakpoint at. Use an int in hexadecimal\n");
@@ -306,4 +309,8 @@ bool Debugger::executeInstructionAndVerify(const string& command) {
 
 bool Debugger::hasRegister(const string& name) {
     return executor.hasRegister(name);
+}
+
+void Debugger::print(const std::vector<std::string>& commandParts) {
+    
 }

@@ -24,13 +24,21 @@ Program::~Program() {
     delete breakpointsAddresses;
 }
 
-void Program::clear() {
-    delete instructions;
-    delete labelsAddresses;
-    delete breakpointsAddresses;
-    instructions = new std::map<int, std::string>();
-    labelsAddresses = new std::map<std::string, int>();
-    breakpointsAddresses = new std::map<int, bool>();
+void Program::clear(std::string what) {
+    if (what == "instructions" or what.empty()) {
+        delete instructions;
+        instructions = new std::map<int, std::string>();
+    }
+
+    if (what == "labels" or what.empty()) {
+        delete labelsAddresses;
+        labelsAddresses = new std::map<std::string, int>();
+    }
+
+    if (what == "instructions" or what.empty()) {
+        delete breakpointsAddresses;
+        breakpointsAddresses = new std::map<int, bool>();
+    }    
 }
 
 /////INSTRUCTION/////
