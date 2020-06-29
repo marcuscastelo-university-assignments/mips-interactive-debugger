@@ -111,14 +111,8 @@ string preventAbsolutePath(const string& str_orig) {
     return str;
 }
 
-bool isInteger(const std::string& s){
-    // return std::regex_match(s, std::regex("[(-|+)|]?[0-9]+"));
-    try {
-        stoi(s);
-        return true;
-    } catch (std::exception &e) {
-        return false;
-    }
+bool isInteger(const std::string& s) {
+    return std::regex_match(s, std::regex("^\\s*([+-]?[0-9]+)\\s*$"));
 }
 
 string removeComments(string str) {
