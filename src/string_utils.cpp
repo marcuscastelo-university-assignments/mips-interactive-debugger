@@ -112,7 +112,13 @@ string preventAbsolutePath(const string& str_orig) {
 }
 
 bool isInteger(const std::string& s){
-    return std::regex_match(s, std::regex("[(-|+)|]?[0-9]+"));
+    // return std::regex_match(s, std::regex("[(-|+)|]?[0-9]+"));
+    try {
+        stoi(s);
+        return true;
+    } catch (std::exception &e) {
+        return false;
+    }
 }
 
 string removeComments(string str) {
@@ -136,6 +142,7 @@ string removeAllChars (string str, char c) {
 
 pair<string, string> parseRegisterOffset(string str) {
     int pos = str.find('(');
+    if (pos == string::npos) return make_pair("not", "offset");
     str.erase(str.end()-1);
     int size = str.size();
 

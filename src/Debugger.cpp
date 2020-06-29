@@ -56,7 +56,7 @@ void Debugger::next() {
     int pos = reg.asInt();
     pos = (pos/4)+1;
     string inst = program.getInstruction(pos);
-    printf("%s\n", inst.c_str());
+    
     try {
         if (validatePossibleLabel(inst) == true) {
             if (executeInstructionAndVerify(inst) == false)
@@ -162,17 +162,21 @@ void Debugger::help(const vector<string>& commandParts) {
         return;
     }
 
-    else if (commandParts[1] == "import")
-        printf("Import code in .asm file\n");
+    else if (commandParts[1] == "file")
+        printf("Import code in .asm file. File mode only\n");
 
     else if (commandParts[1] == "export")
-        printf("Export code entered in console mode as \"code.asm\"\n");
+        printf("Export code entered in console mode\n");
 
     else if (commandParts[1] == "help")
         printf("Print the list of commands\n");
 
     else if (commandParts[1] == "quit")
-        printf("Exit debugger\n");
+        printf("Exit file debugger\n");
+
+    else if (commandParts[1] == "exit")
+        printf("Exit console debugger\n");
+        
     else
         printf("Command \"%s\" does not exist. Use \"help\" to see commands\n", commandParts[0].c_str());
 }

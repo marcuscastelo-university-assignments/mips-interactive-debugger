@@ -171,7 +171,6 @@ void Program::printLabel(std::string label) const {
 
 /////BREAKPOINTS/////
 void Program::addBreakpoint(int pos) {
-    printf("alow\n");
     if (pos < 0 or pos >= (int) getInstructionsVectorSize())
         throw std::out_of_range("Position not allowed");
 
