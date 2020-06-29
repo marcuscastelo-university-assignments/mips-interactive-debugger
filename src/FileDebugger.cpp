@@ -50,7 +50,7 @@ void FileDebugger::start (void) {
         else if (commandParts[0] == "disassemble")
             disassemble(commandParts);
 
-        else if (commandParts[0] == "break" or commandParts[0] == "break-remove") {
+        else if (commandParts[0] == "break" or commandParts[0] == "break-remove" or commandParts[0] == "break-clear") {
             breakpoint(commandParts);
         }
 

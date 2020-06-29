@@ -229,6 +229,9 @@ void Debugger::disassemble(const vector<string>& commandParts) {
 }
 
 void Debugger::breakpoint(const vector<string>& commandParts) {
+    if (commandParts[0] == "break-clear")
+        program.clear("breakpoint");
+        
     if (commandParts.size() == 1) {
         printf("No argument with '%s'\n", commandParts[0].c_str());
         return;
@@ -239,9 +242,6 @@ void Debugger::breakpoint(const vector<string>& commandParts) {
             program.removeBreakpoint(stoi(commandParts[1], 0, 16));
         else if (commandParts[0] == "break")
             program.addBreakpoint(stoi(commandParts[1], 0, 16));
-        else
-            program.clear("breakpoint");
-        
 
     } catch (std::invalid_argument &e) {
         printf("Invalid argument to add breakpoint at. Use an int in hexadecimal\n");
