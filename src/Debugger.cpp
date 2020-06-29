@@ -259,11 +259,8 @@ bool Debugger::validatePossibleLabel(const string& command) {
         str.pop_back();
         if (str.empty())
             return false;
-        
-        if (str[0] != '$')
-            str = "$"+str;
 
-        if (hasRegister(command))
+        if (str[0] == '$')
             return false;
     }
 

@@ -217,6 +217,7 @@ bool isLabel(std::string str) {
 }
 
 void printSingleInstruction(std::string line, int pos, FILE *file_ptr) {
+    pos *= 4;
     if (isLabel(line))
         fprintf(file_ptr, "%c0x%04x", '\n', pos);
     else
@@ -226,11 +227,11 @@ void printSingleInstruction(std::string line, int pos, FILE *file_ptr) {
 }
 
 void printSingleLabel(std::string label, int addr) {
-    printf("|%-15s| 0x%04x|\n", label.c_str(), addr);
+    printf("|%-15s| 0x%04x|\n", label.c_str(), addr*4);
 
     return;
 }
 
 void printSingleBreakpoint(int addr) {
-    printf("Breakpoint at 0x%04x\n", addr);
+    printf("Breakpoint at 0x%04x\n", addr*4);
 }
