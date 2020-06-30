@@ -25,6 +25,8 @@ class ByteArray
         void print(FILE *file_stream = stdout) const;
 
         int getSize() const;
+
+        char operator[] (int pos);
 };
 
 #endif  //!__BYTEARRAY__H__

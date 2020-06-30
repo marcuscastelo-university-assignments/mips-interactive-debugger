@@ -16,4 +16,6 @@ class FileDebugger : public Debugger {
         void importCode(vector<string> commandParts);
 };
 
+bool isPrintStackCommand(std::string& command);
+
 #endif

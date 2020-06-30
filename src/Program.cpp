@@ -75,7 +75,6 @@ bool Program::addInstruction(std::string inst) {
 }
 
 std::string Program::getInstruction(int pos, bool withCommas) const {
-    printf("size: %d\npos: %d\n", getInstructionsMapSize(), pos);
     if (pos < 0 or pos >= (int) getInstructionsMapSize())
         throw std::out_of_range("Position not allowed");
 

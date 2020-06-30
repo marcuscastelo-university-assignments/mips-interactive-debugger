@@ -56,8 +56,6 @@ void Debugger::next() {
     Register &reg = executor.getRegister("$pc");
     int pos = reg.asInt()+4;
     string inst = program.getInstruction(pos);
-    
-    printSingleInstruction(inst, pos);
 
     try {
         if (validatePossibleLabel(inst) == true) {
@@ -231,7 +229,7 @@ void Debugger::disassemble(const vector<string>& commandParts) {
 void Debugger::breakpoint(const vector<string>& commandParts) {
     if (commandParts[0] == "break-clear")
         program.clear("breakpoint");
-        
+
     if (commandParts.size() == 1) {
         printf("No argument with '%s'\n", commandParts[0].c_str());
         return;
@@ -311,6 +309,72 @@ bool Debugger::hasRegister(const string& name) {
     return executor.hasRegister(name);
 }
 
-void Debugger::print(const std::vector<std::string>& commandParts) {
+void Debugger::printStack(std::vector<std::string>& commandParts) {
+    string command = commandParts[0];
+    command.erase(0, 2);
+    if (command.size() != 2 and command.size() != 3) {
+        printf("Invalid arguments\n");
+    }
+
+    int unitiesQuantity;
+    char formatChar;
+    char unity;
+
+    bool flag;
+
+    try {
+        unitiesQuantity = stoi(command);
+        command.erase(0, 1);
+    } catch (std::exception &e) {
+        unitiesQuantity = 1;
+    }
+
+    if (unitiesQuantity <= 0)
+        return;
+
+    formatChar = command[0];
+    unity = command[1];
+
+    //////////////
+    std::vector<char> possibleFormatValue = {'a', 'c', 'd', 'f', 'o', 's', 't', 'u', 'x'};
     
+    flag = false;
+
+    for (char c : possibleFormatValue) {
+        if (c == formatChar) {
+            flag = true;
+            break;
+        }
+    }
+    if (!flag) {
+        printf("Invalid value for format argument\n");
+        return;
+    }
+
+    flag = false;
+
+    for (char c : possibleUnityValue) {
+        if (c == unity) {
+            flag = true;
+            break;
+        }
+    }
+    if (!flag) {
+        printf("Invalid value for unity value\n");
+        return;
+    }
+
+    string addr = commandParts[1];
+    int size;
+
+    if (unity == 'b') size = 1;
+    else if (unity == 'h') size = 2;
+    else if (unity == 'w') size = 4;
+    else if (unity == 'g') size = 8;
+
+    
+    
+
+
+    return;
 }

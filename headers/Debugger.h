@@ -25,12 +25,12 @@ class Debugger {
         void help(const std::vector<std::string>& commandParts = std::vector<std::string>(1));
         void disassemble(const std::vector<std::string>& commandParts);
         void breakpoint(const std::vector<std::string>& commandParts);
+        void printStack(std::vector<std::string>& commandParts);
         
         bool validatePossibleLabel(const std::string& command);
         bool executeInstructionAndVerify(const std::string& command);
 
         bool hasRegister(const std::string& name);
-        void print(const std::vector<std::string>& commandParts);
 
 };
 

@@ -62,6 +62,10 @@ void FileDebugger::start (void) {
             exec();
         }
 
+        else if (isPrintStackCommand(command)) {
+            printStack(commandParts);
+        }
+
         else if (commandParts[0] == "n" or commandParts[0] == "next") {
             try {
                 next();
@@ -107,4 +111,11 @@ void FileDebugger::importCode (vector<string> commandParts) {
     }
 
     fclose(file_ptr);
+}
+
+bool isPrintStackCommand (std::string& command) {
+    if (command.substr(0, 2) == "x/")
+        return true;
+
+    return false;
 }

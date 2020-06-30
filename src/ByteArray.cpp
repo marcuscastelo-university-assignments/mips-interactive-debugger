@@ -69,3 +69,7 @@ void ByteArray::print(FILE *file_stream) const {
 void ByteArray::setByteAt(int pos, unsigned char byte) {
     bytes[pos] = byte;
 }
+
+char ByteArray::operator[](int pos) {
+    return bytes[pos];
+}
