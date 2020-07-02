@@ -36,6 +36,7 @@ class Executor{
         const Program &getProgram() const;
         const Registers &getRegisters() const;
         Register &getRegister(const std::string& name) const;
+        Stack getStack();
 
         Instruction *executeInstructionStr(const std::string& instruction) const;
         bool hasRegister(const std::string& name) const;

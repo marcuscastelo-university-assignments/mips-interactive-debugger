@@ -1,7 +1,10 @@
 #include "Debugger.h"
+#include "string_utils.h"
 
 #include <iostream>
 #include <string.h>
+#include <stdlib.h>
+#include "print.h"
 
 using namespace std;
 
@@ -310,17 +313,31 @@ bool Debugger::hasRegister(const string& name) {
 }
 
 void Debugger::printStack(std::vector<std::string>& commandParts) {
-    string command = commandParts[0];
-    command.erase(0, 2);
-    if (command.size() != 2 and command.size() != 3) {
-        printf("Invalid arguments\n");
-    }
-
+    int addr;
     int unitiesQuantity;
+    int size;
+
     char formatChar;
     char unity;
 
     bool flag;
+    string command;
+
+    command = commandParts[0];
+    command.erase(0, 2);
+    if (command.size() != 2 and command.size() != 3) {
+        printf("Invalid arguments\n");
+        return;
+    }
+
+    
+
+    try {
+        addr = stoi(commandParts[1], 0, 16);
+    } catch (std::exception &e) {
+        printf("Use a valid address to see stack\n");
+        return;
+    }
 
     try {
         unitiesQuantity = stoi(command);
@@ -336,10 +353,10 @@ void Debugger::printStack(std::vector<std::string>& commandParts) {
     unity = command[1];
 
     //////////////
-    std::vector<char> possibleFormatValue = {'a', 'c', 'd', 'f', 'o', 's', 't', 'u', 'x'};
+    std::vector<char> possibleFormatValue = {'c', 'd', 'f', 's', 'u', 'x'};
+    std::vector<char> possibleUnityValue = {'b', 'h', 'w', 'w'};
     
     flag = false;
-
     for (char c : possibleFormatValue) {
         if (c == formatChar) {
             flag = true;
@@ -352,7 +369,6 @@ void Debugger::printStack(std::vector<std::string>& commandParts) {
     }
 
     flag = false;
-
     for (char c : possibleUnityValue) {
         if (c == unity) {
             flag = true;
@@ -364,17 +380,90 @@ void Debugger::printStack(std::vector<std::string>& commandParts) {
         return;
     }
 
-    string addr = commandParts[1];
-    int size;
-
     if (unity == 'b') size = 1;
     else if (unity == 'h') size = 2;
     else if (unity == 'w') size = 4;
     else if (unity == 'g') size = 8;
 
+    Stack stack = executor.getStack();
+
+    for (int i = 0; i < unitiesQuantity; i++) {
+        ByteArray bytes = stack.getBytes(addr, size);
+
+        char *arr = (char*) malloc(sizeof(char) * size+1);
+        if (arr == NULL) {
+            printf("Unable to print stack. Out of memory\n");
+            return;
+        }
+        
+        for (int j = 0; j < size; j++)
+            arr[j] = bytes[j];
+
+        arr[size] = '\0';
+        
+        printf("0x08%x\t", addr);
+        choosePrintf(size, formatChar, arr);
+        printf("\n");
+
+        addr += size;
+
+        free(arr);
+    }
     
     
 
 
+    return;
+}
+
+void Debugger::choosePrintf(int size, char format, char *arr) {
+    if (format == 's') {
+        printStr(arr);
+        return;
+    }
+    
+    if (format == 'c') {
+        printChar(arr);
+        return;
+    }
+
+    if (size == 1) {
+        if (format == 'x')
+            printByteHex(arr);
+        else
+            printByteInt(arr);
+    }
+
+    else if (size == 2) {
+        if (format == 'x')
+            printShortHex(arr);
+        else if (format == 'u')
+            printShortUns(arr);
+        else
+            printShortInt(arr);
+    }
+    
+    else if (size == 4) {
+        if (format == 'x')
+            printHex(arr);
+        else if (format == 'f')
+            printFloat(arr);
+        else if (format == 'u')
+            printUns(arr);
+        else if (format == 'd')
+            printInt(arr);
+    }
+
+    else if (size == 8) {
+        if (format == 'x')
+            printLLHex(arr);
+        else if (format == 'f')
+            printDouble(arr);
+        else if (format == 'u')
+            printLLUns(arr);
+        else if(format == 'd')
+            printLLInt(arr);
+    }
+    
     return;
 }

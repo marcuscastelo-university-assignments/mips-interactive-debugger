@@ -431,3 +431,7 @@ void Executor::_syscall()  {
     else std::cout << "WARNING: Syscall out of range" << std::endl;
 }
 
+
+Stack Executor::getStack(void) {
+    return stack;
+}

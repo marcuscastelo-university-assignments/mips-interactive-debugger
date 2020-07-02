@@ -149,4 +149,5 @@ pair<string, string> parseRegisterOffset(string str) {
     string reg = str.substr(pos+1, size-pos);
 
     return make_pair(reg, offset);
-} 
+}
+

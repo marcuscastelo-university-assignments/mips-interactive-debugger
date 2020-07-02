@@ -4,6 +4,7 @@
 #include "Executor.h"
 #include "Program.h"
 #include "Instruction.h"
+#include "print.h"
 
 #include <vector>
 #include <string>
@@ -31,6 +32,9 @@ class Debugger {
         bool executeInstructionAndVerify(const std::string& command);
 
         bool hasRegister(const std::string& name);
+
+    private:
+        void choosePrintf(int size, char format, char *arr);
 
 };
 
