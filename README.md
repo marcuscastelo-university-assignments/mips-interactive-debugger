@@ -1,6 +1,6 @@
 # MIPS Interactive Debugger
 
-Project made for USP - São Carlos: SSC0902 - Organização e Arquitetura de Computadores (Organization and Architecture of Computers). \
+Project made for USP - São Carlos: SSC0902 - Organização e Arquitetura de Computadores (Organization and Architecture of Computers). 
 
 The project aims to help new students to learn MIPS Assembly instructions by showing register values, instruction pointer, etc. \
 Not all instructions are supported, but the majority are already implemented.
@@ -23,7 +23,7 @@ Know more about MIPS instructions [here](https://ecs-network.serv.pacific.edu/ec
 
 There are two modes to run the program: reading a file and reading from stdin (interactive mode) \
 To read from a file, just use `make run` or `make rfile` \
-To enter interactive mode, execute `make rconsole` \
+To enter interactive mode, execute `make rconsole`
 
 Alternatively, after the first build, one can start the program with `./mipsdb` or `./mipsdb -c` (for console mode)
 
