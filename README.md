@@ -47,3 +47,4 @@ One can type `>help <command>` to get help on the specified command.
 
 ## Screenshots
 
+![Console mode demo](res/mipsdb-console-demo.png)
