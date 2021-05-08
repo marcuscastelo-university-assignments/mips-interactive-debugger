@@ -29,7 +29,7 @@ Alternatively, after the first build, one can start the program with `./mipsdb` 
 
 # How to use
 
-Once started the program with `./mipsdb`, one can type `>help` to show available commands: \
+Once started the program with `./mipsdb`, one can type `>help` to show available commands: 
 
 ```
 Help options:
